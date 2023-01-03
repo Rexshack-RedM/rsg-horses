@@ -373,15 +373,15 @@ end)
 function CustomHorse()
     MenuData.CloseAll()
     local elements = {
-            {label = "Blankets",    category = 'blankets',   value = 1, desc = "", type = "slider", min = 1, max = 65},
-            {label = "Saddles",     category = 'saddles',    value = 1, desc = "", type = "slider", min = 1, max = 136},
-            {label = "Horns",       category = 'horns',      value = 1, desc = "", type = "slider", min = 1, max = 14},
-            {label = "Saddle Bags", category = 'saddlebags', value = 1, desc = "", type = "slider", min = 1, max = 20},
-            {label = "Stirrups",    category = 'stirrups',   value = 1, desc = "", type = "slider", min = 1, max = 11},
-            {label = "Bedrolls",    category = 'bedrolls',   value = 1, desc = "", type = "slider", min = 1, max = 30},
-            {label = "Tails",       category = 'tails',      value = 1, desc = "", type = "slider", min = 1, max = 85},
-            {label = "Manes",        category = 'manes',      value = 1, desc = "", type = "slider", min = 1, max = 102},
-            {label = "Masks",       category = 'masks',      value = 0, desc = "select 0 for no mask", type = "slider", min = 0, max = 51},
+            {label = "Blankets",    category = 'blankets',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 65},
+            {label = "Saddles",     category = 'saddles',    value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 136},
+            {label = "Horns",       category = 'horns',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 14},
+            {label = "Saddle Bags", category = 'saddlebags', value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 20},
+            {label = "Stirrups",    category = 'stirrups',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 11},
+            {label = "Bedrolls",    category = 'bedrolls',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 30},
+            {label = "Tails",       category = 'tails',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 85},
+            {label = "Manes",       category = 'manes',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 102},
+            {label = "Masks",       category = 'masks',      value = 0, desc = "select 0 for no mask",   type = "slider", min = 0, max = 51},
         }
         MenuData.Open(
         'default', GetCurrentResourceName(), 'horse_menu',
