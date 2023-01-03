@@ -4,8 +4,8 @@ Config = {}
 Config.Debug = false
 
 -- horse inventory
-Config.HorseInvWeight = 12000
-Config.HorseInvSlots = 12
+Config.HorseInvWeight = 15000
+Config.HorseInvSlots = 20
 
 -- config blips
 Config.Blip = {

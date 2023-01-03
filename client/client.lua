@@ -236,9 +236,8 @@ function InvHorse()
             local pcoords = GetEntityCoords(PlayerPedId())
             local hcoords = GetEntityCoords(horsePed)
             if #(pcoords - hcoords) <= 1.7 then
-                --TriggerEvent('rsg-stable:client:horseinventory')
                 local horsestash = data.name..data.horseid
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = 15000, slots = 20, })
+                TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
                 TriggerEvent("inventory:client:SetCurrentStash", horsestash)
             else
                 RSGCore.Functions.Notify('you are NOT in distance to open inventory!', 'error', 7500)
