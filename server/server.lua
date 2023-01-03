@@ -8,12 +8,11 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, newname
         return
     end
     local horseid = GenerateHorseid()
-    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, components, active) VALUES(@citizenid, @horseid, @name, @horse, @components, @active)', {
+    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, active) VALUES(@citizenid, @horseid, @name, @horse, @active)', {
         ['@citizenid'] = Player.PlayerData.citizenid,
         ['@horseid'] = horseid,
         ['@name'] = newnames,
         ['@horse'] = model,
-        ['@components'] = json.encode({}),
         ['@active'] = false,
     })
     Player.Functions.RemoveMoney('cash', price)
