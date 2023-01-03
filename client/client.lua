@@ -24,7 +24,6 @@ RegisterNetEvent('rsg-horses:client:custShop', function()
     local function createCamera(horsePed)
         local coords = GetEntityCoords(horsePed)
         CustomHorse()
-        --TriggerEvent('rsg-horses:custMenu')
         groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
         SetCamCoord(groundCam, coords.x + 0.5, coords.y - 3.6, coords.z )
         SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
@@ -976,8 +975,7 @@ end)
 RegisterCommand("hmale", function()
     Citizen.InvokeNative(0x5653AB26C82938CF, entity, 41611, 1.0) 
     Citizen.InvokeNative(0xCC8CA3E88256E58F, entity, 0, 1, 1, 1, 0)
-end) 
--- Exiting Humanity's Command Cave
+end)
 
 ----------------------------- Chat Suggestions   -----------------------------
 TriggerEvent("chat:addSuggestion", "/hl", "Add a lantern to your horse!", {
