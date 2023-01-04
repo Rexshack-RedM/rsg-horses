@@ -92,132 +92,13 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(so
 end)
 ------------------------------------- Horse Customization  -------------------------------------
 
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckSaddle', function(source, cb)
+-- get active horse components callback
+RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(source, cb)
     local src = source
     local encodedSaddle = json.encode(SaddleDataEncoded)
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT saddle FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckBlanket', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT blanket FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckHorn', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT horn FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckSaddlebags', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT saddlebag FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckBedroll', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT bedroll FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckStirrup', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT stirrup FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckMane', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT mane FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckTail', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT tail FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = Playercid,
-        ['@active'] = 1
-    })
-    if (result[1] ~= nil) then
-        cb(result[1])
-    else
-        return
-    end
-end)
-
-RSGCore.Functions.CreateCallback('rsg-horses:server:CheckMask', function(source, cb)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT mask FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
+    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
         ['@citizenid'] = Playercid,
         ['@active'] = 1
     })
@@ -230,7 +111,6 @@ end)
 
 -- save saddle
 RegisterNetEvent("rsg-horses:server:SaveSaddles", function(SaddleDataEncoded)
-	print(SaddleDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
