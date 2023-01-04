@@ -322,25 +322,25 @@ local function SpawnHorse()
                         HorseCalled = false
                     else 
                         SetModelAsNoLongerNeeded(model)
-                        Citizen.InvokeNative(0x58A850EAEE20FAA3, horsePed, true)
+                        Citizen.InvokeNative(0x58A850EAEE20FAA3, horsePed, true) -- PlaceObjectOnGroundProperly
                         while not DoesEntityExist(horsePed) do
                             Wait(10)
                         end
                         Wait(100)
                         getControlOfEntity(horsePed)
-                        Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
-                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed)
+                        Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
+                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                         local hasp = GetHashKey("PLAYER")
-                        Citizen.InvokeNative(0xADB3F206518799E8, horsePed, hasp)
-                        Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1)
-                        Citizen.InvokeNative(0x931B241409216C1F , PlayerPedId(), horsePed , 0)
+                        Citizen.InvokeNative(0xADB3F206518799E8, horsePed, hasp) -- SetPedRelationshipGroupDefaultHash
+                        Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
+                        --Citizen.InvokeNative(0x931B241409216C1F , PlayerPedId(), horsePed , 0) -- SetPedOwnsAnimal
                         SetModelAsNoLongerNeeded(model)
                         SetPedNameDebug(horsePed, hname)
                         SetPedPromptName(horsePed, hname)
                         horseSpawned = true                    
                         moveHorseToPlayer()
                         applyImportantThings()
-                        Citizen.InvokeNative(0x9587913B9E772D29, entity, 0)
+                        Citizen.InvokeNative(0x9587913B9E772D29, entity, 0) -- PlaceEntityOnGroundProperly
                         Wait(5000)    
                     end              
                 end
