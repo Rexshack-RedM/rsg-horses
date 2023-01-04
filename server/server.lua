@@ -191,6 +191,15 @@ RegisterNetEvent("rsg-horses:server:SaveMasks", function(MaskDataEncoded)
     end
 end)
 
+RegisterNetEvent("rsg-horses:server:SaveMustaches", function(MaskDataEncoded)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local Playercid = Player.PlayerData.citizenid
+    if MaskDataEncoded ~= nil then
+        MySQL.update('UPDATE player_horses SET mustache = ?  WHERE citizenid = ? AND active = ?', {MaskDataEncoded ,  Player.PlayerData.citizenid, 1 })
+    end
+end)
+
 RegisterNetEvent("rsg-horses:server:TradeHorse", function(playerId, horseId, source, cb)
     print("server")
     local src = source

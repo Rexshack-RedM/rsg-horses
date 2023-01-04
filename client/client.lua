@@ -353,20 +353,21 @@ exports('spawnHorse', handleSpawnHorse)
 -- apply components to horse on spawn
 function applyImportantThings()
     
-	Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), horsePed, 0) -- SetPedOwnsAnimal
+    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), horsePed, 0) -- SetPedOwnsAnimal
     SetPedConfigFlag(horsePed, 297, true) -- PCF_ForceInteractionLockonOnTargetPed
     
-	-- check and apply components
+    -- check and apply components
     RSGCore.Functions.TriggerCallback('rsg-horses:server:CheckComponents', function(data)
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true) -- ApplyShopItemToPed
-		Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true) -- ApplyShopItemToPed
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache), true, true, true) -- ApplyShopItemToPed
     end)
 end
 
@@ -381,6 +382,7 @@ local bedrollsHash
 local tailsHash
 local manesHash
 local masksHash
+local mustachesHash
 
 MenuData = {}
 TriggerEvent('menu_base:getData',function(call)
@@ -390,15 +392,16 @@ end)
 function CustomHorse()
     MenuData.CloseAll()
     local elements = {
-            {label = "Blankets",    category = 'blankets',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 65},
-            {label = "Saddles",     category = 'saddles',    value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 136},
-            {label = "Horns",       category = 'horns',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 14},
-            {label = "Saddle Bags", category = 'saddlebags', value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 20},
-            {label = "Stirrups",    category = 'stirrups',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 11},
-            {label = "Bedrolls",    category = 'bedrolls',   value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 30},
-            {label = "Tails",       category = 'tails',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 85},
-            {label = "Manes",       category = 'manes',      value = 1, desc = "press [enter] to apply", type = "slider", min = 1, max = 102},
-            {label = "Masks",       category = 'masks',      value = 0, desc = "select 0 for no mask",   type = "slider", min = 0, max = 51},
+            {label = "Blankets",    category = 'blankets',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 65},
+            {label = "Saddles",     category = 'saddles',    value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 136},
+            {label = "Horns",       category = 'horns',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 14},
+            {label = "Saddle Bags", category = 'saddlebags', value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 20},
+            {label = "Stirrups",    category = 'stirrups',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 11},
+            {label = "Bedrolls",    category = 'bedrolls',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 30},
+            {label = "Tails",       category = 'tails',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 85},
+            {label = "Manes",       category = 'manes',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 102},
+            {label = "Masks",       category = 'masks',      value = 0, desc = "select 0 for no mask",     type = "slider", min = 0, max = 51},
+            {label = "Mustaches",   category = 'mustaches',  value = 0, desc = "select 0 for no mustache", type = "slider", min = 0, max = 16},
         }
         MenuData.Open(
         'default', GetCurrentResourceName(), 'horse_menu',
@@ -435,6 +438,9 @@ function CustomHorse()
             end
             if data.current.category == 'masks' then
                 TriggerEvent('rsg-horses:client:setMasks', data.current.category, data.current.value)
+            end
+            if data.current.category == 'mustaches' then
+                TriggerEvent('rsg-horses:client:setMustaches', data.current.category, data.current.value)
             end
         end,
         function(data, menu)
@@ -654,6 +660,43 @@ RegisterNetEvent('rsg-horses:client:setMasks',function(category, value)
                 if mount ~= nil then
                     Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(masksHash), true, true, true) 
                     TriggerServerEvent('rsg-horses:server:SaveMasks', masksHash)
+                else
+                    RSGCore.Functions.Notify('No Horse Found', 'error')
+                end
+            end)
+        end
+    else
+        print('something went wrong!')
+    end
+end)
+
+-- handle mustaches compontent
+RegisterNetEvent('rsg-horses:client:setMustaches',function(category, value)
+    if category == 'mustaches' then
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0x30DEFDDF, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveMustaches', 0)
+                else
+                    RSGCore.Functions.Notify('No Horse Found', 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseMustaches) do
+                if value == v.hashid then
+                    mustachesHash = v.hash
+                end
+            end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(mustachesHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveMustaches', mustachesHash)
                 else
                     RSGCore.Functions.Notify('No Horse Found', 'error')
                 end
