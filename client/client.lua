@@ -329,18 +329,13 @@ local function SpawnHorse()
                         Wait(100)
                         getControlOfEntity(horsePed)
                         Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
-                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
-                        local hasp = GetHashKey("PLAYER")
-                        Citizen.InvokeNative(0xADB3F206518799E8, horsePed, hasp) -- SetPedRelationshipGroupDefaultHash
-                        Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
-                        --Citizen.InvokeNative(0x931B241409216C1F , PlayerPedId(), horsePed , 0) -- SetPedOwnsAnimal
+                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity                        
                         SetModelAsNoLongerNeeded(model)
                         SetPedNameDebug(horsePed, hname)
                         SetPedPromptName(horsePed, hname)
                         horseSpawned = true                    
                         moveHorseToPlayer()
                         applyImportantThings()
-                        Citizen.InvokeNative(0x9587913B9E772D29, entity, 0) -- PlaceEntityOnGroundProperly
                         Wait(5000)    
                     end              
                 end
@@ -348,13 +343,11 @@ local function SpawnHorse()
         end
     end)
 end
-exports('spawnHorse', handleSpawnHorse)
 
 -- apply components to horse on spawn
 function applyImportantThings()
-    
-    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), horsePed, 0) -- SetPedOwnsAnimal
     SetPedConfigFlag(horsePed, 297, true) -- PCF_ForceInteractionLockonOnTargetPed
+    Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
     
     -- check and apply components
     RSGCore.Functions.TriggerCallback('rsg-horses:server:CheckComponents', function(data)
@@ -368,6 +361,16 @@ function applyImportantThings()
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true) -- ApplyShopItemToPed
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true) -- ApplyShopItemToPed
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache), true, true, true) -- ApplyShopItemToPed
+        -- set horse health/stamina (increased by horse training)
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, 100) -- SetAttributeCoreValue (horse health)
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, tonumber(data.horsexp)) -- SetAttributeCoreValue (horse stamina)
+        if data.horsexp > 100 then
+            EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
+            EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
+            local setoverpower = data.horsexp + .0 -- convert overpower to float value
+            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
+            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
+        end
     end)
 end
 
@@ -721,7 +724,8 @@ end)
 -- move horse to player
 function moveHorseToPlayer()
     Citizen.CreateThread(function()
-        Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 5.0, 15.0, 0, 0)
+        --Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 5.0, 15.0, 0, 0)
+        Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 7.2, 2.0, 0, 0)
         while horseSpawned == true do
             local coords = GetEntityCoords(PlayerPedId())
             local horseCoords = GetEntityCoords(horsePed)
