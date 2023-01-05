@@ -338,10 +338,6 @@ local function SpawnHorse()
                         applyImportantThings()
                         Wait(5000)    
                     end
-                    local playerjob = RSGCore.Functions.GetPlayerData().job.name
-                    if playerjob == 'horsetrainer' then
-                        TriggerEvent('rsg-horsetrainer:client:spawnedHorse', horsePed)
-                    end
                 end
             end
         end
