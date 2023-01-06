@@ -344,6 +344,8 @@ function applyImportantThings()
     
     -- check and apply components
     RSGCore.Functions.TriggerCallback('rsg-horses:server:CheckComponents', function(data)
+		local horsexp = data.horsexp
+		local horsegender = data.gender
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle), true, true, true) -- ApplyShopItemToPed
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true) -- ApplyShopItemToPed
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
@@ -357,14 +359,14 @@ function applyImportantThings()
         -- set horse health/stamina (increased by horse training)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, 100) -- SetAttributeCoreValue (horse health)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, tonumber(data.horsexp)) -- SetAttributeCoreValue (horse stamina)
-        if data.horsexp > 100 then
+        if horsexp > 100 then
             EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
             EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
             local setoverpower = data.horsexp + .0 -- convert overpower to float value
             Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
             Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
         end
-        if data.gender == male then
+        if horsegender == 'male' then
             Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
             Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 0.0) -- horse gender (0.0 = male)
             Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
