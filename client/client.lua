@@ -120,16 +120,34 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                 label =  n.names.." || " .. n.price ..  "$",
                                 targeticon = "fas fa-eye",
                                 action = function(newnames)
-                                    AddTextEntry('FMMC_MPM_NA', "Set horse name")
-                                    DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 30)
-                                    while (UpdateOnscreenKeyboard() == 0) do
-                                        DisableAllControlActions(0);
-                                        Wait(0);
+                                    local dialog = exports['rsg-input']:ShowInput({
+                                        header = "Horse Setup",
+                                        submitText = "Submit",
+                                        inputs = {
+                                            {
+                                                text = "name",
+                                                name = "horsename",
+                                                type = "text",
+                                                isRequired = true,
+                                            },
+                                            {
+                                                text = "gender",
+                                                name = "horsegender",
+                                                type = "radio",
+                                                options = {
+                                                    { value = "male",   text = "Male" },
+                                                    { value = "female", text = "Female" },
+                                                },
+                                            },
+                                        }
+                                    })
+                                    if dialog ~= nil then
+                                        for k,v in pairs(dialog) do
+                                            newhorsename = dialog.horsename
+                                            newhorsegender = dialog.horsegender
+                                        end
                                     end
-                                    if (GetOnscreenKeyboardResult()) then
-                                        newnames = GetOnscreenKeyboardResult()
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, newnames)
-                                    end
+                                    TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, newhorsename, newhorsegender)
                                 end
                             }
                         },
@@ -341,6 +359,15 @@ function applyImportantThings()
             local setoverpower = data.horsexp + .0 -- convert overpower to float value
             Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
             Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
+        end
+        if data.gender == male then
+            Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
+            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 0.0) -- horse gender (0.0 = male)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
+        else
+            Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
+            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 1.0) -- horse gender (1.0 = female)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
         end
     end)
 end

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `player_horses` (
   `tail` varchar(50) DEFAULT NULL,
   `mask` varchar(50) DEFAULT NULL,
   `mustache` varchar(50) DEFAULT NULL,
+  `gender` varchar(11) DEFAULT NULL,
   `active` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

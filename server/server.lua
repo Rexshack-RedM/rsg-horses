@@ -6,7 +6,7 @@ RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
     TriggerClientEvent("rsg-horses:client:equipHorseLantern", source, item.name)
 end)
 
-RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, newnames,comps)
+RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.money.cash < price) then
@@ -14,11 +14,12 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, newname
         return
     end
     local horseid = GenerateHorseid()
-    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, active) VALUES(@citizenid, @horseid, @name, @horse, @active)', {
+    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, gender, active) VALUES(@citizenid, @horseid, @name, @horse, @gender, @active)', {
         ['@citizenid'] = Player.PlayerData.citizenid,
         ['@horseid'] = horseid,
-        ['@name'] = newnames,
+        ['@name'] = horsename,
         ['@horse'] = model,
+        ['@gender'] = gender,
         ['@active'] = false,
     })
     Player.Functions.RemoveMoney('cash', price)
