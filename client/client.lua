@@ -147,7 +147,11 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                             newhorsegender = dialog.horsegender
                                         end
                                     end
-                                    TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, newhorsename, newhorsegender)
+                                    if newhorsename ~= nil then
+                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, newhorsename, newhorsegender)
+                                    else
+                                        return
+                                    end
                                 end
                             }
                         },
