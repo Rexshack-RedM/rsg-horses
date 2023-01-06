@@ -836,7 +836,7 @@ RegisterNetEvent('rsg-horses:client:menu', function()
         for _, v in pairs(cb) do
             GetHorse[#GetHorse + 1] = {
                 header = v.name,
-                txt = "select you horse",
+                txt = 'Gender : '..v.gender..' / XP : '..v.horsexp..' / Active : '..v.active,
                 icon = "fa-solid fa-circle-user",
                 params = {
                     event = "rsg-horses:client:SpawnHorse",
