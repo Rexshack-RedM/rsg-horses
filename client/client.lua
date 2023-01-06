@@ -122,7 +122,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                 action = function(newnames)
                                     local dialog = exports['rsg-input']:ShowInput({
                                         header = "Horse Setup",
-                                        submitText = "Submit",
+                                        submitText = "Buy Horse",
                                         inputs = {
                                             {
                                                 text = "name",
