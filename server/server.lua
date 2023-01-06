@@ -1,5 +1,11 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 
+-- horselantern
+RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    TriggerClientEvent("rsg-horses:client:equipHorseLantern", source, item.name)
+end)
+
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, newnames,comps)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)

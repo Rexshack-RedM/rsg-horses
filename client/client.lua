@@ -14,6 +14,7 @@ local horseDBID
 local ped 
 local coords
 local hasSpawned = false
+local lanternequiped = false
 -------------------
 local Zones = {}
 local zonename = nil
@@ -217,36 +218,6 @@ RegisterNetEvent('rsg-horses:client:distroyStable', function()
         SetEntityAsNoLongerNeeded(v)
     end
 end)
-
--- open inventory
-CreateThread(function()
-    while true do
-        Wait(1)
-        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['B']) then
-            InvHorse()
-            Wait(1)
-        end
-    end
-end)
-
--- horse inventory
-function InvHorse()
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        if horsePed ~= 0 then
-            local pcoords = GetEntityCoords(PlayerPedId())
-            local hcoords = GetEntityCoords(horsePed)
-            if #(pcoords - hcoords) <= 1.7 then
-                local horsestash = data.name..data.horseid
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
-                TriggerEvent("inventory:client:SetCurrentStash", horsestash)
-            else
-                RSGCore.Functions.Notify('you are NOT in distance to open inventory!', 'error', 7500)
-            end 
-        else
-            RSGCore.Functions.Notify('you do not have a horse active!', 'error', 7500)
-        end
-    end)
-end    
 
 -- trade horse
 local function TradeHorse()
@@ -768,36 +739,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- flee horse
-local function Flee()
-    TaskAnimalFlee(horsePed, PlayerPedId(), -1)
-    Wait(10000)
-    DeleteEntity(horsePed)
-    Wait(1000)
-    horsePed = 0
-    HorseCalled = false
-end
-
--- call / flee horse
-CreateThread(function()
-    while true do
-        Wait(1)
-        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
-            if not HorseCalled then
-            SpawnHorse()
-            HorseCalled = true
-            Wait(10000) -- Spam protect
-        else
-            moveHorseToPlayer()
-        end
-    elseif Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['HorseCommandFlee']) then -- flee horse
-            if horseSpawned ~= 0 then
-                Flee()
-            end
-        end
-    end
-end)
-
 AddEventHandler('onResourceStop', function(resource)
     if (resource == GetCurrentResourceName()) then
         for k,v in pairs(entities) do
@@ -943,34 +884,96 @@ RegisterNetEvent('rsg-horses:client:DeleteHorse', function(data)
     TriggerServerEvent("rsg-horses:server:DelHores", data.player.id)
 end)
 
------------------------------ commands -----------------------------
-RegisterCommand("hl", function()
-    Citizen.InvokeNative(0xD3A7B003ED343FD9, SpawnplayerHorse, 0x635E387C, true, true, true) -- add comp
-end)
-RegisterCommand("hlx", function()
-    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, SpawnplayerHorse, 0x635E387C, true, true, true) -- remove comp
-end)
---[[     RegisterCommand("saoff", function()
-    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, SpawnplayerHorse, 0x150D0DAA, true, true, true) -- remove comp
-end) ]]
-RegisterCommand("hfemale", function()
-    Citizen.InvokeNative(0x5653AB26C82938CF, entity, 41611, 0.0)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, entity, 0, 1, 1, 1, 0)
-end) 
-RegisterCommand("hmale", function()
-    Citizen.InvokeNative(0x5653AB26C82938CF, entity, 41611, 1.0) 
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, entity, 0, 1, 1, 1, 0)
+-------------------------------------------------------------------------------
+
+-- flee horse
+local function Flee()
+    TaskAnimalFlee(horsePed, PlayerPedId(), -1)
+    Wait(10000)
+    DeleteEntity(horsePed)
+    Wait(1000)
+    horsePed = 0
+    HorseCalled = false
+end
+
+-- call / flee horse
+CreateThread(function()
+    while true do
+        Wait(1)
+        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
+            if not HorseCalled then
+                SpawnHorse()
+                HorseCalled = true
+                Wait(10000) -- Spam protect
+            else
+                moveHorseToPlayer()
+            end
+        elseif Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['HorseCommandFlee']) then -- flee horse
+            if horseSpawned ~= 0 then
+                Flee()
+            end
+        end
+    end
 end)
 
------------------------------ Chat Suggestions   -----------------------------
-TriggerEvent("chat:addSuggestion", "/hl", "Add a lantern to your horse!", {
-    {name = "", help = "to remove do /hlx"}
-})
-TriggerEvent("chat:addSuggestion", "/hlx", "Remove the lantern from your horse", {
-    {name = "", help = "Do /hl to add a lantern"}
-})
-TriggerEvent("chat:addSuggestion", "/hfemale", "Turn your horse female!", {
-})
-TriggerEvent("chat:addSuggestion", "/hmale", "Turn your horse male!", {
-})
------------------------------ Chat Suggestions End   -----------------------------
+-------------------------------------------------------------------------------
+
+-- open inventory by key
+CreateThread(function()
+    while true do
+        Wait(1)
+        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['B']) then
+            TriggerEvent('rsg-horses:client:inventoryHorse')
+            Wait(1)
+        end
+    end
+end)
+
+-- horse inventory
+RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+        if horsePed ~= 0 then
+            local pcoords = GetEntityCoords(PlayerPedId())
+            local hcoords = GetEntityCoords(horsePed)
+            if #(pcoords - hcoords) <= 1.7 then
+                local horsestash = data.name..data.horseid
+                TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
+                TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+            else
+                RSGCore.Functions.Notify('you are NOT in distance to open inventory!', 'error', 7500)
+            end 
+        else
+            RSGCore.Functions.Notify('you do not have a horse active!', 'error', 7500)
+        end
+    end)
+end)  
+
+-------------------------------------------------------------------------------
+
+-- equip horse lantern
+RegisterNetEvent('rsg-horses:client:equipHorseLantern')
+AddEventHandler('rsg-horses:client:equipHorseLantern', function()
+    local hasItem = RSGCore.Functions.HasItem('horselantern', 1)
+    if hasItem then
+        local pcoords = GetEntityCoords(PlayerPedId())
+        local hcoords = GetEntityCoords(horsePed)
+        if #(pcoords - hcoords) <= 3.0 then
+            if lanternequiped == false then
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0x635E387C, true, true, true)
+                lanternequiped = true
+                RSGCore.Functions.Notify('horse lantern equiped', 'success')
+            elseif lanternequiped == true then
+                Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
+                Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+                lanternequiped = false
+                RSGCore.Functions.Notify('horse lantern removed', 'primary')
+            end
+        else
+            RSGCore.Functions.Notify('you need to be closer to do that!', 'error')
+        end
+    else
+        RSGCore.Functions.Notify('you don\'t have a horse lantern!', 'error')
+    end
+end)
+
+-------------------------------------------------------------------------------
