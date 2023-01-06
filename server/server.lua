@@ -1,10 +1,36 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 
--- horselantern
+-------------------------------------------------------------------------------
+
+-- player horselantern
 RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent("rsg-horses:client:equipHorseLantern", source, item.name)
 end)
+
+-- feed horse carrot
+RSGCore.Functions.CreateUseableItem("carrot", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+    end
+end)
+
+-- feed horse sugarcube
+RSGCore.Functions.CreateUseableItem("sugarcube", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+    end
+end)
+
+-- brush horse
+RSGCore.Functions.CreateUseableItem("horsebrush", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item.name)
+end)
+
+-------------------------------------------------------------------------------
 
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsename, gender)
     local src = source

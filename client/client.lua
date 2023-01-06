@@ -326,54 +326,45 @@ local function SpawnHorse()
                         SetModelAsNoLongerNeeded(model)
                         SetPedNameDebug(horsePed, hname)
                         SetPedPromptName(horsePed, hname)
+                        -- set horse components
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache), true, true, true) -- ApplyShopItemToPed
+                        SetPedConfigFlag(horsePed, 297, true) -- PCF_ForceInteractionLockonOnTargetPed
+                        Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
+                        -- set horse xp and gender
+                        local horsexp = data.horsexp
+                        local horsegender = data.gender
+                        -- set horse health/stamina (increased by horse training)
+                        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, 100) -- SetAttributeCoreValue (horse health)
+                        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, tonumber(data.horsexp + 1)) -- SetAttributeCoreValue (horse stamina)
+                        if horsexp > 100 then
+                            EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
+                            EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
+                            local setoverpower = data.horsexp + .0 -- convert overpower to float value
+                            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
+                            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
+                        end
+                        -- set gender of horse
+                        if horsegender == 'male' then
+                            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 0.0) -- horse gender (0.0 = male)
+                            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
+                        else
+                            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 1.0) -- horse gender (1.0 = female)
+                            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
+                        end
                         horseSpawned = true                    
-                        moveHorseToPlayer()
-                        applyImportantThings()
-                        Wait(5000)    
+                        moveHorseToPlayer() 
                     end
                 end
             end
-        end
-    end)
-end
-
--- apply components to horse on spawn
-function applyImportantThings()
-    SetPedConfigFlag(horsePed, 297, true) -- PCF_ForceInteractionLockonOnTargetPed
-    Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
-    
-    -- check and apply components
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:CheckComponents', function(data)
-		local horsexp = data.horsexp
-		local horsegender = data.gender
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true) -- ApplyShopItemToPed
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache), true, true, true) -- ApplyShopItemToPed
-        -- set horse health/stamina (increased by horse training)
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, 100) -- SetAttributeCoreValue (horse health)
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, tonumber(data.horsexp)) -- SetAttributeCoreValue (horse stamina)
-        if horsexp > 100 then
-            EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
-            EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
-            local setoverpower = data.horsexp + .0 -- convert overpower to float value
-            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
-            Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
-        end
-        if horsegender == 'male' then
-            Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
-            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 0.0) -- horse gender (0.0 = male)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
-        else
-            Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)
-            Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, 1.0) -- horse gender (1.0 = female)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
         end
     end)
 end
@@ -983,7 +974,7 @@ end)
 
 -------------------------------------------------------------------------------
 
--- equip horse lantern
+-- player equip horse lantern
 RegisterNetEvent('rsg-horses:client:equipHorseLantern')
 AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local hasItem = RSGCore.Functions.HasItem('horselantern', 1)
@@ -1007,6 +998,51 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     else
         RSGCore.Functions.Notify('you don\'t have a horse lantern!', 'error')
     end
+end)
+
+-------------------------------------------------------------------------------
+
+-- player feed horse
+RegisterNetEvent('rsg-horses:client:playerfeedhorse')
+AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
+    if itemName == 'carrot' then
+        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+        Wait(5000)
+        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
+        local newHealth = horseHealth + Config.FeedCarrotHealth
+        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+        print(horseStamina)
+        print(Config.FeedCarrotStamina)
+        local newStamina = horseStamina + Config.FeedCarrotStamina
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    elseif itemName == 'sugarcube' then
+        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+        Wait(5000)
+        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
+        local newHealth = horseHealth + Config.FeedSugarCubeHealth
+        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+        local newStamina = horseStamina + Config.FeedSugarCubeStamina
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    else
+        print("something went wrong")
+    end
+end)
+
+-- player brush horse
+RegisterNetEvent('rsg-horses:client:playerbrushhorse')
+AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
+    Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, `INTERACTION_BRUSH`, 0, 0)
+    Wait(8000)
+    Citizen.InvokeNative(0xE3144B932DFDFF65, horsePed, 0.0, -1, 1, 1)
+    ClearPedEnvDirt(horsePed)
+    ClearPedDamageDecalByZone(horsePed, 10, "ALL")
+    ClearPedBloodDamage(horsePed)
+    Citizen.InvokeNative(0xD8544F6260F5F01E, horsePed, 10)
+    PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
 end)
 
 -------------------------------------------------------------------------------

@@ -7,6 +7,12 @@ Config.Debug = false
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
 
+-- player feed horse settings
+Config.FeedCarrotHealth = 10 -- amount of health increase when you feed your horse a carrot
+Config.FeedCarrotStamina = 10 -- amount of stamina increase when you feed your horse a carrot
+Config.FeedSugarCubeHealth = 25 -- amount of health increase when you feed your horse a sugarcube
+Config.FeedSugarCubeStamina = 25 -- amount of stamina increase when you feed your horse a sugarcube
+
 -- config blips
 Config.Blip = {
     blipName = 'Horse Stable', -- Config.Blip.blipName
