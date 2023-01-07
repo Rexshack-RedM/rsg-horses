@@ -325,6 +325,14 @@ local function SpawnHorse()
                         Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                         SetPedRelationshipGroupHash(horsePed, GetPedRelationshipGroupHash(horsePed))
                         Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true) -- SetPedOwnsAnimal
+                        -- set relationship group between horse and player
+                        Citizen.InvokeNative(0xC80A74AC829DDD92, horsePed, GetPedRelationshipGroupHash(horsePed)) -- SetPedRelationshipGroupHash
+                        Citizen.InvokeNative(0xBF25EB89375A37AD, 1, GetPedRelationshipGroupHash(horsePed), `PLAYER`) -- SetRelationshipBetweenGroups
+                        if Config.Debug == true then
+                            local relationship = Citizen.InvokeNative(0x9E6B70061662AE5C, GetPedRelationshipGroupHash(horsePed), `PLAYER`) -- GetRelationshipBetweenGroups
+                            print(relationship)
+                        end
+                        -- end of relationship group
                         SetModelAsNoLongerNeeded(model)
                         SetPedNameDebug(horsePed, hname)
                         SetPedPromptName(horsePed, hname)
