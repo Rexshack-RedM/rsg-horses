@@ -10,6 +10,8 @@ local horseSpawned = false
 local HorseCalled = false
 local newnames = ''
 local horseDBID
+local horsexp = nil
+local horsegender = nil
 -------------------
 local ped 
 local coords
@@ -349,8 +351,8 @@ local function SpawnHorse()
                         SetPedConfigFlag(horsePed, 297, true) -- PCF_ForceInteractionLockonOnTargetPed
                         Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
                         -- set horse xp and gender
-                        local horsexp = data.horsexp
-                        local horsegender = data.gender
+                        horsexp = data.horsexp
+                        horsegender = data.gender
                         -- set horse health/stamina (increased by horse training)
                         if horsexp <= 100 then
                             local sethorseheath = tonumber(data.horsexp + Config.InitHorseHealth)
@@ -960,7 +962,11 @@ CreateThread(function()
         local fullymounted = Citizen.InvokeNative(0x460BC76A0E10655E, PlayerPedId(), true)
         if fullymounted == 1 then
             if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['Q']) then
-                Citizen.InvokeNative(0xA09CFD29100F06C3, horsePed, 5, 0, 0)
+                if horsexp >= Config.EnableReadUp then
+                    Citizen.InvokeNative(0xA09CFD29100F06C3, horsePed, 5, 0, 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.not_enough_xp'), 'error', 7500)
+                end
             end
         end
     end
