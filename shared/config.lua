@@ -7,6 +7,10 @@ Config.Debug = false
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
 
+-- inital horse stamina and health (number between 1 and 100) 
+Config.InitHorseHealth = 50
+Config.InitHorseStamina = 50
+
 -- player feed horse settings
 Config.FeedCarrotHealth = 10 -- amount of health increase when you feed your horse a carrot
 Config.FeedCarrotStamina = 10 -- amount of stamina increase when you feed your horse a carrot

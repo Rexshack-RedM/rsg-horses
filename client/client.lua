@@ -343,8 +343,12 @@ local function SpawnHorse()
                         local horsexp = data.horsexp
                         local horsegender = data.gender
                         -- set horse health/stamina (increased by horse training)
-                        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, 100) -- SetAttributeCoreValue (horse health)
-                        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, tonumber(data.horsexp + 1)) -- SetAttributeCoreValue (horse stamina)
+                        if horsexp <= 100 then
+                            local sethorseheath = tonumber(data.horsexp + Config.InitHorseHealth)
+                            local sethorsestamina = tonumber(data.horsexp + Config.InitHorseStamina)
+                            Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, sethorseheath) -- SetAttributeCoreValue (horse health)
+                            Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, sethorsestamina) -- SetAttributeCoreValue (horse stamina)
+                        end
                         if horsexp > 100 then
                             EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
                             EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
