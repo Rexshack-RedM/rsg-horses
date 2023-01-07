@@ -950,9 +950,8 @@ end)
 CreateThread(function()
     while true do
         Wait(1)
-        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['B']) then
+        if Citizen.InvokeNative(0x580417101DDB492F, 0, RSGCore.Shared.Keybinds['B']) then
             TriggerEvent('rsg-horses:client:inventoryHorse')
-            Wait(1)
         end
     end
 end)
