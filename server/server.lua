@@ -36,7 +36,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsena
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('RSGCore:Notify', src, 'you don\'t have enough cash to do that!', 'error')
+        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
         return
     end
     local horseid = GenerateHorseid()
@@ -49,7 +49,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsena
         ['@active'] = false,
     })
     Player.Functions.RemoveMoney('cash', price)
-    TriggerClientEvent('RSGCore:Notify', src, 'you now own this horse', 'success')
+    TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_owned'), 'success')
 end)
 
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
@@ -72,25 +72,19 @@ RegisterServerEvent('rsg-horses:server:DelHores', function(id)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local modelHorse = nil
-    print(id)
-    print(Player)
     local player_horses = MySQL.query.await('SELECT * FROM player_horses WHERE id = @id AND `citizenid` = @citizenid', {
         ['@id'] = id,
         ['@citizenid'] = Player.PlayerData.citizenid
     })
-    print(player_horses)
     for i = 1, #player_horses do
         if tonumber(player_horses[i].id) == tonumber(id) then
             modelHorse = player_horses[i].horse
             MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { id, Player.PlayerData.citizenid })
-            print('delete')
         end
     end
     for k,v in pairs(Config.BoxZones) do
         for j,n in pairs(v) do
             if n.model == modelHorse then
-                print(n.model)
-                print(modelHorse)
                 Player.Functions.AddMoney('cash', n.price * 0.5)
             end
         end

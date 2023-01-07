@@ -6,7 +6,9 @@ description 'rsg-horses'
 
 shared_scripts {
     'shared/config.lua',
-    'shared/horse_comp.lua'
+    'shared/horse_comp.lua',
+    '@rsg-core/shared/locale.lua',
+    'locales/en.lua', -- Change this to your preferred language
 }
 
 client_scripts {

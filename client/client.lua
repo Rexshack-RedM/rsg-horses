@@ -44,7 +44,7 @@ RegisterNetEvent('rsg-horses:client:custShop', function()
         if #(pcoords - coords) <= 30.0 then
             createCamera(horsePed)
         else
-            RSGCore.Functions.Notify('Your Horse Is Too Far!', 'error', 7500)
+            RSGCore.Functions.Notify(Lang:t('error.horse_too_far'), 'error', 7500)
         end 
     else 
         RSGCore.Functions.Notify('No Horse Detected', 'error', 7500)
@@ -121,22 +121,22 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                 targeticon = "fas fa-eye",
                                 action = function(newnames)
                                     local dialog = exports['rsg-input']:ShowInput({
-                                        header = "Horse Setup",
-                                        submitText = "Buy Horse",
+                                        header = Lang:t('menu.horse_setup'),
+                                        submitText = Lang:t('menu.horse_buy'),
                                         inputs = {
                                             {
-                                                text = "name",
+                                                text = Lang:t('menu.horse_name'),
                                                 name = "horsename",
                                                 type = "text",
                                                 isRequired = true,
                                             },
                                             {
-                                                text = "gender",
+                                                text = Lang:t('menu.horse_gender'),
                                                 name = "horsegender",
                                                 type = "radio",
                                                 options = {
-                                                    { value = "male",   text = "Male" },
-                                                    { value = "female", text = "Female" },
+                                                    { value = "male",   text = Lang:t('menu.horse_male') },
+                                                    { value = "female", text = Lang:t('menu.horse_female') },
                                                 },
                                             },
                                         }
@@ -182,7 +182,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                 options = {
                     {
                         icon = "fas fa-horse-head",
-                        label = "Get your horse",
+                        label = Lang:t('menu.horse_view_horses'),
                         targeticon = "fas fa-eye",
                         action = function()
                             TriggerEvent("rsg-horses:client:menu")
@@ -190,7 +190,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                     },
                     {
                         icon = "fas fa-horse-head",
-                        label = "Store Horse",
+                        label = Lang:t('menu.horse_store_horse'),
                         targeticon = "fas fa-eye",
                         action = function()
                             TriggerEvent("rsg-horses:client:storehorse")
@@ -198,7 +198,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                     },
                     {
                         icon = "fas fa-horse-head",
-                        label = "Sell your horse",
+                        label = Lang:t('menu.horse_sell'),
                         targeticon = "fas fa-eye",
                         action = function()
                             TriggerEvent("rsg-horses:client:MenuDel")
@@ -206,7 +206,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                     },
                     {
                         icon = "fas fa-horse-head",
-                        label =  "Tack Shop",
+                        label =  Lang:t('menu.horse_customize'),
                         targeticon = "fas fa-eye",
                         action = function()
                         TriggerEvent('rsg-horses:client:custShop')
@@ -214,7 +214,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                     },
                     {
                         icon = "fas fa-horse-head",
-                        label =  "Trade Horse",
+                        label =  Lang:t('menu.horse_trade'),
                         targeticon = "fas fa-eye",
                         action = function()
                         TriggerEvent('rsg-horses:client:tradehorse')
@@ -250,9 +250,9 @@ local function TradeHorse()
                 local playerId = GetPlayerServerId(player)
                 local horseId = data.citizenid
                 TriggerServerEvent('rsg-horses:server:TradeHorse', playerId, horseId)
-                RSGCore.Functions.Notify('Horse has been traded with nearest person', 'success', 7500)
+                RSGCore.Functions.Notify(Lang:t('success.horse_traded'), 'success', 7500)
             else
-                RSGCore.Functions.Notify('No nearby person!', 'success', 7500)
+                RSGCore.Functions.Notify(Lang:t('error.no_nearby_player'), 'success', 7500)
             end
         end
     end)
@@ -307,7 +307,7 @@ local function SpawnHorse()
                     local horseCoords = GetEntityCoords(horsePed)
                     local distance = GetDistanceBetweenCoords(horseCoords, coords)
                     if distance > 150 then
-                        RSGCore.Functions.Notify('You need to be near a road!', 'error', 7500)
+                        RSGCore.Functions.Notify(Lang:t('error.near_road'), 'error', 7500)
                         Wait(100)
                         DeleteEntity(horsePed)
                         Wait(100)
@@ -323,7 +323,6 @@ local function SpawnHorse()
                         getControlOfEntity(horsePed)
                         Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
                         Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
-                        SetPedRelationshipGroupHash(horsePed, GetPedRelationshipGroupHash(horsePed))
                         Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true) -- SetPedOwnsAnimal
                         -- set relationship group between horse and player
                         Citizen.InvokeNative(0xC80A74AC829DDD92, horsePed, GetPedRelationshipGroupHash(horsePed)) -- SetPedRelationshipGroupHash
@@ -404,22 +403,22 @@ end)
 function CustomHorse()
     MenuData.CloseAll()
     local elements = {
-            {label = "Blankets",    category = 'blankets',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 65},
-            {label = "Saddles",     category = 'saddles',    value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 136},
-            {label = "Horns",       category = 'horns',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 14},
-            {label = "Saddle Bags", category = 'saddlebags', value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 20},
-            {label = "Stirrups",    category = 'stirrups',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 11},
-            {label = "Bedrolls",    category = 'bedrolls',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 30},
-            {label = "Tails",       category = 'tails',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 85},
-            {label = "Manes",       category = 'manes',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 102},
-            {label = "Masks",       category = 'masks',      value = 0, desc = "select 0 for no mask",     type = "slider", min = 0, max = 51},
-            {label = "Mustaches",   category = 'mustaches',  value = 0, desc = "select 0 for no mustache", type = "slider", min = 0, max = 16},
+            {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 65},
+            {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 136},
+            {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 14},
+            {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 20},
+            {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 11},
+            {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 30},
+            {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 85},
+            {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 102},
+            {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = 0, desc = "select 0 for no mask",     type = "slider", min = 0, max = 51},
+            {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = 0, desc = "select 0 for no mustache", type = "slider", min = 0, max = 16},
         }
         MenuData.Open(
         'default', GetCurrentResourceName(), 'horse_menu',
         {
-            title    = 'Horse Customization',
-            subtext    = '',
+            title    = Lang:t('menu.horse_customization'),
+            subtext  = '',
             align    = 'top-left',
             elements = elements,
         },
@@ -476,11 +475,11 @@ RegisterNetEvent('rsg-horses:client:setBlankets',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(blanketsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveBlankets', blanketsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -499,11 +498,11 @@ RegisterNetEvent('rsg-horses:client:setSaddles',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlesHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveSaddles', saddlesHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -522,11 +521,11 @@ RegisterNetEvent('rsg-horses:client:setHorns',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(hornsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveHorns', hornsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -545,11 +544,11 @@ RegisterNetEvent('rsg-horses:client:setSaddlebags',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlebagsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveSaddlebags', saddlebagsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -568,11 +567,11 @@ RegisterNetEvent('rsg-horses:client:setStirrups',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(stirrupsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveStirrups', stirrupsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -591,11 +590,11 @@ RegisterNetEvent('rsg-horses:client:setBedrolls',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(bedrollsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveBedrolls', bedrollsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -614,11 +613,11 @@ RegisterNetEvent('rsg-horses:client:setTails',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(tailsHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveTails', tailsHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -637,11 +636,11 @@ RegisterNetEvent('rsg-horses:client:setManes',function(category, value)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(manesHash), true, true, true) 
                 TriggerServerEvent('rsg-horses:server:SaveManes', manesHash)
             else
-                RSGCore.Functions.Notify('No Horse Found', 'error')
+                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
             end
         end)
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -657,7 +656,7 @@ RegisterNetEvent('rsg-horses:client:setMasks',function(category, value)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
                     TriggerServerEvent('rsg-horses:server:SaveMasks', 0)
                 else
-                    RSGCore.Functions.Notify('No Horse Found', 'error')
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
                 end
             end)
         else
@@ -673,12 +672,12 @@ RegisterNetEvent('rsg-horses:client:setMasks',function(category, value)
                     Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(masksHash), true, true, true) 
                     TriggerServerEvent('rsg-horses:server:SaveMasks', masksHash)
                 else
-                    RSGCore.Functions.Notify('No Horse Found', 'error')
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
                 end
             end)
         end
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -694,7 +693,7 @@ RegisterNetEvent('rsg-horses:client:setMustaches',function(category, value)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
                     TriggerServerEvent('rsg-horses:server:SaveMustaches', 0)
                 else
-                    RSGCore.Functions.Notify('No Horse Found', 'error')
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
                 end
             end)
         else
@@ -715,7 +714,7 @@ RegisterNetEvent('rsg-horses:client:setMustaches',function(category, value)
             end)
         end
     else
-        print('something went wrong!')
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
@@ -808,13 +807,13 @@ local HorseId = nil
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     HorseId = data.player.id
     TriggerServerEvent("rsg-horses:server:SetHoresActive", data.player.id)
-    RSGCore.Functions.Notify('Horse has been set active call from back by whistling', 'success', 7500)
+    RSGCore.Functions.Notify(Lang:t('success.horse_active'), 'success', 7500)
 end)
 
 RegisterNetEvent("rsg-horses:client:storehorse", function(data)
  if (horsePed ~= 0) then
     TriggerServerEvent("rsg-horses:server:SetHoresUnActive", HorseId)
-    RSGCore.Functions.Notify('Taking your horse to the back', 'success', 7500)
+    RSGCore.Functions.Notify(Lang:t('success.storing_horse'), 'success', 7500)
     Flee()
     Wait(10000)
     DeletePed(horsePed)
@@ -833,7 +832,7 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
             SetEntityAsNoLongerNeeded(horsePed)
             HorseCalled = false
         else
-            RSGCore.Functions.Notify('You dont have a horse out', 'success', 7500)
+            RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
         end
     end)
 end)
@@ -841,7 +840,7 @@ end)
 RegisterNetEvent('rsg-horses:client:menu', function()
     local GetHorse = {
         {
-            header = "| My Horses |",
+            header = Lang:t('menu.my_horses'),
             isMenuHeader = true,
             icon = "fa-solid fa-circle-user",
         },
@@ -850,7 +849,7 @@ RegisterNetEvent('rsg-horses:client:menu', function()
         for _, v in pairs(cb) do
             GetHorse[#GetHorse + 1] = {
                 header = v.name,
-                txt = 'Gender : '..v.gender..' / XP : '..v.horsexp..' / Active : '..v.active,
+                txt = Lang:t('menu.my_horse_gender')..v.gender..Lang:t('menu.my_horse_xp')..v.horsexp..Lang:t('menu.my_horse_active')..v.active,
                 icon = "fa-solid fa-circle-user",
                 params = {
                     event = "rsg-horses:client:SpawnHorse",
@@ -868,7 +867,7 @@ end)
 RegisterNetEvent('rsg-horses:client:MenuDel', function()
     local GetHorse = {
         {
-            header = "| Sell Horses |",
+            header = Lang:t('menu.sell_horses'),
             isMenuHeader = true,
             icon = "fa-solid fa-circle-user",
         },
@@ -902,7 +901,7 @@ RegisterNetEvent('rsg-horses:client:MenuDelC', function(data)
         for _, v in pairs(cb) do
             GetHorse[#GetHorse + 1] = {
                 header = v.name,
-                txt = "Doing this will make you lose your horse forever!",
+                txt = Lang:t('menu.sell_warning'),
                 icon = "fa-solid fa-circle-user",
                 params = {
                     event = "rsg-horses:client:DeleteHorse",
@@ -918,7 +917,7 @@ RegisterNetEvent('rsg-horses:client:MenuDelC', function(data)
 end)
 
 RegisterNetEvent('rsg-horses:client:DeleteHorse', function(data)
-    RSGCore.Functions.Notify('Horse has been successfully removed', 'success', 7500)
+    RSGCore.Functions.Notify(Lang:t('success.horse_sold'), 'success', 7500)
     TriggerServerEvent("rsg-horses:server:DelHores", data.player.id)
 end)
 
@@ -990,10 +989,10 @@ RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
                 TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
                 TriggerEvent("inventory:client:SetCurrentStash", horsestash)
             else
-                RSGCore.Functions.Notify('you are NOT in distance to open inventory!', 'error', 7500)
+                RSGCore.Functions.Notify(Lang:t('error.inventory_distance'), 'error', 7500)
             end 
         else
-            RSGCore.Functions.Notify('you do not have a horse active!', 'error', 7500)
+            RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
         end
     end)
 end)  
@@ -1016,13 +1015,13 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
                 Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
                 Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
                 lanternequiped = false
-                RSGCore.Functions.Notify('horse lantern removed', 'primary')
+                RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'primary')
             end
         else
-            RSGCore.Functions.Notify('you need to be closer to do that!', 'error')
+            RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
         end
     else
-        RSGCore.Functions.Notify('you don\'t have a horse lantern!', 'error')
+        RSGCore.Functions.Notify(Lang:t('error.no_lantern'), 'error')
     end
 end)
 
@@ -1054,7 +1053,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
         PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
     else
-        print("something went wrong")
+        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
