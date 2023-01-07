@@ -322,7 +322,9 @@ local function SpawnHorse()
                         Wait(100)
                         getControlOfEntity(horsePed)
                         Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
-                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity                        
+                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
+                        SetPedRelationshipGroupHash(horsePed, GetPedRelationshipGroupHash(horsePed))
+                        Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true) -- SetPedOwnsAnimal
                         SetModelAsNoLongerNeeded(model)
                         SetPedNameDebug(horsePed, hname)
                         SetPedPromptName(horsePed, hname)
@@ -939,6 +941,19 @@ CreateThread(function()
         elseif Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['HorseCommandFlee']) then -- flee horse
             if horseSpawned ~= 0 then
                 Flee()
+            end
+        end
+    end
+end)
+
+-- horse rear up
+CreateThread(function()
+    while true do
+        Wait(1)
+        local fullymounted = Citizen.InvokeNative(0x460BC76A0E10655E, PlayerPedId(), true)
+        if fullymounted == 1 then
+            if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['Q']) then
+                Citizen.InvokeNative(0xA09CFD29100F06C3, horsePed, 5, 0, 0)
             end
         end
     end

@@ -15,6 +15,11 @@
 # Starting the resource
 - add the following to your server.cfg file : ensure rsg-horses
 
+# Controls Set
+- [H] call horse
+- [B] horse inventory
+- [Q] horse rear up
+
 # Credit
 - Humanity Is Insanity#3505 & Zee#2115 from The Crossroads RP for code inspiration and system
 - RedEM-RP for the menu : https://github.com/RedEM-RP/redemrp_menu_base
