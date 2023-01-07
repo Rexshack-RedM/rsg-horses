@@ -812,6 +812,16 @@ RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     RSGCore.Functions.Notify(Lang:t('success.horse_active'), 'success', 7500)
 end)
 
+-- flee horse
+local function Flee()
+    TaskAnimalFlee(horsePed, PlayerPedId(), -1)
+    Wait(10000)
+    DeleteEntity(horsePed)
+    Wait(1000)
+    horsePed = 0
+    HorseCalled = false
+end
+
 RegisterNetEvent("rsg-horses:client:storehorse", function(data)
  if (horsePed ~= 0) then
     TriggerServerEvent("rsg-horses:server:SetHoresUnActive", HorseId)
@@ -924,16 +934,6 @@ RegisterNetEvent('rsg-horses:client:DeleteHorse', function(data)
 end)
 
 -------------------------------------------------------------------------------
-
--- flee horse
-local function Flee()
-    TaskAnimalFlee(horsePed, PlayerPedId(), -1)
-    Wait(10000)
-    DeleteEntity(horsePed)
-    Wait(1000)
-    horsePed = 0
-    HorseCalled = false
-end
 
 -- call / flee horse
 CreateThread(function()
