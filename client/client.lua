@@ -381,6 +381,7 @@ local function SpawnHorse()
                             Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
                         end
                         horseSpawned = true                    
+                        HorseCalled = true
                         moveHorseToPlayer() 
                     end
                 end
@@ -947,7 +948,6 @@ CreateThread(function()
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
             if not HorseCalled then
                 SpawnHorse()
-                HorseCalled = true
                 Wait(10000) -- Spam protect
             else
                 moveHorseToPlayer()
