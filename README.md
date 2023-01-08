@@ -19,6 +19,7 @@
 - [H] call horse
 - [B] horse inventory
 - [Q] horse rear up
+- rename your acvite horse : command /sethorsename
 
 # Credit
 - Humanity Is Insanity#3505 & Zee#2115 from The Crossroads RP for code inspiration and system
