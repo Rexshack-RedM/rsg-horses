@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `player_horses` (
   `horseid` varchar(6) NOT NULL,
   `name` varchar(255) NOT NULL,
   `horse` varchar(50) DEFAULT NULL,
-  `horsexp` int(11) NOT NULL,
+  `horsexp` int(11) NOT NULL DEFAULT 0,
   `saddle` varchar(50) DEFAULT NULL,
   `blanket` varchar(50) DEFAULT NULL,
   `saddlebag` varchar(50) DEFAULT NULL,
