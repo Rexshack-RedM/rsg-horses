@@ -54,11 +54,11 @@ RegisterNetEvent('rsg-horses:client:custShop', function()
 end)
 
 -- rename horse name command
-RegisterCommand('sethorsename',function(input)
+RegisterCommand('sethorsename',function()
     local input = exports['rsg-input']:ShowInput({
-    header = "Name your horse",
-    submitText = "Confirm",
-    inputs = {
+        header = "Name your horse",
+        submitText = "Confirm",
+        inputs = {
             {
                 type = 'text',
                 isRequired = true,
@@ -67,7 +67,10 @@ RegisterCommand('sethorsename',function(input)
             }
         }
     })
-    TriggerServerEvent('rsg-horses:renameHorse', input)
+
+    if input == nil then return end
+
+    TriggerServerEvent('rsg-horses:renameHorse', input.realinput)
 end)
 
 -- create stable zones

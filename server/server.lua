@@ -68,6 +68,19 @@ RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id)
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, id, Player.PlayerData.citizenid })
 end)
 
+RegisterServerEvent('rsg-horses:renameHorse', function(name)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local newName = MySQL.query.await('UPDATE player_horses SET name = ? WHERE citizenid = ? AND active = ?' , {name, Player.PlayerData.citizenid, 1})
+
+    if newName == nil then
+        TriggerClientEvent('RSGCore:Notify', src, 'Failed to change horse name!', 'error')
+        return
+    end
+
+    TriggerClientEvent('RSGCore:Notify', src, 'Horse name changed to \''..name..'\' successfully!', 'success')
+end)
+
 RegisterServerEvent('rsg-horses:server:DelHores', function(id)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
