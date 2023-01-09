@@ -1071,6 +1071,21 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
         PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+   elseif itemName == 'horsestim' then
+		Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -1355254781, GetHashKey("p_cs_syringe01x"), 0, 0) -- TaskAnimalInteraction
+		Wait(5000)
+		local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
+		local newHealth = horseHealth + Config.HorseStimHealth
+		local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+		local newStamina = horseStamina + Config.HorseStimStamina
+		Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
+		Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+		Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, 1000.0)
+    	Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, 1000.0)
+		PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+		if not oncooldown then 
+			oncooldown = true 
+			RSGCore.Functions.Notify('You gave the horse stims!', 'success')
     else
         print(Lang:t('error.something_went_wrong'))
     end
