@@ -20,9 +20,6 @@ Config.FeedSugarCubeStamina = 25 -- amount of stamina increase when you feed you
 -- horse xp settings
 Config.EnableReadUp = 1000 -- amount of XP you need to enable horse rear-up [Q] key
 
--- call horse from anywhere
-Config.CallFromAnywhere = true
-
 -- config blips
 Config.Blip = {
     blipName = 'Horse Stable', -- Config.Blip.blipName
