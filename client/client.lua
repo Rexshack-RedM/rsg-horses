@@ -321,7 +321,7 @@ local function SpawnHorse()
                     local coords = GetEntityCoords(PlayerPedId())
                     local horseCoords = GetEntityCoords(horsePed)
                     local distance = GetDistanceBetweenCoords(horseCoords, coords)
-                    if distance > 150 then
+                    if not Config.CallFromAnywhere and distance > 150 then
                         RSGCore.Functions.Notify(Lang:t('error.near_road'), 'error', 7500)
                         Wait(100)
                         DeleteEntity(horsePed)
