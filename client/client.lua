@@ -227,6 +227,14 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                         TriggerEvent('rsg-horses:client:tradehorse')
                         end
                     },
+                    {
+                        icon = "fas fa-award",
+                        label =  Lang:t('menu.horse_trainer_shop'),
+                        targeticon = "fas fa-eye",
+                        action = function()
+                        TriggerEvent('rsg-horsetrainer:client:OpenTrainerShop')
+                        end
+                    },
                 },
                 distance = 2.5,
             })

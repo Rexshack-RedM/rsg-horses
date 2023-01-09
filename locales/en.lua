@@ -51,6 +51,7 @@ local Translations = {
         my_horse_active = ' / Active : ',
         sell_horses = 'Sell Horses',
         sell_warning = 'Doing this will make you lose your horse forever!',
+        horse_trainer_shop = 'Shop (Horse Trainer Only)',
     },
 }
 
