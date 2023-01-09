@@ -1,0 +1,1 @@
+['horsestim']		= {['name'] = 'horsestim',		['label'] = 'Horse Stimulant',	['weight'] = 500,	['type'] = 'item',	['image'] = 'horsestim.png',	['unique'] = false,	['useable'] = true,	['shouldClose'] = true,	['combinable'] = nil,	['level'] = 0,	['description'] = 'who said horses dont like drugs?'},
