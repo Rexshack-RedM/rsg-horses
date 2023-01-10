@@ -850,9 +850,6 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
         if (horsePed ~= 0) then
             TradeHorse()
             Flee()
-            Wait(10000)
-            DeletePed(horsePed)
-            SetEntityAsNoLongerNeeded(horsePed)
             HorseCalled = false
         else
             RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
