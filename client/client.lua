@@ -337,7 +337,8 @@ local function SpawnHorse()
                         Wait(100)
                         getControlOfEntity(horsePed)
                         Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
-                        Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
+                        local horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
+                        Citizen.InvokeNative(0x9CB1A1623062F402, horseBlip, data.name) -- SetBlipName
                         Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true) -- SetPedOwnsAnimal
                         -- set relationship group between horse and player
                         Citizen.InvokeNative(0xC80A74AC829DDD92, horsePed, GetPedRelationshipGroupHash(horsePed)) -- SetPedRelationshipGroupHash
