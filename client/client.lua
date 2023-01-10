@@ -830,8 +830,8 @@ end)
 -- flee horse
 local function Flee()
     TaskAnimalFlee(horsePed, PlayerPedId(), -1)
-    DeleteEntity(horsePed)
     Wait(10000)
+    DeleteEntity(horsePed)
     horsePed = 0
     HorseCalled = false
 end
