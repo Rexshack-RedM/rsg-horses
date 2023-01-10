@@ -12,6 +12,8 @@ local newnames = ''
 local horseDBID
 local horsexp = nil
 local horsegender = nil
+local horseBonding = 0
+local bondingLevel = 0
 -------------------
 local ped 
 local coords
@@ -23,6 +25,10 @@ local zonename = nil
 local inStableZone = false
 -------------------
 
+-- Export for Horse Bonding Level checks
+exports('CheckHorseBondingLevel', function()
+    return bondingLevel
+end)
 
 RegisterNetEvent('rsg-horses:client:custShop', function()
     local function createCamera(horsePed)
@@ -286,6 +292,29 @@ local function PlacePedOnGroundProperly(hPed)
     end
 end
 
+-- calculate horse bonding levels
+local function BondingLevels()
+    local maxBonding = GetMaxAttributePoints(horsePed, 7)
+    local currentBonding = GetAttributePoints(horsePed, 7)
+    local thirdBonding = maxBonding / 3
+
+    if currentBonding >= maxBonding then
+        bondingLevel = 4
+    end
+
+    if currentBonding >= thirdBonding and thirdBonding * 2 > currentBonding then
+        bondingLevel = 2
+    end
+
+    if currentBonding >= thirdBonding * 2 and maxBonding > currentBonding  then
+        bondingLevel = 3
+    end
+
+    if thirdBonding > currentBonding then
+        bondingLevel = 1
+    end
+end
+
 -- spawn horse
 local function SpawnHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
@@ -377,6 +406,28 @@ local function SpawnHorse()
                     Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
                     Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
                 end
+
+                -- horse bonding level: start
+                if horsexp <= Config.MaxBondingLevel / 0.25 then -- level 1 (0 -> 1250)
+                    horseBonding = 1
+                end
+
+                if horsexp >= Config.MaxBondingLevel / 0.5 then -- level 2 (1000 -> 2500)
+                    horseBonding = 817
+                end
+
+                if horsexp >= Config.MaxBondingLevel * 0.75 then -- level 3 (2500 -> 3750)
+                    horseBonding = 1634
+                end
+
+                if horsexp >= Config.MaxBondingLevel then -- level 4 (3750 -> 5000)
+                    horseBonding = 2450
+                end
+
+                Citizen.InvokeNative(0x09A59688C26D88DF, horsePed, 7, horseBonding)
+
+                BondingLevels()
+                -- horse bonding level: end
 
                 local faceFeature = 0.0
 
@@ -954,7 +1005,7 @@ CreateThread(function()
 
             if not HorseCalled and (distance > 100.0) then
                 SpawnHorse()
-                Wait(10000) -- Spam protect
+                Wait(3000) -- Spam protect
             else
                 moveHorseToPlayer()
             end
@@ -963,23 +1014,6 @@ CreateThread(function()
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['HorseCommandFlee']) then -- flee horse
             if horseSpawned ~= 0 then
                 Flee()
-            end
-        end
-    end
-end)
-
--- horse rear up
-CreateThread(function()
-    while true do
-        Wait(1)
-        local fullymounted = Citizen.InvokeNative(0x460BC76A0E10655E, PlayerPedId(), true)
-        if fullymounted == 1 then
-            if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['Q']) then
-                if horsexp >= Config.EnableReadUp then
-                    Citizen.InvokeNative(0xA09CFD29100F06C3, horsePed, 5, 0, 0)
-                else
-                    RSGCore.Functions.Notify(Lang:t('error.not_enough_xp'), 'error', 7500)
-                end
             end
         end
     end
@@ -1055,8 +1089,10 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
         local newHealth = horseHealth + Config.FeedCarrotHealth
         local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
-        print(horseStamina)
-        print(Config.FeedCarrotStamina)
+        if Config.Debug then
+            print(horseStamina)
+            print(Config.FeedCarrotStamina)
+        end
         local newStamina = horseStamina + Config.FeedCarrotStamina
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
