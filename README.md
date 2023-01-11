@@ -16,11 +16,30 @@
 - add the following to your server.cfg file : ensure rsg-horses
 
 # Controls Set
+- some keys need bonding level to work
+- may depend on your keybinds set on RDR settings
+-------------------
+- [W] move forward
+- [S] backward
+- [A] move left
+- [D] move right
+-------------------
+- [C] look behind
+- [E] mount/dismount
 - [H] call horse
 - [B] horse inventory
-- [Q] horse rear up
+- [LCTRL] backup horse (when not moving)
+- [LCTRL] to skid when moving
+- [SPACEBAR] horse jump
+- [SPACEBAR] + [L] strafing left
+- [SPACEBAR] + [R] strafing right
+- [LCTRL] + [SPACEBAR] horse rear up when not moving / correct bonding level
+-------------------
+
+# Commands Set
 - rename your active horse : command /sethorsename
 
 # Credit
 - Humanity Is Insanity#3505 & Zee#2115 from The Crossroads RP for code inspiration and system
 - RedEM-RP for the menu : https://github.com/RedEM-RP/redemrp_menu_base
+- Goghor#9453 for coding assistance / horse bonding work
