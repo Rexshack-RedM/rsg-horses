@@ -29,3 +29,5 @@ dependencies {
     'rsg-core',
     'menu_base'
 }
+
+export 'CheckHorseBondingLevel'

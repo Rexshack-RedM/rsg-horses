@@ -20,6 +20,9 @@ Config.FeedSugarCubeStamina = 25 -- amount of stamina increase when you feed you
 -- horse xp settings
 Config.EnableReadUp = 1000 -- amount of XP you need to enable horse rear-up [Q] key
 
+-- horse bonding settings
+Config.MaxBondingLevel = 5000
+
 -- config blips
 Config.Blip = {
     blipName = 'Horse Stable', -- Config.Blip.blipName
