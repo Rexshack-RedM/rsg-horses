@@ -19,6 +19,7 @@ local ped
 local coords
 local hasSpawned = false
 local lanternequiped = false
+local lanternUsed = false
 -------------------
 local Zones = {}
 local zonename = nil
@@ -1069,22 +1070,37 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
 
     local pcoords = GetEntityCoords(PlayerPedId())
     local hcoords = GetEntityCoords(horsePed)
+    local distance = #(pcoords - hcoords)
 
-    if #(pcoords - hcoords) <= 3.0 then
-        if lanternequiped == false then
-            Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0x635E387C, true, true, true)
-            lanternequiped = true
-            RSGCore.Functions.Notify(Lang:t('primary.lantern_equiped'), 'success')
-        end
-
-        if lanternequiped == true then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
-            lanternequiped = false
-            RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'primary')
-        end
-    else
+    if distance > 2.0 then
         RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        return
+    end
+
+    if lanternUsed then
+        lanternUsed = false
+        Wait(5000)
+    end
+
+    if lanternequiped == false then
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0x635E387C, true, true, true)
+
+        lanternequiped = true
+        lanternUsed = true
+
+        RSGCore.Functions.Notify(Lang:t('primary.lantern_equiped'), 'success', 3000)
+        return
+    end
+
+    if lanternequiped == true then
+        Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+
+        lanternequiped = false
+        lanternUsed = true
+
+        RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'primary', 3000)
+        return
     end
 end)
 
