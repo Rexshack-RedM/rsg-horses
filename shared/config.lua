@@ -3,6 +3,9 @@ Config = {}
 -- debug
 Config.Debug = false
 
+-- horse inventory hotkey, please refer to '[framework]/rsg-core/shared/keybinds.lua' for complete list of hotkeys
+Config.HorseInvKey = 0x760A9C6F -- G
+
 -- horse inventory
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20

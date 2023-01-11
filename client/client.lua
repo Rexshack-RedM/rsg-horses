@@ -30,6 +30,11 @@ exports('CheckHorseBondingLevel', function()
     return bondingLevel
 end)
 
+-- Export for active horsePed
+exports('CheckActiveHorse', function()
+    return horsePed
+end)
+
 RegisterNetEvent('rsg-horses:client:custShop', function()
     local function createCamera(horsePed)
         local coords = GetEntityCoords(horsePed)
@@ -1025,7 +1030,11 @@ end)
 CreateThread(function()
     while true do
         Wait(1)
-        if Citizen.InvokeNative(0x580417101DDB492F, 0, RSGCore.Shared.Keybinds['B']) then
+
+        local pcoords = GetEntityCoords(PlayerPedId())
+        local hcoords = GetEntityCoords(horsePed)
+
+        if #(pcoords - hcoords) <= 1.7 and Citizen.InvokeNative(0x580417101DDB492F, 0, Config.HorseInvKey) then
             TriggerEvent('rsg-horses:client:inventoryHorse')
         end
     end
@@ -1033,22 +1042,18 @@ end)
 
 -- horse inventory
 RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        if horsePed ~= 0 then
-            local pcoords = GetEntityCoords(PlayerPedId())
-            local hcoords = GetEntityCoords(horsePed)
-            if #(pcoords - hcoords) <= 1.7 then
-                local horsestash = data.name..data.horseid
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
-                TriggerEvent("inventory:client:SetCurrentStash", horsestash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.inventory_distance'), 'error', 7500)
-            end 
-        else
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
+        if horsePed == 0 then
             RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
+            return
         end
+
+        local horsestash = data.name..' '..data.horseid
+
+        TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
+        TriggerEvent("inventory:client:SetCurrentStash", horsestash)
     end)
-end)  
+end)
 
 -------------------------------------------------------------------------------
 
@@ -1056,25 +1061,30 @@ end)
 RegisterNetEvent('rsg-horses:client:equipHorseLantern')
 AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local hasItem = RSGCore.Functions.HasItem('horselantern', 1)
-    if hasItem then
-        local pcoords = GetEntityCoords(PlayerPedId())
-        local hcoords = GetEntityCoords(horsePed)
-        if #(pcoords - hcoords) <= 3.0 then
-            if lanternequiped == false then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0x635E387C, true, true, true)
-                lanternequiped = true
-                RSGCore.Functions.Notify('horse lantern equiped', 'success')
-            elseif lanternequiped == true then
-                Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
-                Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
-                lanternequiped = false
-                RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'primary')
-            end
-        else
-            RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+
+    if not hasItem then
+        RSGCore.Functions.Notify(Lang:t('error.no_lantern'), 'error')
+        return
+    end
+
+    local pcoords = GetEntityCoords(PlayerPedId())
+    local hcoords = GetEntityCoords(horsePed)
+
+    if #(pcoords - hcoords) <= 3.0 then
+        if lanternequiped == false then
+            Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0x635E387C, true, true, true)
+            lanternequiped = true
+            RSGCore.Functions.Notify(Lang:t('primary.lantern_equiped'), 'success')
+        end
+
+        if lanternequiped == true then
+            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x1530BE1C, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            lanternequiped = false
+            RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'primary')
         end
     else
-        RSGCore.Functions.Notify(Lang:t('error.no_lantern'), 'error')
+        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
     end
 end)
 
@@ -1083,45 +1093,73 @@ end)
 -- player feed horse
 RegisterNetEvent('rsg-horses:client:playerfeedhorse')
 AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
+    local pcoords = GetEntityCoords(PlayerPedId())
+    local hcoords = GetEntityCoords(horsePed)
+
+    if #(pcoords - hcoords) > 2.0 then
+        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        return
+    end
+
     if itemName == 'carrot' then
         Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+
         Wait(5000)
+
         local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
         local newHealth = horseHealth + Config.FeedCarrotHealth
         local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+        local newStamina = horseStamina + Config.FeedCarrotStamina
+
         if Config.Debug then
             print(horseStamina)
             print(Config.FeedCarrotStamina)
         end
-        local newStamina = horseStamina + Config.FeedCarrotStamina
+
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+
         PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    elseif itemName == 'sugarcube' then
+    end
+
+    if itemName == 'sugarcube' then
         Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+
         Wait(5000)
+
         local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
         local newHealth = horseHealth + Config.FeedSugarCubeHealth
         local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
         local newStamina = horseStamina + Config.FeedSugarCubeStamina
+
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
         Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+
         PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    else
-        print(Lang:t('error.something_went_wrong'))
     end
 end)
 
 -- player brush horse
 RegisterNetEvent('rsg-horses:client:playerbrushhorse')
 AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
+    local pcoords = GetEntityCoords(PlayerPedId())
+    local hcoords = GetEntityCoords(horsePed)
+
+    if #(pcoords - hcoords) > 2.0 then
+        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        return
+    end
+
     Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, `INTERACTION_BRUSH`, 0, 0)
+
     Wait(8000)
+
     Citizen.InvokeNative(0xE3144B932DFDFF65, horsePed, 0.0, -1, 1, 1)
     ClearPedEnvDirt(horsePed)
     ClearPedDamageDecalByZone(horsePed, 10, "ALL")
     ClearPedBloodDamage(horsePed)
     Citizen.InvokeNative(0xD8544F6260F5F01E, horsePed, 10)
+
     PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
 end)
 
