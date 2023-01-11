@@ -7,7 +7,7 @@ local Translations = {
         something_went_wrong = 'something went wrong!',
         no_horse_out = 'You dont have a horse out!',
         inventory_distance = 'you are NOT in distance to open inventory!',
-        need_to_be_closer = 'you need to be closer to do that!!',
+        need_to_be_closer = 'Please move closer to your horse!',
         no_lantern = 'you don\'t have a horse lantern!',
         no_cash = 'you don\'t have enough cash to do that!',
         not_enough_xp = 'you don\'t have enough XP to do that!',
@@ -20,7 +20,8 @@ local Translations = {
         horse_owned = 'you now own this horse',
     },
     primary = {
-        lantern_removed = 'horse lantern removed',
+        lantern_equiped = 'Horse lantern equiped!',
+        lantern_removed = 'horse lantern removed!'
     },
     menu = {
         horse_setup = 'Horse Setup',
