@@ -408,11 +408,11 @@ local function SpawnHorse()
                 end
 
                 -- horse bonding level: start
-                if horsexp <= Config.MaxBondingLevel / 0.25 then -- level 1 (0 -> 1250)
+                if horsexp <= Config.MaxBondingLevel * 0.25 then -- level 1 (0 -> 1250)
                     horseBonding = 1
                 end
 
-                if horsexp >= Config.MaxBondingLevel / 0.5 then -- level 2 (1000 -> 2500)
+                if horsexp >= Config.MaxBondingLevel * 0.5 then -- level 2 (1000 -> 2500)
                     horseBonding = 817
                 end
 
