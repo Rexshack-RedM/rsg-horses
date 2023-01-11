@@ -21,7 +21,7 @@ local Translations = {
     },
     primary = {
         lantern_equiped = 'Horse lantern equiped!',
-        lantern_removed = 'horse lantern removed!'
+        lantern_removed = 'Horse lantern removed!'
     },
     menu = {
         horse_setup = 'Horse Setup',
