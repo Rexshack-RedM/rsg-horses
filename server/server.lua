@@ -8,6 +8,12 @@ RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
     TriggerClientEvent("rsg-horses:client:equipHorseLantern", source, item.name)
 end)
 
+-- player horseholster
+RSGCore.Functions.CreateUseableItem("horseholster", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    TriggerClientEvent("rsg-horses:client:equipHorseHolster", source, item.name)
+end)
+
 -- feed horse carrot
 RSGCore.Functions.CreateUseableItem("carrot", function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
