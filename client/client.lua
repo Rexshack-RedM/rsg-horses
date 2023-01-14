@@ -399,21 +399,76 @@ local function SpawnHorse()
                 horsexp = data.horsexp
                 horsegender = data.gender
 
-                -- set horse health/stamina (increased by horse training)
-                if horsexp <= 100 then
-                    local sethorseheath = tonumber(data.horsexp + Config.InitHorseHealth)
-                    local sethorsestamina = tonumber(data.horsexp + Config.InitHorseStamina)
-                    Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, sethorseheath) -- SetAttributeCoreValue (horse health)
-                    Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, sethorsestamina) -- SetAttributeCoreValue (horse stamina)
-                end
-
-                if horsexp > 100 then
+                -- set horse health/stamina/ability/speed/acceleration (increased by horse training)
+                if horsexp <= 99 then
+                    SetAttributePoints(horsePed, 0, 100) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 100) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 100) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 100) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 100) -- ACCELERATION (0-2000)
+                elseif horsexp >= 100 and horsexp <= 199 then
+                    SetAttributePoints(horsePed, 0, 200) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 200) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 200) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 200) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 200) -- ACCELERATION (0-2000)
+                elseif horsexp >= 200 and horsexp <= 299 then
+                    SetAttributePoints(horsePed, 0, 300) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 300) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 300) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 300) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 300) -- ACCELERATION (0-2000)
+                elseif horsexp >= 300 and horsexp <= 399 then
+                    SetAttributePoints(horsePed, 0, 400) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 400) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 400) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 400) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 400) -- ACCELERATION (0-2000)
+                elseif horsexp >= 400 and horsexp <= 499 then
+                    SetAttributePoints(horsePed, 0, 500) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 500) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 500) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 500) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 500) -- ACCELERATION (0-2000)
+                elseif horsexp >= 500 and horsexp <= 999 then
+                    SetAttributePoints(horsePed, 0, 900) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 900) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 900) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 900) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 900) -- ACCELERATION (0-2000)
+                elseif horsexp >= 1000 and horsexp <= 1999 then
+                    SetAttributePoints(horsePed, 0, 1000) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 1000) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 1000) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 1000) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 1000) -- ACCELERATION (0-2000)
+                elseif horsexp >= 2000 and horsexp <= 2999 then
+                    SetAttributePoints(horsePed, 0, 1500) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 1500) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 1500) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 1500) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 1500) -- ACCELERATION (0-2000)
+                elseif horsexp >= 3000 and horsexp <= 3999 then
+                    SetAttributePoints(horsePed, 0, 2000) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 2000) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 2000) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 2000) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 2000) -- ACCELERATION (0-2000)
+                elseif horsexp >= 4000 then
+                    SetAttributePoints(horsePed, 0, 2000) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, 2000) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, 2000) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, 2000) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, 2000) -- ACCELERATION (0-2000)
+                    -- overpower settings
                     EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
                     EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
                     local setoverpower = data.horsexp + .0 -- convert overpower to float value
                     Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, setoverpower) -- set health with overpower
                     Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower) -- set stamina with overpower
+                    -- end of overpower settings
                 end
+                -- end set horse health/stamina/ability/speed/acceleration (increased by horse training)
 
                 -- horse bonding level: start
                 if horsexp <= Config.MaxBondingLevel * 0.25 then -- level 1 (0 -> 1250)
