@@ -401,65 +401,65 @@ local function SpawnHorse()
 
                 -- set horse health/stamina/ability/speed/acceleration (increased by horse training)
                 if horsexp <= 99 then
-                    SetAttributePoints(horsePed, 0, 100) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 100) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 100) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 100) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 100) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level1) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level1) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level1) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level1) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level1) -- ACCELERATION (0-2000)
                 elseif horsexp >= 100 and horsexp <= 199 then
-                    SetAttributePoints(horsePed, 0, 200) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 200) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 200) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 200) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 200) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level2) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level2) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level2) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level2) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level2) -- ACCELERATION (0-2000)
                 elseif horsexp >= 200 and horsexp <= 299 then
-                    SetAttributePoints(horsePed, 0, 300) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 300) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 300) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 300) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 300) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level3) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level3) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level3) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level3) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level3) -- ACCELERATION (0-2000)
                 elseif horsexp >= 300 and horsexp <= 399 then
-                    SetAttributePoints(horsePed, 0, 400) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 400) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 400) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 400) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 400) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level4) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level4) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level4) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level4) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level4) -- ACCELERATION (0-2000)
                 elseif horsexp >= 400 and horsexp <= 499 then
-                    SetAttributePoints(horsePed, 0, 500) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 500) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 500) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 500) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 500) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level5) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level5) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level5) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level5) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level5) -- ACCELERATION (0-2000)
                 elseif horsexp >= 500 and horsexp <= 999 then
-                    SetAttributePoints(horsePed, 0, 900) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 900) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 900) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 900) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 900) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level6) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level6) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level6) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level6) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level6) -- ACCELERATION (0-2000)
                 elseif horsexp >= 1000 and horsexp <= 1999 then
-                    SetAttributePoints(horsePed, 0, 1000) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 1000) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 1000) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 1000) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 1000) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level7) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level7) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level7) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level7) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level7) -- ACCELERATION (0-2000)
                 elseif horsexp >= 2000 and horsexp <= 2999 then
-                    SetAttributePoints(horsePed, 0, 1500) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 1500) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 1500) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 1500) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 1500) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level8) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level8) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level8) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level8) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level8) -- ACCELERATION (0-2000)
                 elseif horsexp >= 3000 and horsexp <= 3999 then
-                    SetAttributePoints(horsePed, 0, 2000) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 2000) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 2000) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 2000) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 2000) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level9) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level9) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level9) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level9) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level9) -- ACCELERATION (0-2000)
                 elseif horsexp >= 4000 then
-                    SetAttributePoints(horsePed, 0, 2000) -- HEALTH (0-2000)
-                    SetAttributePoints(horsePed, 1, 2000) -- STAMINA (0-2000)
-                    SetAttributePoints(horsePed, 4, 2000) -- AGILITY (0-2000)
-                    SetAttributePoints(horsePed, 5, 2000) -- SPEED (0-2000)
-                    SetAttributePoints(horsePed, 6, 2000) -- ACCELERATION (0-2000)
+                    SetAttributePoints(horsePed, 0, Config.Level10) -- HEALTH (0-2000)
+                    SetAttributePoints(horsePed, 1, Config.Level10) -- STAMINA (0-2000)
+                    SetAttributePoints(horsePed, 4, Config.Level10) -- AGILITY (0-2000)
+                    SetAttributePoints(horsePed, 5, Config.Level10) -- SPEED (0-2000)
+                    SetAttributePoints(horsePed, 6, Config.Level10) -- ACCELERATION (0-2000)
                     -- overpower settings
                     EnableAttributeOverpower(horsePed, 0, 5000.0) -- health overpower
                     EnableAttributeOverpower(horsePed, 1, 5000.0) -- stamina overpower
@@ -1107,9 +1107,38 @@ RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
         end
 
         local horsestash = data.name..' '..data.horseid
-
-        TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.HorseInvWeight, slots = Config.HorseInvSlots, })
-        TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        
+        if horsexp <= 99 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level1InvWeight, slots = Config.Level1InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 100 and horsexp <= 199 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level2InvWeight, slots = Config.Level2InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 200 and horsexp <= 299 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level3InvWeight, slots = Config.Level3InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 300 and horsexp <= 399 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level4InvWeight, slots = Config.Level4InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 400 and horsexp <= 499 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level5InvWeight, slots = Config.Level5InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 500 and horsexp <= 999 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level6InvWeight, slots = Config.Level6InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 1000 and horsexp <= 1999 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level7InvWeight, slots = Config.Level7InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 2000 and horsexp <= 2999 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level8InvWeight, slots = Config.Level8InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp >= 3000 and horsexp <= 3999 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level9InvWeight, slots = Config.Level9InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        elseif horsexp > 4000 then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash, { maxweight = Config.Level10InvWeight, slots = Config.Level10InvSlots, })
+            TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        end
     end)
 end)
 

@@ -10,9 +10,39 @@ Config.HorseInvKey = 0x760A9C6F -- G
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
 
--- inital horse stamina and health (number between 1 and 100) 
-Config.InitHorseHealth = 50
-Config.InitHorseStamina = 50
+-- horse inventory weight by level (horse trainer)
+Config.Level1InvWeight = 2000
+Config.Level1InvSlots = 2
+Config.Level2InvWeight = 4000
+Config.Level2InvSlots = 4
+Config.Level3InvWeight = 6000
+Config.Level3InvSlots = 6
+Config.Level4InvWeight = 8000
+Config.Level4InvSlots = 8
+Config.Level5InvWeight = 9000
+Config.Level5InvSlots = 10
+Config.Level6InvWeight = 10000
+Config.Level6InvSlots = 12
+Config.Level7InvWeight = 12000
+Config.Level7InvSlots = 14
+Config.Level8InvWeight = 13000
+Config.Level8InvSlots = 16
+Config.Level9InvWeight = 14000
+Config.Level9InvSlots = 18
+Config.Level10InvWeight = 15000
+Config.Level10InvSlots = 20
+
+-- horse health/stamina/ability/speed/acceleration levels (horse trainer)
+Config.Level1 = 100
+Config.Level2 = 200
+Config.Level3 = 300
+Config.Level4 = 400
+Config.Level5 = 500
+Config.Level6 = 900
+Config.Level7 = 1000
+Config.Level8 = 1500
+Config.Level9 = 1750
+Config.Level10 = 2000
 
 -- player feed horse settings
 Config.FeedCarrotHealth = 10 -- amount of health increase when you feed your horse a carrot
