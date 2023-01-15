@@ -546,14 +546,14 @@ end)
 function CustomHorse()
     MenuData.CloseAll()
     local elements = {
-            {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 65},
-            {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 136},
-            {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 14},
-            {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 20},
-            {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 11},
-            {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 30},
-            {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 85},
-            {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 1, desc = "press [enter] to apply",   type = "slider", min = 1, max = 102},
+            {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 1, desc = "",   type = "slider", min = 1, max = 65},
+            {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 1, desc = "",   type = "slider", min = 1, max = 136},
+            {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 1, desc = "",   type = "slider", min = 1, max = 14},
+            {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 1, desc = "",   type = "slider", min = 1, max = 20},
+            {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 1, desc = "",   type = "slider", min = 1, max = 11},
+            {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 1, desc = "",   type = "slider", min = 1, max = 30},
+            {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 1, desc = "",   type = "slider", min = 1, max = 85},
+            {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 1, desc = "",   type = "slider", min = 1, max = 102},
             {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = 0, desc = "select 0 for no mask",     type = "slider", min = 0, max = 51},
             {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = 0, desc = "select 0 for no mustache", type = "slider", min = 0, max = 16},
         }
