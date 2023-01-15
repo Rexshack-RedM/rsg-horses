@@ -50,9 +50,6 @@ Config.FeedCarrotStamina = 10 -- amount of stamina increase when you feed your h
 Config.FeedSugarCubeHealth = 25 -- amount of health increase when you feed your horse a sugarcube
 Config.FeedSugarCubeStamina = 25 -- amount of stamina increase when you feed your horse a sugarcube
 
--- horse xp settings
-Config.EnableReadUp = 1000 -- amount of XP you need to enable horse rear-up [Q] key
-
 -- horse bonding settings
 Config.MaxBondingLevel = 5000
 

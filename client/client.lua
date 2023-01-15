@@ -10,10 +10,11 @@ local horseSpawned = false
 local HorseCalled = false
 local newnames = ''
 local horseDBID
-local horsexp = nil
+local horsexp = 0
 local horsegender = nil
 local horseBonding = 0
 local bondingLevel = 0
+local horseLevel = 0
 -------------------
 local ped 
 local coords
@@ -27,6 +28,11 @@ local Zones = {}
 local zonename = nil
 local inStableZone = false
 -------------------
+
+-- Export for Horse Level checks
+exports('CheckHorseLevel', function()
+    return horseLevel
+end)
 
 -- Export for Horse Bonding Level checks
 exports('CheckHorseBondingLevel', function()
@@ -405,42 +411,52 @@ local function SpawnHorse()
 
                 if horsexp <= 99 then
                     hValue = Config.Level1
+                    horseLevel = 1
                     goto continue
                 end
                 if horsexp >= 100 and horsexp <= 199 then
                     hValue = Config.Level2
+                    horseLevel = 2
                     goto continue
                 end
                 if horsexp >= 200 and horsexp <= 299 then
                     hValue = Config.Level3
+                    horseLevel = 3
                     goto continue
                 end
                 if horsexp >= 300 and horsexp <= 399 then
                     hValue = Config.Level4
+                    horseLevel = 4
                     goto continue
                 end
                 if horsexp >= 400 and horsexp <= 499 then
                     hValue = Config.Level5
+                    horseLevel = 5
                     goto continue
                 end
                 if horsexp >= 500 and horsexp <= 999 then
                     hValue = Config.Level6
+                    horseLevel = 6
                     goto continue
                 end
                 if horsexp >= 1000 and horsexp <= 1999 then
                     hValue = Config.Level7
+                    horseLevel = 7
                     goto continue
                 end
                 if horsexp >= 2000 and horsexp <= 2999 then
                     hValue = Config.Level8
+                    horseLevel = 8
                     goto continue
                 end
                 if horsexp >= 3000 and horsexp <= 3999 then
                     hValue = Config.Level9
+                    horseLevel = 9
                     goto continue
                 end
                 if horsexp >= 4000 then
                     hValue = Config.Level10
+                    horseLevel = 10
                     overPower = true
                 end
 
@@ -464,19 +480,24 @@ local function SpawnHorse()
                 -- end set horse health/stamina/ability/speed/acceleration (increased by horse training)
 
                 -- horse bonding level: start
-                if horsexp <= Config.MaxBondingLevel * 0.25 then -- level 1 (0 -> 1250)
+                local bond = Config.MaxBondingLevel
+                local bond1 = bond * 0.25
+                local bond2 = bond * 0.50
+                local bond3 = bond * 0.75
+
+                if horsexp <= bond * 0.25 then -- level 1 (0 -> 1250)
                     horseBonding = 1
                 end
 
-                if horsexp >= Config.MaxBondingLevel * 0.5 then -- level 2 (1000 -> 2500)
+                if horsexp > bond1 and horsexp <= bond2 then -- level 2 (1250 -> 2500)
                     horseBonding = 817
                 end
 
-                if horsexp >= Config.MaxBondingLevel * 0.75 then -- level 3 (2500 -> 3750)
+                if horsexp > bond2 and horsexp <= bond3 then -- level 3 (2500 -> 3750)
                     horseBonding = 1634
                 end
 
-                if horsexp >= Config.MaxBondingLevel then -- level 4 (3750 -> 5000)
+                if horsexp > bond3 then -- level 4 (3750 -> 5000)
                     horseBonding = 2450
                 end
 
