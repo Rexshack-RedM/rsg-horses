@@ -256,6 +256,14 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                         TriggerEvent('rsg-horsetrainer:client:OpenTrainerShop')
                         end
                     },
+                    {
+                        icon = "fas fa-shopping-basket",
+                        label =  Lang:t('menu.horse_shop'),
+                        targeticon = "fas fa-eye",
+                        action = function()
+                        TriggerEvent('rsg-horses:client:OpenHorseShop')
+                        end
+                    },
                 },
                 distance = 2.5,
             })
@@ -1349,6 +1357,19 @@ AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
     Citizen.InvokeNative(0xD8544F6260F5F01E, horsePed, 10)
 
     PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+end)
+
+-------------------------------------------------------------------------------
+
+RegisterNetEvent('rsg-horses:client:OpenHorseShop')
+AddEventHandler('rsg-horses:client:OpenHorseShop', function()
+
+    local ShopItems = {}
+
+    ShopItems.label = "Horse Shop"
+    ShopItems.items = Config.HorseShop
+    ShopItems.slots = #Config.HorseShop
+    TriggerServerEvent("inventory:server:OpenInventory", "shop", "HorseShop_"..math.random(1, 99), ShopItems)
 end)
 
 -------------------------------------------------------------------------------
