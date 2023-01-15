@@ -30,5 +30,6 @@ dependencies {
     'menu_base'
 }
 
+export 'CheckHorseLevel'
 export 'CheckHorseBondingLevel'
 export 'CheckActiveHorse'
