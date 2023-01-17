@@ -15,9 +15,12 @@
 # Starting the resource
 - add the following to your server.cfg file : ensure rsg-horses
 
-# Controls Set
+# Controls Set and Info
 - some keys need bonding level to work
 - may depend on your keybinds set on RDR settings
+- inventory slots and weight depends on horse EXP
+- horse EXP is gained by hiring a horse trainer
+- horse EXP improves health/stamina/ability/speed/acceleration/inventory-slots/inventory-weight
 -------------------
 - [W] move forward
 - [S] backward
@@ -27,7 +30,7 @@
 - [C] look behind
 - [E] mount/dismount
 - [H] call horse
-- [B] horse inventory
+- [G] horse inventory (when standing near your horse)
 - [LCTRL] backup horse (when not moving)
 - [LCTRL] to skid when moving
 - [SPACEBAR] horse jump
