@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `player_horses` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `citizenid` varchar(50) NOT NULL,
   `horseid` varchar(6) NOT NULL,
   `name` varchar(255) NOT NULL,
