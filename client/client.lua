@@ -554,14 +554,14 @@ end)
 function CustomHorse()
     MenuData.CloseAll()
     local elements = {
-            {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 1, desc = "",   type = "slider", min = 1, max = 65},
-            {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 1, desc = "",   type = "slider", min = 1, max = 136},
-            {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 1, desc = "",   type = "slider", min = 1, max = 14},
-            {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 1, desc = "",   type = "slider", min = 1, max = 20},
-            {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 1, desc = "",   type = "slider", min = 1, max = 11},
-            {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 1, desc = "",   type = "slider", min = 1, max = 30},
-            {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 1, desc = "",   type = "slider", min = 1, max = 85},
-            {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 1, desc = "",   type = "slider", min = 1, max = 102},
+            {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 0, desc = "",   type = "slider", min = 0, max = 65},
+            {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 0, desc = "",   type = "slider", min = 0, max = 136},
+            {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 0, desc = "",   type = "slider", min = 0, max = 14},
+            {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 0, desc = "",   type = "slider", min = 0, max = 20},
+            {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 0, desc = "",   type = "slider", min = 0, max = 11},
+            {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 0, desc = "",   type = "slider", min = 0, max = 30},
+            {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 0, desc = "",   type = "slider", min = 0, max = 85},
+            {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 0, desc = "",   type = "slider", min = 0, max = 102},
             {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = 0, desc = "select 0 for no mask",     type = "slider", min = 0, max = 51},
             {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = 0, desc = "select 0 for no mustache", type = "slider", min = 0, max = 16},
         }
@@ -614,21 +614,35 @@ end
 -- handle blankets compontent
 RegisterNetEvent('rsg-horses:client:setBlankets',function(category, value)
     if category == 'blankets' then
-        for k, v in pairs(Components.HorseBlankets) do
-            if value == v.hashid then
-                blanketsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0x17CEB41A, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveBlankets', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseBlankets) do
+                if value == v.hashid then
+                    blanketsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(blanketsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveBlankets', blanketsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(blanketsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveBlankets', blanketsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -637,21 +651,35 @@ end)
 -- handle saddles compontent
 RegisterNetEvent('rsg-horses:client:setSaddles',function(category, value)
     if category == 'saddles' then
-        for k, v in pairs(Components.HorseSaddles) do
-            if value == v.hashid then
-                saddlesHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0xBAA7E618, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveSaddles', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseSaddles) do
+                if value == v.hashid then
+                    saddlesHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlesHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveSaddles', saddlesHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlesHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveSaddles', saddlesHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -660,21 +688,35 @@ end)
 -- handle horns compontent
 RegisterNetEvent('rsg-horses:client:setHorns',function(category, value)
     if category == 'horns' then
-        for k, v in pairs(Components.HorseHorns) do
-            if value == v.hashid then
-                hornsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0x05447332, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveHorns', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseHorns) do
+                if value == v.hashid then
+                    hornsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(hornsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveHorns', hornsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(hornsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveHorns', hornsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -683,21 +725,35 @@ end)
 -- handle saddlebags compontent
 RegisterNetEvent('rsg-horses:client:setSaddlebags',function(category, value)
     if category == 'saddlebags' then
-        for k, v in pairs(Components.HorseSaddlebags) do
-            if value == v.hashid then
-                saddlebagsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0x80451C25, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveSaddlebags', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseSaddlebags) do
+                if value == v.hashid then
+                    saddlebagsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlebagsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveSaddlebags', saddlebagsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(saddlebagsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveSaddlebags', saddlebagsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -706,21 +762,35 @@ end)
 -- handle stirrups compontent
 RegisterNetEvent('rsg-horses:client:setStirrups',function(category, value)
     if category == 'stirrups' then
-        for k, v in pairs(Components.HorseStirrups) do
-            if value == v.hashid then
-                stirrupsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0xDA6DADCA, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveStirrups', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseStirrups) do
+                if value == v.hashid then
+                    stirrupsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(stirrupsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveStirrups', stirrupsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(stirrupsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveStirrups', stirrupsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -729,21 +799,35 @@ end)
 -- handle bedrolls compontent
 RegisterNetEvent('rsg-horses:client:setBedrolls',function(category, value)
     if category == 'bedrolls' then
-        for k, v in pairs(Components.HorseBedrolls) do
-            if value == v.hashid then
-                bedrollsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0xEFB31921, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveBedrolls', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseBedrolls) do
+                if value == v.hashid then
+                    bedrollsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(bedrollsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveBedrolls', bedrollsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(bedrollsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveBedrolls', bedrollsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -752,21 +836,35 @@ end)
 -- handle tails compontent
 RegisterNetEvent('rsg-horses:client:setTails',function(category, value)
     if category == 'tails' then
-        for k, v in pairs(Components.HorseTails) do
-            if value == v.hashid then
-                tailsHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0xA63CAE10, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveTails', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseTails) do
+                if value == v.hashid then
+                    tailsHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(tailsHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveTails', tailsHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(tailsHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveTails', tailsHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
@@ -775,21 +873,35 @@ end)
 -- handle manes compontent
 RegisterNetEvent('rsg-horses:client:setManes',function(category, value)
     if category == 'manes' then
-        for k, v in pairs(Components.HorseManes) do
-            if value == v.hashid then
-                manesHash = v.hash
+        if value == 0 then
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD710A5007C2AC539, mount, 0xAA0217AB, 0)
+                    Citizen.InvokeNative(0xCC8CA3E88256E58F, mount, 0, 1, 1, 1, 0)
+                    TriggerServerEvent('rsg-horses:server:SaveManes', 0)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
+        else
+            for k, v in pairs(Components.HorseManes) do
+                if value == v.hashid then
+                    manesHash = v.hash
+                end
             end
+            RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
+            local ped = PlayerPedId()
+            local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
+                if mount ~= nil then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(manesHash), true, true, true) 
+                    TriggerServerEvent('rsg-horses:server:SaveManes', manesHash)
+                else
+                    RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
+                end
+            end)
         end
-        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        local ped = PlayerPedId()
-        local mount = Citizen.InvokeNative(0x4C8B59171957BCF7, ped)
-            if mount ~= nil then
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, mount, tonumber(manesHash), true, true, true) 
-                TriggerServerEvent('rsg-horses:server:SaveManes', manesHash)
-            else
-                RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-            end
-        end)
     else
         print(Lang:t('error.something_went_wrong'))
     end
