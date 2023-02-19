@@ -8,17 +8,12 @@ local timeoutTimer = 30
 local horsePed = 0
 local horseSpawned = false
 local HorseCalled = false
-local newnames = ''
-local horseDBID
 local horsexp = 0
 local horsegender = nil
 local horseBonding = 0
 local bondingLevel = 0
 local horseLevel = 0
 -------------------
-local ped 
-local coords
-local hasSpawned = false
 local lanternequiped = false
 local lanternUsed = false
 local holsterequiped = false
@@ -344,6 +339,14 @@ local function SpawnHorse()
             local ped = PlayerPedId()
             local model = GetHashKey(data.horse)
             local location = GetEntityCoords(ped)
+            local x, y, z = table.unpack(location)
+            local _, nodePosition = GetClosestVehicleNode(x - 15, y, z, 0, 3.0, 0.0)
+            local distance = math.floor(#(nodePosition - location))
+            local onRoad = false
+
+            if distance < 50 then
+                onRoad = true
+            end
 
             if (location) then
                 while not HasModelLoaded(model) do
@@ -361,12 +364,17 @@ local function SpawnHorse()
 
                 horsePed = 0
 
-                horsePed = CreatePed(model, location.x - 30, location.y, location.z, heading, true, true, 0, 0)
-                SetEntityCanBeDamaged(horsePed, false)
-                Citizen.InvokeNative(0x9587913B9E772D29, horsePed, false)
-                PlacePedOnGroundProperly(horsePed)
-
-                local horseCoords = GetEntityCoords(horsePed)
+                if onRoad then
+                    horsePed = CreatePed(model, nodePosition, heading, true, true, 0, 0)
+                    SetEntityCanBeDamaged(horsePed, false)
+                    Citizen.InvokeNative(0x9587913B9E772D29, horsePed, false)
+                    onRoad = false
+                else
+                    horsePed = CreatePed(model, location.x - 10, location.y, location.z, heading, true, true, 0, 0)
+                    SetEntityCanBeDamaged(horsePed, false)
+                    Citizen.InvokeNative(0x9587913B9E772D29, horsePed, false)
+                    PlacePedOnGroundProperly(horsePed)
+                end
 
                 while not DoesEntityExist(horsePed) do
                     Wait(10)
