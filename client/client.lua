@@ -103,9 +103,15 @@ CreateThread(function()
                 inStableZone = true
                 zonename = Zones[k].name
                 TriggerEvent('rsg-horses:client:triggerStable', zonename)
+                if Config.TargetHelp == true then
+                    exports['rsg-core']:DrawText('use [L-ALT] to target', 'left')
+                end
             else
                 inStableZone = false
                 TriggerEvent('rsg-horses:client:distroyStable')
+                if Config.TargetHelp == true then
+                    exports['rsg-core']:HideText()
+                end
             end
         end)
     end

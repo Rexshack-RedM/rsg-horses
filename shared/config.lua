@@ -6,6 +6,9 @@ Config.Debug = false
 -- horse inventory hotkey, please refer to '[framework]/rsg-core/shared/keybinds.lua' for complete list of hotkeys
 Config.HorseInvKey = 0x760A9C6F -- G
 
+-- target help to use [L-ALT]
+Config.TargetHelp = true
+
 -- horse inventory
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
