@@ -250,9 +250,8 @@ RegisterNetEvent("rsg-horses:server:TradeHorse", function(playerId, horseId, sou
     local src = source
     local Player2 = RSGCore.Functions.GetPlayer(playerId)
     local Playercid2 = Player2.PlayerData.citizenid
-    --print(Playercid2) print(horseId)
-    MySQL.update('UPDATE player_horses SET citizenid = ?  WHERE citizenid = ? AND active = ?', {Playercid2, horseId, 1})
-    MySQL.update('UPDATE player_horses SET active = ?  WHERE citizenid = ? AND active = ?', {0, Playercid2, 1})
+    MySQL.update('UPDATE player_horses SET citizenid = ? WHERE horseid = ? AND active = ?', {Playercid2, horseId, 1})
+    MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Playercid2, 1})
     TriggerClientEvent('RSGCore:Notify', playerId, Lang:t('success.horse_owned'), 'success')
 end)
 
