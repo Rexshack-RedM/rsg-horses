@@ -293,7 +293,7 @@ local function TradeHorse()
             local player, distance = RSGCore.Functions.GetClosestPlayer()
             if player ~= -1 and distance < 1.5 then
                 local playerId = GetPlayerServerId(player)
-                local horseId = data.citizenid
+                local horseId = data.horseid
                 TriggerServerEvent('rsg-horses:server:TradeHorse', playerId, horseId)
                 RSGCore.Functions.Notify(Lang:t('success.horse_traded'), 'success', 7500)
             else
