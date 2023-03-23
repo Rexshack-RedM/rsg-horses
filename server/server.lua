@@ -39,8 +39,26 @@ end)
 -- horse reviver
 RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
     local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
 
-    TriggerClientEvent("rsg-horses:client:revivehorse", src, item)
+    if not Player then return end
+
+    local cid = Player.PlayerData.citizenid
+    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active',
+    {
+        ['@citizenid'] = cid,
+        ['@active'] = 1
+    })
+
+    if not result[1] then
+        RSGCore.Functions.Notify(src, 'No horse set as active!', 'error', 3000)
+
+        return
+    end
+
+    local data = result[1]
+
+    TriggerClientEvent("rsg-horses:client:revivehorse", src, item, data)
 end)
 
 RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
