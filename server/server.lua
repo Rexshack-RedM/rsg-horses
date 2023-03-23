@@ -36,6 +36,22 @@ RSGCore.Functions.CreateUseableItem("horsebrush", function(source, item)
     TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item.name)
 end)
 
+-- horse reviver
+RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
+    local src = source
+
+    TriggerClientEvent("rsg-horses:client:revivehorse", src, item)
+end)
+
+RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(source)
+
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("inventory:client:ItemBox", src, RSGCore.Shared.Items[item.name], "remove")
+    end
+end)
+
 -------------------------------------------------------------------------------
 
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsename, gender)
