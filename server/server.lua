@@ -56,9 +56,7 @@ RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
         return
     end
 
-    local data = result[1]
-
-    TriggerClientEvent("rsg-horses:client:revivehorse", src, item, data)
+    TriggerClientEvent("rsg-horses:client:revivehorse", src, item, result[1])
 end)
 
 RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
