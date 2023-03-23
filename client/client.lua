@@ -1491,6 +1491,76 @@ end)
 
 -------------------------------------------------------------------------------
 
+local RequestControl = function(entity)
+    local type = GetEntityType(entity)
+
+    if type < 1 or type > 3 then return end
+
+    NetworkRequestControlOfEntity(entity)
+end
+
+local loadAnimDict = function(dict)
+    while (not HasAnimDictLoaded(dict)) do
+        RequestAnimDict(dict)
+        Wait(5)
+    end
+end
+
+-- Player revive horse
+RegisterNetEvent("rsg-horses:client:revivehorse")
+AddEventHandler("rsg-horses:client:revivehorse", function(item)
+    local playerPed = PlayerPedId()
+    local playercoords = GetEntityCoords(playerPed)
+    local horsecoords = GetEntityCoords(horsePed)
+    local distance = #(playercoords - horsecoords)
+
+    if horsePed == 0 then
+        RSGCore.Functions.Notify('No active horse spawned!', 'error')
+
+        return
+    end
+
+    if IsEntityDead(horsePed) then
+        if distance > 1.5 then
+            RSGCore.Functions.Notify('Your horse is too far away!', 'error')
+
+            return
+        end
+
+        RequestControl(horsePed)
+
+        local healAnim1Dict1 = "mech_skin@sample@base"
+        local healAnim1 = "sample_low"
+
+        loadAnimDict(healAnim1Dict1)
+
+        ClearPedTasks(playerPed)
+        ClearPedSecondaryTask(playerPed)
+        ClearPedTasksImmediately(playerPed)
+        FreezeEntityPosition(playerPed, false)
+        SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
+        TaskPlayAnim(playerPed, healAnim1Dict1, healAnim1, 1.0, 1.0, -1, 0, false, false, false)
+
+        RSGCore.Functions.Progressbar("reviving-horse", "Reviving Horse..", 3000, false, true, {
+            disableMovement = true,
+            disableCarMovement = false,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
+            ClearPedTasks(playerPed)
+            FreezeEntityPosition(playerPed, false)
+
+            TriggerServerEvent('rsg-horses:server:revivehorse', item)
+
+            ResurrectPed(horsePed)
+        end)
+    else
+        RSGCore.Functions.Notify('Horse is not injured nor dead!', 'error')
+    end
+end)
+
+-------------------------------------------------------------------------------
+
 RegisterNetEvent('rsg-horses:client:OpenHorseShop')
 AddEventHandler('rsg-horses:client:OpenHorseShop', function()
 
