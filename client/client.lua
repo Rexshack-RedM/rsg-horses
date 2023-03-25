@@ -543,7 +543,9 @@ local function SpawnHorse()
 
                 moveHorseToPlayer()
                 
-                TaskMountAnimal(PlayerPedId(), horsePed, 10000, -1, 1.0, 1, 0, 0)
+                if Config.Automount == true then
+                    TaskMountAnimal(PlayerPedId(), horsePed, 10000, -1, 1.0, 1, 0, 0)
+                end
                 
             end
         end

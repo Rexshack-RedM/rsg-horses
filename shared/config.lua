@@ -9,6 +9,9 @@ Config.HorseInvKey = 0x760A9C6F -- G
 -- target help to use [L-ALT]
 Config.TargetHelp = true
 
+-- horse automount
+Config.Automount = false
+
 -- horse inventory
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
