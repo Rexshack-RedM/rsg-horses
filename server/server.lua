@@ -65,6 +65,7 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
 
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent("inventory:client:ItemBox", src, RSGCore.Shared.Items[item.name], "remove")
+        RSGCore.Functions.Notify(src, 'now flee horse and recall to make active  !', 'success', 3000)
     end
 end)
 
