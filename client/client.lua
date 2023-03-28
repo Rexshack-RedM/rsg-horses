@@ -1556,6 +1556,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
             ClearPedTasks(playerPed)
             FreezeEntityPosition(playerPed, false)
             TriggerServerEvent('rsg-horses:server:revivehorse', item)
+            moveHorseToPlayer()
             SpawnHorse()
         end)
     else
