@@ -170,14 +170,8 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                             },
                                         }
                                     })
-                                    if dialog ~= nil then
-                                        for k,v in pairs(dialog) do
-                                            newhorsename = dialog.horsename
-                                            newhorsegender = dialog.horsegender
-                                        end
-                                    end
-                                    if newhorsename ~= nil then
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, newhorsename, newhorsegender)
+                                    if dialog and dialog.horsename and dialog.horsegender then
+                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, dialog.horsename, dialog.horsegender)
                                     else
                                         return
                                     end
