@@ -1207,23 +1207,24 @@ end)
 -- call / flee horse
 CreateThread(function()
     while true do
-        Wait(1)
+        Wait(4)
 
-        RSGCore.Functions.GetPlayerData(function(PlayerData)
-            if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) -- call horse
-            and PlayerData.metadata["injail"] == 0 then
-                local coords = GetEntityCoords(PlayerPedId())
-                local horseCoords = GetEntityCoords(horsePed)
-                local distance = #(coords - horseCoords)
+        if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
+            RSGCore.Functions.GetPlayerData(function(PlayerData)
+                if PlayerData.metadata["injail"] == 0 then
+                    local coords = GetEntityCoords(PlayerPedId())
+                    local horseCoords = GetEntityCoords(horsePed)
+                    local distance = #(coords - horseCoords)
 
-                if not HorseCalled and (distance > 100.0) then
-                    SpawnHorse()
-                    Wait(3000) -- Spam protect
-                else
-                    moveHorseToPlayer()
+                    if not HorseCalled and (distance > 100.0) then
+                        SpawnHorse()
+                        Wait(3000) -- Spam protect
+                    else
+                        moveHorseToPlayer()
+                    end
                 end
-            end
-        end)
+            end)
+        end
 
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['HorseCommandFlee']) then -- flee horse
             if horseSpawned ~= 0 then
@@ -1238,7 +1239,7 @@ end)
 -- open inventory by key
 CreateThread(function()
     while true do
-        Wait(1)
+        Wait(4)
 
         local pcoords = GetEntityCoords(PlayerPedId())
         local hcoords = GetEntityCoords(horsePed)
