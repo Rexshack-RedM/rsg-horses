@@ -12,6 +12,9 @@ Config.TargetHelp = true
 -- horse automount
 Config.Automount = false
 
+-- Always spawn on road
+Config.SpawnOnRoadOnly = false
+
 -- horse inventory
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20

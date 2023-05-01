@@ -348,6 +348,12 @@ local function SpawnHorse()
                 onRoad = true
             end
 
+            if Config.SpawnOnRoadOnly and not onRoad then
+                RSGCore.Functions.Notify(Lang:t('error.near_road'), 'error')
+
+                return
+            end
+
             if (location) then
                 while not HasModelLoaded(model) do
                     RequestModel(model)
