@@ -566,7 +566,7 @@ local masksHash
 local mustachesHash
 
 MenuData = {}
-TriggerEvent('menu_base:getData',function(call)
+TriggerEvent('rsg-menubase:getData',function(call)
     MenuData = call
 end)
 
