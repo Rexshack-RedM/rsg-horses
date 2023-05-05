@@ -2,6 +2,7 @@ local RSGCore = exports['rsg-core']:GetCoreObject()
 -------------------
 local entities = {}
 local npcs = {}
+local horseComps = {}
 -------------------
 local timeout = false
 local timeoutTimer = 30
@@ -574,16 +575,16 @@ function CustomHorse()
     MenuData.CloseAll()
     local elements =
     {
-        {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = 0, desc = "",   type = "slider", min = 0, max = 65},
-        {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = 0, desc = "",   type = "slider", min = 0, max = 136},
-        {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = 0, desc = "",   type = "slider", min = 0, max = 14},
-        {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = 0, desc = "",   type = "slider", min = 0, max = 20},
-        {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = 0, desc = "",   type = "slider", min = 0, max = 11},
-        {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = 0, desc = "",   type = "slider", min = 0, max = 30},
-        {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = 0, desc = "",   type = "slider", min = 0, max = 85},
-        {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = 0, desc = "",   type = "slider", min = 0, max = 102},
-        {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = 0, desc = "",     type = "slider", min = 0, max = 51},
-        {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = 0, desc = "", type = "slider", min = 0, max = 16}
+        {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = horseComps.blankets or 0, desc = "",   type = "slider", min = 0, max = 65},
+        {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = horseComps.saddles or 0, desc = "",   type = "slider", min = 0, max = 136},
+        {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = horseComps.horns or 0, desc = "",   type = "slider", min = 0, max = 14},
+        {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = horseComps.saddlebags or 0, desc = "",   type = "slider", min = 0, max = 20},
+        {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = horseComps.stirrups or 0, desc = "",   type = "slider", min = 0, max = 11},
+        {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = horseComps.bedrolls or 0, desc = "",   type = "slider", min = 0, max = 30},
+        {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = horseComps.tails or 0, desc = "",   type = "slider", min = 0, max = 85},
+        {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = horseComps.manes or 0, desc = "",   type = "slider", min = 0, max = 102},
+        {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = horseComps.masks or 0, desc = "",     type = "slider", min = 0, max = 51},
+        {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = horseComps.mustaches or 0, desc = "", type = "slider", min = 0, max = 16}
     }
 
     MenuData.Open('default', GetCurrentResourceName(), 'horse_menu',
@@ -593,6 +594,10 @@ function CustomHorse()
         align    = 'top-left',
         elements = elements,
     }, function(data, _)
+        if horseComps[data.current.category] ~= data.current.value then
+            horseComps[data.current.category] = data.current.value
+        end
+
         TriggerEvent('rsg-horses:client:SaveHorseComponents', data.current.category, data.current.value)
     end,
     function(_, menu)
