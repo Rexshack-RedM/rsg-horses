@@ -5,18 +5,12 @@ Components.HorseBlankets = {
     {
         hashid = 1,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
-        hash = 0x0FAE487F,
-        hash_dec_signed = 263080063,
-        category_hash_dec_signed = 399422490,
+        hash = 0x0FAE487F
     },
     {
         hashid = 2,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x2286EE30,
         hash_dec_signed = 579268144,
@@ -25,8 +19,6 @@ Components.HorseBlankets = {
     {
         hashid = 3,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x41D52CD8,
         hash_dec_signed = 1104489688,
@@ -35,8 +27,6 @@ Components.HorseBlankets = {
     {
         hashid = 4,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC4C732B2,
         hash_dec_signed = -993578318,
@@ -45,8 +35,6 @@ Components.HorseBlankets = {
     {
         hashid = 5,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xFDF4250B,
         hash_dec_signed = -34331381,
@@ -55,8 +43,6 @@ Components.HorseBlankets = {
     {
         hashid = 6,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x508B80B9,
         hash_dec_signed = 1351319737,
@@ -65,8 +51,6 @@ Components.HorseBlankets = {
     {
         hashid = 7,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x67CAAF37,
         hash_dec_signed = 1741336375,
@@ -75,8 +59,6 @@ Components.HorseBlankets = {
     {
         hashid = 8,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xEBB4B70D,
         hash_dec_signed = -340478195,
@@ -85,8 +67,6 @@ Components.HorseBlankets = {
     {
         hashid = 9,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xFA1153C6,
         hash_dec_signed = -99527738,
@@ -95,8 +75,6 @@ Components.HorseBlankets = {
     {
         hashid = 10,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x0F537E4A,
         hash_dec_signed = 257130058,
@@ -105,8 +83,6 @@ Components.HorseBlankets = {
     {
         hashid = 11,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x97EBE669,
         hash_dec_signed = -1746147735,
@@ -115,8 +91,6 @@ Components.HorseBlankets = {
     {
         hashid = 12,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x269583CA,
         hash_dec_signed = 647332810,
@@ -125,8 +99,6 @@ Components.HorseBlankets = {
     {
         hashid = 13,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x3973A986,
         hash_dec_signed = 963881350,
@@ -135,8 +107,6 @@ Components.HorseBlankets = {
     {
         hashid = 14,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x4A294AF1,
         hash_dec_signed = 1244220145,
@@ -145,8 +115,6 @@ Components.HorseBlankets = {
     {
         hashid = 15,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xED0190A3,
         hash_dec_signed = -318664541,
@@ -155,8 +123,6 @@ Components.HorseBlankets = {
     {
         hashid = 16,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xBBF05395,
         hash_dec_signed = -1141877867,
@@ -165,8 +131,6 @@ Components.HorseBlankets = {
     {
         hashid = 17,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x823A602A,
         hash_dec_signed = -2110103510,
@@ -175,8 +139,6 @@ Components.HorseBlankets = {
     {
         hashid = 18,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x533A022A,
         hash_dec_signed = 1396310570,
@@ -185,8 +147,6 @@ Components.HorseBlankets = {
     {
         hashid = 19,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xB0F7BDA4,
         hash_dec_signed = -1325941340,
@@ -195,8 +155,6 @@ Components.HorseBlankets = {
     {
         hashid = 20,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xFDC3D6D3,
         hash_dec_signed = -37497133,
@@ -205,8 +163,6 @@ Components.HorseBlankets = {
     {
         hashid = 21,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x6B2084E5,
         hash_dec_signed = 1797293285,
@@ -215,8 +171,6 @@ Components.HorseBlankets = {
     {
         hashid = 22,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x78FB209A,
         hash_dec_signed = 2029723802,
@@ -225,8 +179,6 @@ Components.HorseBlankets = {
     {
         hashid = 23,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x8FAD4DFE,
         hash_dec_signed = -1884467714,
@@ -235,8 +187,6 @@ Components.HorseBlankets = {
     {
         hashid = 24,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x9DE0EA65,
         hash_dec_signed = -1646204315,
@@ -245,8 +195,6 @@ Components.HorseBlankets = {
     {
         hashid = 25,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x342916F3,
         hash_dec_signed = 875108083,
@@ -255,8 +203,6 @@ Components.HorseBlankets = {
     {
         hashid = 26,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xAD283105,
         hash_dec_signed = -1389874939,
@@ -265,8 +211,6 @@ Components.HorseBlankets = {
     {
         hashid = 27,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC2EF5C93,
         hash_dec_signed = -1024500589,
@@ -275,8 +219,6 @@ Components.HorseBlankets = {
     {
         hashid = 28,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC8A467FD,
         hash_dec_signed = -928749571,
@@ -285,8 +227,6 @@ Components.HorseBlankets = {
     {
         hashid = 29,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x4655E362,
         hash_dec_signed = 1180033890,
@@ -295,8 +235,6 @@ Components.HorseBlankets = {
     {
         hashid = 30,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xDBEF0E96,
         hash_dec_signed = -605090154,
@@ -305,8 +243,6 @@ Components.HorseBlankets = {
     {
         hashid = 31,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x7951D487,
         hash_dec_signed = 2035405959,
@@ -315,8 +251,6 @@ Components.HorseBlankets = {
     {
         hashid = 32,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC073E2CA,
         hash_dec_signed = -1066147126,
@@ -325,8 +259,6 @@ Components.HorseBlankets = {
     {
         hashid = 33,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xEDCB3D78,
         hash_dec_signed = -305447560,
@@ -335,8 +267,6 @@ Components.HorseBlankets = {
     {
         hashid = 34,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xA3D5298D,
         hash_dec_signed = -1546311283,
@@ -345,8 +275,6 @@ Components.HorseBlankets = {
     {
         hashid = 35,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xB19B4519,
         hash_dec_signed = -1315224295,
@@ -355,8 +283,6 @@ Components.HorseBlankets = {
     {
         hashid = 36,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xCDD2FB96,
         hash_dec_signed = -841811050,
@@ -365,8 +291,6 @@ Components.HorseBlankets = {
     {
         hashid = 37,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC097E12C,
         hash_dec_signed = -1063788244,
@@ -375,8 +299,6 @@ Components.HorseBlankets = {
     {
         hashid = 38,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xD333865B,
         hash_dec_signed = -751597989,
@@ -385,8 +307,6 @@ Components.HorseBlankets = {
     {
         hashid = 39,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xE409A807,
         hash_dec_signed = -469129209,
@@ -395,8 +315,6 @@ Components.HorseBlankets = {
     {
         hashid = 40,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xF6484C84,
         hash_dec_signed = -163033980,
@@ -405,8 +323,6 @@ Components.HorseBlankets = {
     {
         hashid = 41,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xEC040C89,
         hash_dec_signed = -335278967,
@@ -415,8 +331,6 @@ Components.HorseBlankets = {
     {
         hashid = 42,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x19C5E80C,
         hash_dec_signed = 432400396,
@@ -425,8 +339,6 @@ Components.HorseBlankets = {
     {
         hashid = 43,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x64BE7DF8,
         hash_dec_signed = 1690205688,
@@ -435,8 +347,6 @@ Components.HorseBlankets = {
     {
         hashid = 44,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x3278996D,
         hash_dec_signed = 846764397,
@@ -445,8 +355,6 @@ Components.HorseBlankets = {
     {
         hashid = 45,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x003D34F3,
         hash_dec_signed = 4011251,
@@ -455,8 +363,6 @@ Components.HorseBlankets = {
     {
         hashid = 46,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x3BA0D76D,
         hash_dec_signed = 1000396653,
@@ -465,8 +371,6 @@ Components.HorseBlankets = {
     {
         hashid = 47,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x4BF1F80F,
         hash_dec_signed = 1274148879,
@@ -475,8 +379,6 @@ Components.HorseBlankets = {
     {
         hashid = 48,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x5F0F9E4A,
         hash_dec_signed = 1594859082,
@@ -485,8 +387,6 @@ Components.HorseBlankets = {
     {
         hashid = 49,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x71DFC3EA,
         hash_dec_signed = 1910490090,
@@ -495,8 +395,6 @@ Components.HorseBlankets = {
     {
         hashid = 50,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xF506CA32,
         hash_dec_signed = -184104398,
@@ -505,8 +403,6 @@ Components.HorseBlankets = {
     {
         hashid = 51,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x2A6D33E8,
         hash_dec_signed = 711799784,
@@ -515,8 +411,6 @@ Components.HorseBlankets = {
     {
         hashid = 52,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xFFB1DE72,
         hash_dec_signed = -5120398,
@@ -525,8 +419,6 @@ Components.HorseBlankets = {
     {
         hashid = 53,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x0DC87A9F,
         hash_dec_signed = 231242399,
@@ -535,8 +427,6 @@ Components.HorseBlankets = {
     {
         hashid = 54,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x20D4A0BF,
         hash_dec_signed = 550805695,
@@ -545,8 +435,6 @@ Components.HorseBlankets = {
     {
         hashid = 55,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x127E0412,
         hash_dec_signed = 310248466,
@@ -555,8 +443,6 @@ Components.HorseBlankets = {
     {
         hashid = 56,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xE32A1050,
         hash_dec_signed = -483782576,
@@ -565,8 +451,6 @@ Components.HorseBlankets = {
     {
         hashid = 57,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x5894FB24,
         hash_dec_signed = 1486158628,
@@ -575,8 +459,6 @@ Components.HorseBlankets = {
     {
         hashid = 58,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xD9E17DBB,
         hash_dec_signed = -639533637,
@@ -585,8 +467,6 @@ Components.HorseBlankets = {
     {
         hashid = 59,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xAB302059,
         hash_dec_signed = -1422909351,
@@ -595,8 +475,6 @@ Components.HorseBlankets = {
     {
         hashid = 60,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x9E468686,
         hash_dec_signed = -1639545210,
@@ -605,8 +483,6 @@ Components.HorseBlankets = {
     {
         hashid = 61,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x90A31F96,
         hash_dec_signed = -1868357738,
@@ -615,8 +491,6 @@ Components.HorseBlankets = {
     {
         hashid = 62,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x9AD633FC,
         hash_dec_signed = -1697238020,
@@ -625,8 +499,6 @@ Components.HorseBlankets = {
     {
         hashid = 63,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x53B325B7,
         hash_dec_signed = 1404249527,
@@ -635,8 +507,6 @@ Components.HorseBlankets = {
     {
         hashid = 64,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0x7D637917,
         hash_dec_signed = 2103671063,
@@ -645,8 +515,6 @@ Components.HorseBlankets = {
     {
         hashid = 65,
         category = "blankets",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x17CEB41A,
         hash = 0xC7688D20,
         hash_dec_signed = -949449440,
@@ -660,18 +528,12 @@ Components.HorseSaddles = {
     {
         hashid = 1,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
-        hash = 0xAD4A6355,
-        hash_dec_signed = -1387633835,
-        category_hash_dec_signed = -1163401704,
+        hash = 0xAD4A6355
     },
     {
         hashid = 2,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8FFCF06B,
         hash_dec_signed = -1879248789,
@@ -680,8 +542,6 @@ Components.HorseSaddles = {
     {
         hashid = 3,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x5546EB7A,
         hash_dec_signed = 1430711162,
@@ -690,8 +550,6 @@ Components.HorseSaddles = {
     {
         hashid = 4,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8E64DDB5,
         hash_dec_signed = -1905992267,
@@ -700,8 +558,6 @@ Components.HorseSaddles = {
     {
         hashid = 5,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7092A211,
         hash_dec_signed = 1888657937,
@@ -710,8 +566,6 @@ Components.HorseSaddles = {
     {
         hashid = 6,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC0C04297,
         hash_dec_signed = -1061141865,
@@ -720,8 +574,6 @@ Components.HorseSaddles = {
     {
         hashid = 7,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xBE703DF7,
         hash_dec_signed = -1099940361,
@@ -730,8 +582,6 @@ Components.HorseSaddles = {
     {
         hashid = 8,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE5510BB8,
         hash_dec_signed = -447673416,
@@ -740,8 +590,6 @@ Components.HorseSaddles = {
     {
         hashid = 9,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7D795D72,
         hash_dec_signed = 2105105778,
@@ -750,8 +598,6 @@ Components.HorseSaddles = {
     {
         hashid = 10,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0522CCED,
         hash_dec_signed = 86166765,
@@ -760,8 +606,6 @@ Components.HorseSaddles = {
     {
         hashid = 11,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x5B45F932,
         hash_dec_signed = 1531312434,
@@ -770,8 +614,6 @@ Components.HorseSaddles = {
     {
         hashid = 12,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x219D85E2,
         hash_dec_signed = 563971554,
@@ -780,8 +622,6 @@ Components.HorseSaddles = {
     {
         hashid = 13,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7DBB3E1C,
         hash_dec_signed = 2109423132,
@@ -790,8 +630,6 @@ Components.HorseSaddles = {
     {
         hashid = 14,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x4C1A5ADB,
         hash_dec_signed = 1276795611,
@@ -800,8 +638,6 @@ Components.HorseSaddles = {
     {
         hashid = 15,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF1BAA60D,
         hash_dec_signed = -239426035,
@@ -810,8 +646,6 @@ Components.HorseSaddles = {
     {
         hashid = 16,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE6488B58,
         hash_dec_signed = -431453352,
@@ -820,8 +654,6 @@ Components.HorseSaddles = {
     {
         hashid = 17,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD2FA64BC,
         hash_dec_signed = -755342148,
@@ -830,8 +662,6 @@ Components.HorseSaddles = {
     {
         hashid = 18,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x189F7005,
         hash_dec_signed = 413102085,
@@ -840,8 +670,6 @@ Components.HorseSaddles = {
     {
         hashid = 19,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF7682D97,
         hash_dec_signed = -144167529,
@@ -850,8 +678,6 @@ Components.HorseSaddles = {
     {
         hashid = 20,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x1D0BF8F2,
         hash_dec_signed = 487323890,
@@ -860,8 +686,6 @@ Components.HorseSaddles = {
     {
         hashid = 21,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0A39D34E,
         hash_dec_signed = 171561806,
@@ -870,8 +694,6 @@ Components.HorseSaddles = {
     {
         hashid = 22,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xBFD09512,
         hash_dec_signed = -1076849390,
@@ -880,8 +702,6 @@ Components.HorseSaddles = {
     {
         hashid = 23,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x17153A45,
         hash_dec_signed = 387267141,
@@ -890,8 +710,6 @@ Components.HorseSaddles = {
     {
         hashid = 24,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x05D717C9,
         hash_dec_signed = 97982409,
@@ -900,8 +718,6 @@ Components.HorseSaddles = {
     {
         hashid = 25,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x4B372288,
         hash_dec_signed = 1261904520,
@@ -910,8 +726,6 @@ Components.HorseSaddles = {
     {
         hashid = 26,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x78F07DFA,
         hash_dec_signed = 2029026810,
@@ -920,8 +734,6 @@ Components.HorseSaddles = {
     {
         hashid = 27,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2E4668A3,
         hash_dec_signed = 776366243,
@@ -930,8 +742,6 @@ Components.HorseSaddles = {
     {
         hashid = 28,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x1C14443F,
         hash_dec_signed = 471090239,
@@ -940,8 +750,6 @@ Components.HorseSaddles = {
     {
         hashid = 29,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x353FC03C,
         hash_dec_signed = 893370428,
@@ -950,8 +758,6 @@ Components.HorseSaddles = {
     {
         hashid = 30,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD97573C1,
         hash_dec_signed = -646614079,
@@ -960,8 +766,6 @@ Components.HorseSaddles = {
     {
         hashid = 31,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF3BEA853,
         hash_dec_signed = -205608877,
@@ -970,8 +774,6 @@ Components.HorseSaddles = {
     {
         hashid = 32,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x01F7C4C5,
         hash_dec_signed = 33014981,
@@ -980,8 +782,6 @@ Components.HorseSaddles = {
     {
         hashid = 33,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x106961A8,
         hash_dec_signed = 275341736,
@@ -990,8 +790,6 @@ Components.HorseSaddles = {
     {
         hashid = 34,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2ECD9E70,
         hash_dec_signed = 785227376,
@@ -1000,8 +798,6 @@ Components.HorseSaddles = {
     {
         hashid = 35,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x3D0C3AED,
         hash_dec_signed = 1024211693,
@@ -1010,8 +806,6 @@ Components.HorseSaddles = {
     {
         hashid = 36,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF94D5623,
         hash_dec_signed = -112372189,
@@ -1020,8 +814,6 @@ Components.HorseSaddles = {
     {
         hashid = 37,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x3F9F62CE,
         hash_dec_signed = 1067410126,
@@ -1030,8 +822,6 @@ Components.HorseSaddles = {
     {
         hashid = 38,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x150D0DAA,
         hash_dec_signed = 353177002,
@@ -1040,8 +830,6 @@ Components.HorseSaddles = {
     {
         hashid = 39,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xEB1139AB,
         hash_dec_signed = -351192661,
@@ -1050,8 +838,6 @@ Components.HorseSaddles = {
     {
         hashid = 40,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC04FE429,
         hash_dec_signed = -1068506071,
@@ -1060,8 +846,6 @@ Components.HorseSaddles = {
     {
         hashid = 41,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0DE47F51,
         hash_dec_signed = 233078609,
@@ -1070,8 +854,6 @@ Components.HorseSaddles = {
     {
         hashid = 42,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x5BBC54C3,
         hash_dec_signed = 1539069123,
@@ -1080,8 +862,6 @@ Components.HorseSaddles = {
     {
         hashid = 43,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8D163776,
         hash_dec_signed = -1927923850,
@@ -1090,8 +870,6 @@ Components.HorseSaddles = {
     {
         hashid = 44,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x3E949A74,
         hash_dec_signed = 1049926260,
@@ -1100,8 +878,6 @@ Components.HorseSaddles = {
     {
         hashid = 45,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x70BB7EC1,
         hash_dec_signed = 1891335873,
@@ -1110,8 +886,6 @@ Components.HorseSaddles = {
     {
         hashid = 46,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD11CBF82,
         hash_dec_signed = -786645118,
@@ -1120,8 +894,6 @@ Components.HorseSaddles = {
     {
         hashid = 47,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xBA6A921E,
         hash_dec_signed = -1167420898,
@@ -1130,8 +902,6 @@ Components.HorseSaddles = {
     {
         hashid = 48,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD225CCA0,
         hash_dec_signed = -769274720,
@@ -1140,8 +910,6 @@ Components.HorseSaddles = {
     {
         hashid = 49,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x6D403492,
         hash_dec_signed = 1832924306,
@@ -1150,8 +918,6 @@ Components.HorseSaddles = {
     {
         hashid = 50,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xBB335077,
         hash_dec_signed = -1154264969,
@@ -1160,8 +926,6 @@ Components.HorseSaddles = {
     {
         hashid = 51,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8D9D754C,
         hash_dec_signed = -1919060660,
@@ -1170,8 +934,6 @@ Components.HorseSaddles = {
     {
         hashid = 52,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x5B6390D9,
         hash_dec_signed = 1533251801,
@@ -1180,8 +942,6 @@ Components.HorseSaddles = {
     {
         hashid = 53,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x14168240,
         hash_dec_signed = 337019456,
@@ -1190,8 +950,6 @@ Components.HorseSaddles = {
     {
         hashid = 54,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7FD859C2,
         hash_dec_signed = 2144885186,
@@ -1200,8 +958,6 @@ Components.HorseSaddles = {
     {
         hashid = 55,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x87F421F7,
         hash_dec_signed = -2014043657,
@@ -1210,8 +966,6 @@ Components.HorseSaddles = {
     {
         hashid = 56,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC1AF1568,
         hash_dec_signed = -1045490328,
@@ -1220,8 +974,6 @@ Components.HorseSaddles = {
     {
         hashid = 57,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF36A78DE,
         hash_dec_signed = -211126050,
@@ -1230,8 +982,6 @@ Components.HorseSaddles = {
     {
         hashid = 58,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x9CD94BC1,
         hash_dec_signed = -1663480895,
@@ -1240,8 +990,6 @@ Components.HorseSaddles = {
     {
         hashid = 59,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xCE8C2F22,
         hash_dec_signed = -829673694,
@@ -1250,8 +998,6 @@ Components.HorseSaddles = {
     {
         hashid = 60,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2844E292,
         hash_dec_signed = 675603090,
@@ -1260,8 +1006,6 @@ Components.HorseSaddles = {
     {
         hashid = 61,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC10B5450,
         hash_dec_signed = -1056222128,
@@ -1270,8 +1014,6 @@ Components.HorseSaddles = {
     {
         hashid = 62,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD2C8F7CB,
         hash_dec_signed = -758581301,
@@ -1280,8 +1022,6 @@ Components.HorseSaddles = {
     {
         hashid = 63,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE5B31D9F,
         hash_dec_signed = -441246305,
@@ -1290,8 +1030,6 @@ Components.HorseSaddles = {
     {
         hashid = 64,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF373B920,
         hash_dec_signed = -210519776,
@@ -1300,8 +1038,6 @@ Components.HorseSaddles = {
     {
         hashid = 65,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7A23C686,
         hash_dec_signed = 2049164934,
@@ -1310,8 +1046,6 @@ Components.HorseSaddles = {
     {
         hashid = 66,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x88C363C5,
         hash_dec_signed = -2000460859,
@@ -1320,8 +1054,6 @@ Components.HorseSaddles = {
     {
         hashid = 67,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xB5802A5F,
         hash_dec_signed = -1249891745,
@@ -1330,8 +1062,6 @@ Components.HorseSaddles = {
     {
         hashid = 68,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7C2C580C,
         hash_dec_signed = 2083280908,
@@ -1340,8 +1070,6 @@ Components.HorseSaddles = {
     {
         hashid = 69,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x6FEABF89,
         hash_dec_signed = 1877655433,
@@ -1350,8 +1078,6 @@ Components.HorseSaddles = {
     {
         hashid = 70,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xA21923E5,
         hash_dec_signed = -1575410715,
@@ -1360,8 +1086,6 @@ Components.HorseSaddles = {
     {
         hashid = 71,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x93DA8768,
         hash_dec_signed = -1814395032,
@@ -1370,8 +1094,6 @@ Components.HorseSaddles = {
     {
         hashid = 72,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xA8DB3175,
         hash_dec_signed = -1462029963,
@@ -1380,8 +1102,6 @@ Components.HorseSaddles = {
     {
         hashid = 73,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x9B1C95F8,
         hash_dec_signed = -1692625416,
@@ -1390,8 +1110,6 @@ Components.HorseSaddles = {
     {
         hashid = 74,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x7C19770A,
         hash_dec_signed = 2082043658,
@@ -1400,8 +1118,6 @@ Components.HorseSaddles = {
     {
         hashid = 75,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xA1154105,
         hash_dec_signed = -1592442619,
@@ -1410,8 +1126,6 @@ Components.HorseSaddles = {
     {
         hashid = 76,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xB357E58A,
         hash_dec_signed = -1286085238,
@@ -1420,8 +1134,6 @@ Components.HorseSaddles = {
     {
         hashid = 77,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8DD09A7C,
         hash_dec_signed = -1915708804,
@@ -1430,8 +1142,6 @@ Components.HorseSaddles = {
     {
         hashid = 78,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x9FF23EBF,
         hash_dec_signed = -1611514177,
@@ -1440,8 +1150,6 @@ Components.HorseSaddles = {
     {
         hashid = 79,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xFC6AF7AF,
         hash_dec_signed = -60098641,
@@ -1450,8 +1158,6 @@ Components.HorseSaddles = {
     {
         hashid = 80,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xB9BE555D,
         hash_dec_signed = -1178708643,
@@ -1460,8 +1166,6 @@ Components.HorseSaddles = {
     {
         hashid = 81,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x01EC65C0,
         hash_dec_signed = 32269760,
@@ -1470,8 +1174,6 @@ Components.HorseSaddles = {
     {
         hashid = 82,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0F2F0045,
         hash_dec_signed = 254738501,
@@ -1480,8 +1182,6 @@ Components.HorseSaddles = {
     {
         hashid = 83,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE52BAC3F,
         hash_dec_signed = -450122689,
@@ -1490,8 +1190,6 @@ Components.HorseSaddles = {
     {
         hashid = 84,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF4B14B4A,
         hash_dec_signed = -189707446,
@@ -1500,8 +1198,6 @@ Components.HorseSaddles = {
     {
         hashid = 85,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x3827D232,
         hash_dec_signed = 942133810,
@@ -1510,8 +1206,6 @@ Components.HorseSaddles = {
     {
         hashid = 86,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xDE5A2905,
         hash_dec_signed = -564516603,
@@ -1520,8 +1214,6 @@ Components.HorseSaddles = {
     {
         hashid = 87,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xEC882931,
         hash_dec_signed = -326620879,
@@ -1530,8 +1222,6 @@ Components.HorseSaddles = {
     {
         hashid = 88,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xDA36048D,
         hash_dec_signed = -633994099,
@@ -1540,8 +1230,6 @@ Components.HorseSaddles = {
     {
         hashid = 89,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC7FC601A,
         hash_dec_signed = -939761638,
@@ -1550,8 +1238,6 @@ Components.HorseSaddles = {
     {
         hashid = 90,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xB7B33F88,
         hash_dec_signed = -1212989560,
@@ -1560,8 +1246,6 @@ Components.HorseSaddles = {
     {
         hashid = 91,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xA7AC9F7B,
         hash_dec_signed = -1481859205,
@@ -1570,8 +1254,6 @@ Components.HorseSaddles = {
     {
         hashid = 92,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x9533FA8E,
         hash_dec_signed = -1791755634,
@@ -1580,8 +1262,6 @@ Components.HorseSaddles = {
     {
         hashid = 93,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE039FC0F,
         hash_dec_signed = -533070833,
@@ -1590,8 +1270,6 @@ Components.HorseSaddles = {
     {
         hashid = 94,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xF687A8AA,
         hash_dec_signed = -158881622,
@@ -1600,8 +1278,6 @@ Components.HorseSaddles = {
     {
         hashid = 95,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x47D2CB3F,
         hash_dec_signed = 1204996927,
@@ -1610,8 +1286,6 @@ Components.HorseSaddles = {
     {
         hashid = 96,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x15FB6791,
         hash_dec_signed = 368797585,
@@ -1620,8 +1294,6 @@ Components.HorseSaddles = {
     {
         hashid = 97,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE36C8274,
         hash_dec_signed = -479427980,
@@ -1630,8 +1302,6 @@ Components.HorseSaddles = {
     {
         hashid = 98,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x40C53D24,
         hash_dec_signed = 1086668068,
@@ -1640,8 +1310,6 @@ Components.HorseSaddles = {
     {
         hashid = 99,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x64CEC6DF,
         hash_dec_signed = 1691272927,
@@ -1650,8 +1318,6 @@ Components.HorseSaddles = {
     {
         hashid = 100,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x9E0C3959,
         hash_dec_signed = -1643366055,
@@ -1660,8 +1326,6 @@ Components.HorseSaddles = {
     {
         hashid = 101,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x90489DD2,
         hash_dec_signed = -1874289198,
@@ -1670,8 +1334,6 @@ Components.HorseSaddles = {
     {
         hashid = 102,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xBC52F5E6,
         hash_dec_signed = -1135413786,
@@ -1680,8 +1342,6 @@ Components.HorseSaddles = {
     {
         hashid = 103,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD61B2996,
         hash_dec_signed = -702862954,
@@ -1690,8 +1350,6 @@ Components.HorseSaddles = {
     {
         hashid = 104,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC7D58D0B,
         hash_dec_signed = -942306037,
@@ -1700,8 +1358,6 @@ Components.HorseSaddles = {
     {
         hashid = 105,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2BEA8ED4,
         hash_dec_signed = 736792276,
@@ -1710,8 +1366,6 @@ Components.HorseSaddles = {
     {
         hashid = 106,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8DABACD7,
         hash_dec_signed = -1918128937,
@@ -1720,8 +1374,6 @@ Components.HorseSaddles = {
     {
         hashid = 107,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x6384D886,
         hash_dec_signed = 1669650566,
@@ -1730,8 +1382,6 @@ Components.HorseSaddles = {
     {
         hashid = 108,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x694DE418,
         hash_dec_signed = 1766712344,
@@ -1740,8 +1390,6 @@ Components.HorseSaddles = {
     {
         hashid = 109,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x60DE5335,
         hash_dec_signed = 1625183029,
@@ -1750,8 +1398,6 @@ Components.HorseSaddles = {
     {
         hashid = 110,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x76887E89,
         hash_dec_signed = 1988656777,
@@ -1760,8 +1406,6 @@ Components.HorseSaddles = {
     {
         hashid = 111,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2E216DBC,
         hash_dec_signed = 773942716,
@@ -1770,8 +1414,6 @@ Components.HorseSaddles = {
     {
         hashid = 112,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x5A9E4F6C,
         hash_dec_signed = 1520324460,
@@ -1780,8 +1422,6 @@ Components.HorseSaddles = {
     {
         hashid = 113,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2F8C7941,
         hash_dec_signed = 797735233,
@@ -1790,8 +1430,6 @@ Components.HorseSaddles = {
     {
         hashid = 114,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xFD4E14C5,
         hash_dec_signed = -45214523,
@@ -1800,8 +1438,6 @@ Components.HorseSaddles = {
     {
         hashid = 115,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xB61F0668,
         hash_dec_signed = -1239480728,
@@ -1810,8 +1446,6 @@ Components.HorseSaddles = {
     {
         hashid = 116,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x21E8DDFA,
         hash_dec_signed = 568909306,
@@ -1820,8 +1454,6 @@ Components.HorseSaddles = {
     {
         hashid = 117,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xDA84CF33,
         hash_dec_signed = -628830413,
@@ -1830,8 +1462,6 @@ Components.HorseSaddles = {
     {
         hashid = 118,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC454830C,
         hash_dec_signed = -1001094388,
@@ -1840,8 +1470,6 @@ Components.HorseSaddles = {
     {
         hashid = 119,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD6BF27E1,
         hash_dec_signed = -692115487,
@@ -1850,8 +1478,6 @@ Components.HorseSaddles = {
     {
         hashid = 120,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x24F24446,
         hash_dec_signed = 619856966,
@@ -1860,8 +1486,6 @@ Components.HorseSaddles = {
     {
         hashid = 121,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0F4118E4,
         hash_dec_signed = 255924452,
@@ -1870,8 +1494,6 @@ Components.HorseSaddles = {
     {
         hashid = 122,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x0306806F,
         hash_dec_signed = 50757743,
@@ -1880,8 +1502,6 @@ Components.HorseSaddles = {
     {
         hashid = 123,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x70C65BED,
         hash_dec_signed = 1892047853,
@@ -1890,8 +1510,6 @@ Components.HorseSaddles = {
     {
         hashid = 124,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xC76C46D9,
         hash_dec_signed = -949205287,
@@ -1900,8 +1518,6 @@ Components.HorseSaddles = {
     {
         hashid = 125,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x2E3F3A62,
         hash_dec_signed = 775895650,
@@ -1910,8 +1526,6 @@ Components.HorseSaddles = {
     {
         hashid = 126,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x660B29F9,
         hash_dec_signed = 1712007673,
@@ -1920,8 +1534,6 @@ Components.HorseSaddles = {
     {
         hashid = 127,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x335DC49F,
         hash_dec_signed = 861783199,
@@ -1930,8 +1542,6 @@ Components.HorseSaddles = {
     {
         hashid = 128,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xFCE1D7A4,
         hash_dec_signed = -52308060,
@@ -1940,8 +1550,6 @@ Components.HorseSaddles = {
     {
         hashid = 129,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x093B7057,
         hash_dec_signed = 154890327,
@@ -1950,8 +1558,6 @@ Components.HorseSaddles = {
     {
         hashid = 130,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x20359E53,
         hash_dec_signed = 540384851,
@@ -1960,8 +1566,6 @@ Components.HorseSaddles = {
     {
         hashid = 131,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x534A7D59,
         hash_dec_signed = 1397390681,
@@ -1970,8 +1574,6 @@ Components.HorseSaddles = {
     {
         hashid = 132,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xD7FC86BF,
         hash_dec_signed = -671316289,
@@ -1980,8 +1582,6 @@ Components.HorseSaddles = {
     {
         hashid = 133,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0xE9B7AA35,
         hash_dec_signed = -373839307,
@@ -1990,8 +1590,6 @@ Components.HorseSaddles = {
     {
         hashid = 134,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x6C622F8C,
         hash_dec_signed = 1818374028,
@@ -2000,8 +1598,6 @@ Components.HorseSaddles = {
     {
         hashid = 135,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x8E22730C,
         hash_dec_signed = -1910344948,
@@ -2010,8 +1606,6 @@ Components.HorseSaddles = {
     {
         hashid = 136,
         category = "saddles",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xBAA7E618,
         hash = 0x1EE21489,
         hash_dec_signed = 518132873,
@@ -2024,18 +1618,12 @@ Components.HorseHorns = {
     {
         hashid = 1,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
-        hash = 0xC6C381F5,
-        hash_dec_signed = -960265739,
-        category_hash_dec_signed = 88372018,
+        hash = 0xC6C381F5
     },
     {
         hashid = 2,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xDBE6AC3B,
         hash_dec_signed = -605639621,
@@ -2044,8 +1632,6 @@ Components.HorseHorns = {
     {
         hashid = 3,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x2A28C8BE,
         hash_dec_signed = 707315902,
@@ -2054,8 +1640,6 @@ Components.HorseHorns = {
     {
         hashid = 4,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xE1DC3856,
         hash_dec_signed = -505661354,
@@ -2064,8 +1648,6 @@ Components.HorseHorns = {
     {
         hashid = 5,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x34135CC3,
         hash_dec_signed = 873684163,
@@ -2074,8 +1656,6 @@ Components.HorseHorns = {
     {
         hashid = 6,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x3E40711D,
         hash_dec_signed = 1044410653,
@@ -2084,8 +1664,6 @@ Components.HorseHorns = {
     {
         hashid = 7,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x107D9598,
         hash_dec_signed = 276665752,
@@ -2094,8 +1672,6 @@ Components.HorseHorns = {
     {
         hashid = 8,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x9AD2AA40,
         hash_dec_signed = -1697469888,
@@ -2104,8 +1680,6 @@ Components.HorseHorns = {
     {
         hashid = 9,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xED0BCEB5,
         hash_dec_signed = -317993291,
@@ -2114,8 +1688,6 @@ Components.HorseHorns = {
     {
         hashid = 10,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xF826E4EB,
         hash_dec_signed = -131668757,
@@ -2124,8 +1696,6 @@ Components.HorseHorns = {
     {
         hashid = 11,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xF8CAE723,
         hash_dec_signed = -120920285,
@@ -2134,8 +1704,6 @@ Components.HorseHorns = {
     {
         hashid = 12,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xE1B1B8F1,
         hash_dec_signed = -508446479,
@@ -2144,8 +1712,6 @@ Components.HorseHorns = {
     {
         hashid = 13,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0x333CDC06,
         hash_dec_signed = 859626502,
@@ -2154,8 +1720,6 @@ Components.HorseHorns = {
     {
         hashid = 14,
         category = "horns",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x05447332,
         hash = 0xF09C56EE,
         hash_dec_signed = -258189586,
@@ -2169,18 +1733,12 @@ Components.HorseSaddlebags = {
     {
         hashid = 1,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
-        hash = 0x5277E9BA,
-        hash_dec_signed = 1383590330,
-        category_hash_dec_signed = -2142954459,
+        hash = 0x5277E9BA
     },
     {
         hashid = 2,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x20AA8620,
         hash_dec_signed = 548046368,
@@ -2189,8 +1747,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 3,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x577EF434,
         hash_dec_signed = 1467937844,
@@ -2199,8 +1755,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 4,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x293E17B3,
         hash_dec_signed = 691935155,
@@ -2209,8 +1763,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 5,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xE4108D59,
         hash_dec_signed = -468677287,
@@ -2219,8 +1771,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 6,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xC019F804,
         hash_dec_signed = -1072039932,
@@ -2229,8 +1779,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 7,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x8BE10F93,
         hash_dec_signed = -1948184685,
@@ -2239,8 +1787,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 8,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x9D593283,
         hash_dec_signed = -1655098749,
@@ -2249,8 +1795,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 9,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xE57042B4,
         hash_dec_signed = -445627724,
@@ -2259,8 +1803,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 10,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xF8FB69CA,
         hash_dec_signed = -117741110,
@@ -2269,8 +1811,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 11,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xC05AA4AA,
         hash_dec_signed = -1067801430,
@@ -2279,8 +1819,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 12,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xAE110017,
         hash_dec_signed = -1374617577,
@@ -2289,8 +1827,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 13,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xB4F40DD9,
         hash_dec_signed = -1259074087,
@@ -2299,8 +1835,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 14,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xE2ADE94C,
         hash_dec_signed = -491919028,
@@ -2309,8 +1843,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 15,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xD048C482,
         hash_dec_signed = -800537470,
@@ -2319,8 +1851,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 16,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xEEC77E72,
         hash_dec_signed = -288915854,
@@ -2329,8 +1859,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 17,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x2AEFF6CA,
         hash_dec_signed = 720369354,
@@ -2339,8 +1867,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 18,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x1D4EDB88,
         hash_dec_signed = 491707272,
@@ -2349,8 +1875,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 19,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0x0E893DFD,
         hash_dec_signed = 243875325,
@@ -2359,8 +1883,6 @@ Components.HorseSaddlebags = {
     {
         hashid = 20,
         category = "saddlebags",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0x80451C25,
         hash = 0xF0C30271,
         hash_dec_signed = -255655311,
@@ -2375,18 +1897,12 @@ Components.HorseStirrups = {
     {
         hashid = 1,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
-        hash = 0x587DD49F,
-        hash_dec_signed = 1484641439,
-        category_hash_dec_signed = -630346294,
+        hash = 0x587DD49F
     },
     {
         hashid = 2,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x67AF7302,
         hash_dec_signed = 1739551490,
@@ -2395,8 +1911,6 @@ Components.HorseStirrups = {
     {
         hashid = 3,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x75178DD2,
         hash_dec_signed = 1964477906,
@@ -2405,8 +1919,6 @@ Components.HorseStirrups = {
     {
         hashid = 4,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x8246282F,
         hash_dec_signed = -2109331409,
@@ -2415,8 +1927,6 @@ Components.HorseStirrups = {
     {
         hashid = 5,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0xCB9A3AD6,
         hash_dec_signed = -879084842,
@@ -2425,8 +1935,6 @@ Components.HorseStirrups = {
     {
         hashid = 6,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x9EE8E174,
         hash_dec_signed = -1628905100,
@@ -2435,8 +1943,6 @@ Components.HorseStirrups = {
     {
         hashid = 7,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0xE73FF221,
         hash_dec_signed = -415239647,
@@ -2445,8 +1951,6 @@ Components.HorseStirrups = {
     {
         hashid = 8,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0xBDF19F85,
         hash_dec_signed = -1108238459,
@@ -2455,8 +1959,6 @@ Components.HorseStirrups = {
     {
         hashid = 9,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x03B3AB08,
         hash_dec_signed = 62106376,
@@ -2465,8 +1967,6 @@ Components.HorseStirrups = {
     {
         hashid = 10,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0xD8AE54FE,
         hash_dec_signed = -659663618,
@@ -2475,8 +1975,6 @@ Components.HorseStirrups = {
     {
         hashid = 11,
         category = "stirrups",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xDA6DADCA,
         hash = 0x8D0BC7DA,
         hash_dec_signed = -1928607782,
@@ -2491,18 +1989,12 @@ Components.HorseBedrolls = {
     {
         hashid = 1,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
-        hash = 0x9FD99D7D,
-        hash_dec_signed = -1613128323,
-        category_hash_dec_signed = -273475295,
+        hash = 0x9FD99D7D
     },
     {
         hashid = 2,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x8C9F7709,
         hash_dec_signed = -1935706359,
@@ -2511,8 +2003,6 @@ Components.HorseBedrolls = {
     {
         hashid = 3,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x7B55D476,
         hash_dec_signed = 2069222518,
@@ -2521,8 +2011,6 @@ Components.HorseBedrolls = {
     {
         hashid = 4,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xD8258E14,
         hash_dec_signed = -668627436,
@@ -2531,8 +2019,6 @@ Components.HorseBedrolls = {
     {
         hashid = 5,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x0AC1F34C,
         hash_dec_signed = 180482892,
@@ -2541,8 +2027,6 @@ Components.HorseBedrolls = {
     {
         hashid = 6,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x18BB6B30,
         hash_dec_signed = 414935856,
@@ -2551,8 +2035,6 @@ Components.HorseBedrolls = {
     {
         hashid = 7,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x12F0DF9F,
         hash_dec_signed = 317775775,
@@ -2561,8 +2043,6 @@ Components.HorseBedrolls = {
     {
         hashid = 8,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x1B43F045,
         hash_dec_signed = 457437253,
@@ -2571,8 +2051,6 @@ Components.HorseBedrolls = {
     {
         hashid = 9,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x55A0E4FE,
         hash_dec_signed = 1436607742,
@@ -2581,8 +2059,6 @@ Components.HorseBedrolls = {
     {
         hashid = 10,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xFFB0391E,
         hash_dec_signed = -5228258,
@@ -2591,8 +2067,6 @@ Components.HorseBedrolls = {
     {
         hashid = 11,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x084E5AFA,
         hash_dec_signed = 139352826,
@@ -2601,8 +2075,6 @@ Components.HorseBedrolls = {
     {
         hashid = 12,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x9D868568,
         hash_dec_signed = -1652128408,
@@ -2611,8 +2083,6 @@ Components.HorseBedrolls = {
     {
         hashid = 13,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x72FCB059,
         hash_dec_signed = 1929162841,
@@ -2621,8 +2091,6 @@ Components.HorseBedrolls = {
     {
         hashid = 14,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x69B29DC5,
         hash_dec_signed = 1773313477,
@@ -2631,8 +2099,6 @@ Components.HorseBedrolls = {
     {
         hashid = 15,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xD258EF10,
         hash_dec_signed = -765923568,
@@ -2641,8 +2107,6 @@ Components.HorseBedrolls = {
     {
         hashid = 16,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x98214B1C,
         hash_dec_signed = -1742648548,
@@ -2651,8 +2115,6 @@ Components.HorseBedrolls = {
     {
         hashid = 17,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x45FEA6D8,
         hash_dec_signed = 1174316760,
@@ -2661,8 +2123,6 @@ Components.HorseBedrolls = {
     {
         hashid = 18,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xA643680C,
         hash_dec_signed = -1505531892,
@@ -2671,8 +2131,6 @@ Components.HorseBedrolls = {
     {
         hashid = 19,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x7C8A149A,
         hash_dec_signed = 2089424026,
@@ -2681,8 +2139,6 @@ Components.HorseBedrolls = {
     {
         hashid = 20,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x8DD7B735,
         hash_dec_signed = -1915242699,
@@ -2691,8 +2147,6 @@ Components.HorseBedrolls = {
     {
         hashid = 21,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xA1FD8B43,
         hash_dec_signed = -1577219261,
@@ -2701,8 +2155,6 @@ Components.HorseBedrolls = {
     {
         hashid = 22,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xB4532FEE,
         hash_dec_signed = -1269616658,
@@ -2711,8 +2163,6 @@ Components.HorseBedrolls = {
     {
         hashid = 23,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xBC664014,
         hash_dec_signed = -1134149612,
@@ -2721,8 +2171,6 @@ Components.HorseBedrolls = {
     {
         hashid = 24,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0xD020E789,
         hash_dec_signed = -803149943,
@@ -2731,8 +2179,6 @@ Components.HorseBedrolls = {
     {
         hashid = 25,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x69B21ADD,
         hash_dec_signed = 1773279965,
@@ -2741,8 +2187,6 @@ Components.HorseBedrolls = {
     {
         hashid = 26,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x4B7E0712,
         hash_dec_signed = 1266550546,
@@ -2751,8 +2195,6 @@ Components.HorseBedrolls = {
     {
         hashid = 27,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x36BEDD90,
         hash_dec_signed = 918478224,
@@ -2761,8 +2203,6 @@ Components.HorseBedrolls = {
     {
         hashid = 28,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x27543EBB,
         hash_dec_signed = 659832507,
@@ -2771,8 +2211,6 @@ Components.HorseBedrolls = {
     {
         hashid = 29,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x841C784A,
         hash_dec_signed = -2078508982,
@@ -2781,8 +2219,6 @@ Components.HorseBedrolls = {
     {
         hashid = 30,
         category = "bedrolls",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xEFB31921,
         hash = 0x73D157B4,
         hash_dec_signed = 1943099316,
@@ -2796,18 +2232,12 @@ Components.HorseTails = {
     {
         hashid = 1,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
-        hash = 0x04951F22,
-        hash_dec_signed = 76881698,
-        category_hash_dec_signed = -1505972720,
+        hash = 0x04951F22
     },
     {
         hashid = 2,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x0607E6DD,
         hash_dec_signed = 101181149,
@@ -2816,8 +2246,6 @@ Components.HorseTails = {
     {
         hashid = 3,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x066C266F,
         hash_dec_signed = 107751023,
@@ -2826,8 +2254,6 @@ Components.HorseTails = {
     {
         hashid = 4,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x073073A2,
         hash_dec_signed = 120615842,
@@ -2836,8 +2262,6 @@ Components.HorseTails = {
     {
         hashid = 5,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x084D6B90,
         hash_dec_signed = 139291536,
@@ -2846,8 +2270,6 @@ Components.HorseTails = {
     {
         hashid = 6,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x0AFB492C,
         hash_dec_signed = 184240428,
@@ -2856,8 +2278,6 @@ Components.HorseTails = {
     {
         hashid = 7,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x12DBBBAF,
         hash_dec_signed = 316390319,
@@ -2866,8 +2286,6 @@ Components.HorseTails = {
     {
         hashid = 8,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x17EB79D3,
         hash_dec_signed = 401308115,
@@ -2876,8 +2294,6 @@ Components.HorseTails = {
     {
         hashid = 9,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x1A3B721B,
         hash_dec_signed = 440103451,
@@ -2886,8 +2302,6 @@ Components.HorseTails = {
     {
         hashid = 10,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x1BB5EAA1,
         hash_dec_signed = 464906913,
@@ -2896,8 +2310,6 @@ Components.HorseTails = {
     {
         hashid = 11,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x1E9A18C2,
         hash_dec_signed = 513415362,
@@ -2906,8 +2318,6 @@ Components.HorseTails = {
     {
         hashid = 12,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x1F7A99EA,
         hash_dec_signed = 528128490,
@@ -2916,8 +2326,6 @@ Components.HorseTails = {
     {
         hashid = 13,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x25B51566,
         hash_dec_signed = 632624486,
@@ -2926,8 +2334,6 @@ Components.HorseTails = {
     {
         hashid = 14,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x2E753874,
         hash_dec_signed = 779434100,
@@ -2936,8 +2342,6 @@ Components.HorseTails = {
     {
         hashid = 15,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x30603BB5,
         hash_dec_signed = 811613109,
@@ -2946,8 +2350,6 @@ Components.HorseTails = {
     {
         hashid = 16,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x33E7B1CB,
         hash_dec_signed = 870822347,
@@ -2956,8 +2358,6 @@ Components.HorseTails = {
     {
         hashid = 17,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x383E86F3,
         hash_dec_signed = 943621875,
@@ -2966,8 +2366,6 @@ Components.HorseTails = {
     {
         hashid = 18,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x3AE050B5,
         hash_dec_signed = 987779253,
@@ -2976,8 +2374,6 @@ Components.HorseTails = {
     {
         hashid = 19,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x3B27D1DD,
         hash_dec_signed = 992465373,
@@ -2986,8 +2382,6 @@ Components.HorseTails = {
     {
         hashid = 20,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x3B8A8D0C,
         hash_dec_signed = 998935820,
@@ -2996,8 +2390,6 @@ Components.HorseTails = {
     {
         hashid = 21,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x3D1F13D4,
         hash_dec_signed = 1025446868,
@@ -3006,8 +2398,6 @@ Components.HorseTails = {
     {
         hashid = 22,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x3D212D77,
         hash_dec_signed = 1025584503,
@@ -3016,8 +2406,6 @@ Components.HorseTails = {
     {
         hashid = 23,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x4124CC49,
         hash_dec_signed = 1092930633,
@@ -3026,8 +2414,6 @@ Components.HorseTails = {
     {
         hashid = 24,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x49CD2991,
         hash_dec_signed = 1238182289,
@@ -3036,8 +2422,6 @@ Components.HorseTails = {
     {
         hashid = 25,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x4B51B039,
         hash_dec_signed = 1263644729,
@@ -3046,8 +2430,6 @@ Components.HorseTails = {
     {
         hashid = 26,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x4F5268A4,
         hash_dec_signed = 1330800804,
@@ -3056,8 +2438,6 @@ Components.HorseTails = {
     {
         hashid = 27,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x5062FC53,
         hash_dec_signed = 1348664403,
@@ -3066,8 +2446,6 @@ Components.HorseTails = {
     {
         hashid = 28,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x508AD44A,
         hash_dec_signed = 1351275594,
@@ -3076,8 +2454,6 @@ Components.HorseTails = {
     {
         hashid = 29,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x543203ED,
         hash_dec_signed = 1412563949,
@@ -3086,8 +2462,6 @@ Components.HorseTails = {
     {
         hashid = 30,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x574BC82D,
         hash_dec_signed = 1464584237,
@@ -3096,8 +2470,6 @@ Components.HorseTails = {
     {
         hashid = 31,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x5D7FA043,
         hash_dec_signed = 1568645187,
@@ -3106,8 +2478,6 @@ Components.HorseTails = {
     {
         hashid = 32,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x5F4871C5,
         hash_dec_signed = 1598583237,
@@ -3116,8 +2486,6 @@ Components.HorseTails = {
     {
         hashid = 33,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x607956E9,
         hash_dec_signed = 1618564841,
@@ -3126,8 +2494,6 @@ Components.HorseTails = {
     {
         hashid = 34,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x695B2E3F,
         hash_dec_signed = 1767583295,
@@ -3136,8 +2502,6 @@ Components.HorseTails = {
     {
         hashid = 35,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x69756C80,
         hash_dec_signed = 1769303168,
@@ -3146,8 +2510,6 @@ Components.HorseTails = {
     {
         hashid = 36,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x6DB6F164,
         hash_dec_signed = 1840705892,
@@ -3156,8 +2518,6 @@ Components.HorseTails = {
     {
         hashid = 37,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x740701A3,
         hash_dec_signed = 1946616227,
@@ -3166,8 +2526,6 @@ Components.HorseTails = {
     {
         hashid = 38,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x7522834F,
         hash_dec_signed = 1965196111,
@@ -3176,8 +2534,6 @@ Components.HorseTails = {
     {
         hashid = 39,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x75C4C716,
         hash_dec_signed = 1975830294,
@@ -3186,8 +2542,6 @@ Components.HorseTails = {
     {
         hashid = 40,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x7A248ABE,
         hash_dec_signed = 2049215166,
@@ -3196,8 +2550,6 @@ Components.HorseTails = {
     {
         hashid = 41,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x810A5CE0,
         hash_dec_signed = -2130027296,
@@ -3206,8 +2558,6 @@ Components.HorseTails = {
     {
         hashid = 42,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x82DB38EE,
         hash_dec_signed = -2099562258,
@@ -3216,8 +2566,6 @@ Components.HorseTails = {
     {
         hashid = 43,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x84269E43,
         hash_dec_signed = -2077843901,
@@ -3226,8 +2574,6 @@ Components.HorseTails = {
     {
         hashid = 44,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x84ADE4E4,
         hash_dec_signed = -2068978460,
@@ -3236,8 +2582,6 @@ Components.HorseTails = {
     {
         hashid = 45,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x876B27E0,
         hash_dec_signed = -2023020576,
@@ -3246,8 +2590,6 @@ Components.HorseTails = {
     {
         hashid = 46,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x88A2AA53,
         hash_dec_signed = -2002605485,
@@ -3256,8 +2598,6 @@ Components.HorseTails = {
     {
         hashid = 47,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x894C290D,
         hash_dec_signed = -1991497459,
@@ -3266,8 +2606,6 @@ Components.HorseTails = {
     {
         hashid = 48,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x96EDC3D1,
         hash_dec_signed = -1762802735,
@@ -3276,8 +2614,6 @@ Components.HorseTails = {
     {
         hashid = 49,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x972AC447,
         hash_dec_signed = -1758804921,
@@ -3286,8 +2622,6 @@ Components.HorseTails = {
     {
         hashid = 50,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0x9CB1CFD8,
         hash_dec_signed = -1666068520,
@@ -3296,8 +2630,6 @@ Components.HorseTails = {
     {
         hashid = 51,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA0775A83,
         hash_dec_signed = -1602790781,
@@ -3306,8 +2638,6 @@ Components.HorseTails = {
     {
         hashid = 52,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA3DA055A,
         hash_dec_signed = -1545992870,
@@ -3316,8 +2646,6 @@ Components.HorseTails = {
     {
         hashid = 53,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA4F0E056,
         hash_dec_signed = -1527717802,
@@ -3326,8 +2654,6 @@ Components.HorseTails = {
     {
         hashid = 54,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA62C9657,
         hash_dec_signed = -1507027369,
@@ -3336,8 +2662,6 @@ Components.HorseTails = {
     {
         hashid = 55,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA7438C29,
         hash_dec_signed = -1488745431,
@@ -3346,8 +2670,6 @@ Components.HorseTails = {
     {
         hashid = 56,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xA8A4673A,
         hash_dec_signed = -1465620678,
@@ -3356,8 +2678,6 @@ Components.HorseTails = {
     {
         hashid = 57,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xB244FE1E,
         hash_dec_signed = -1304101346,
@@ -3366,8 +2686,6 @@ Components.HorseTails = {
     {
         hashid = 58,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xB4374DB1,
         hash_dec_signed = -1271444047,
@@ -3376,8 +2694,6 @@ Components.HorseTails = {
     {
         hashid = 59,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xB4AB3354,
         hash_dec_signed = -1263848620,
@@ -3386,8 +2702,6 @@ Components.HorseTails = {
     {
         hashid = 60,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xBCD412B1,
         hash_dec_signed = -1126952271,
@@ -3396,8 +2710,6 @@ Components.HorseTails = {
     {
         hashid = 61,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xC0AF3489,
         hash_dec_signed = -1062259575,
@@ -3406,8 +2718,6 @@ Components.HorseTails = {
     {
         hashid = 62,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xC2FA4FF2,
         hash_dec_signed = -1023782926,
@@ -3416,8 +2726,6 @@ Components.HorseTails = {
     {
         hashid = 63,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xC304EB4C,
         hash_dec_signed = -1023087796,
@@ -3426,8 +2734,6 @@ Components.HorseTails = {
     {
         hashid = 64,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xC74FCC45,
         hash_dec_signed = -951071675,
@@ -3436,8 +2742,6 @@ Components.HorseTails = {
     {
         hashid = 65,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xCDFF359A,
         hash_dec_signed = -838912614,
@@ -3446,8 +2750,6 @@ Components.HorseTails = {
     {
         hashid = 66,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xCE62B5CE,
         hash_dec_signed = -832391730,
@@ -3456,8 +2758,6 @@ Components.HorseTails = {
     {
         hashid = 67,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xD143E02D,
         hash_dec_signed = -784080851,
@@ -3466,8 +2766,6 @@ Components.HorseTails = {
     {
         hashid = 68,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xD7D68A7B,
         hash_dec_signed = -673805701,
@@ -3476,8 +2774,6 @@ Components.HorseTails = {
     {
         hashid = 69,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xD9288D47,
         hash_dec_signed = -651653817,
@@ -3486,8 +2782,6 @@ Components.HorseTails = {
     {
         hashid = 70,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xD9EA1916,
         hash_dec_signed = -638969578,
@@ -3496,8 +2790,6 @@ Components.HorseTails = {
     {
         hashid = 71,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xDCE41557,
         hash_dec_signed = -589032105,
@@ -3506,8 +2798,6 @@ Components.HorseTails = {
     {
         hashid = 72,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xDD9F5447,
         hash_dec_signed = -576760761,
@@ -3516,8 +2806,6 @@ Components.HorseTails = {
     {
         hashid = 73,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xDDB48566,
         hash_dec_signed = -575371930,
@@ -3526,8 +2814,6 @@ Components.HorseTails = {
     {
         hashid = 74,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xE38F5D96,
         hash_dec_signed = -477143658,
@@ -3536,8 +2822,6 @@ Components.HorseTails = {
     {
         hashid = 75,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xEAA5EEE7,
         hash_dec_signed = -358224153,
@@ -3546,8 +2830,6 @@ Components.HorseTails = {
     {
         hashid = 76,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xEABBBAB9,
         hash_dec_signed = -356795719,
@@ -3556,8 +2838,6 @@ Components.HorseTails = {
     {
         hashid = 77,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xEAEAB164,
         hash_dec_signed = -353717916,
@@ -3566,8 +2846,6 @@ Components.HorseTails = {
     {
         hashid = 78,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xEBC7218B,
         hash_dec_signed = -339271285,
@@ -3576,8 +2854,6 @@ Components.HorseTails = {
     {
         hashid = 79,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xED0397AC,
         hash_dec_signed = -318531668,
@@ -3586,8 +2862,6 @@ Components.HorseTails = {
     {
         hashid = 80,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xED787168,
         hash_dec_signed = -310873752,
@@ -3596,8 +2870,6 @@ Components.HorseTails = {
     {
         hashid = 81,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xEFA67855,
         hash_dec_signed = -274302891,
@@ -3606,8 +2878,6 @@ Components.HorseTails = {
     {
         hashid = 82,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xF4294320,
         hash_dec_signed = -198622432,
@@ -3616,8 +2886,6 @@ Components.HorseTails = {
     {
         hashid = 83,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xF4A3443C,
         hash_dec_signed = -190626756,
@@ -3626,8 +2894,6 @@ Components.HorseTails = {
     {
         hashid = 84,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xF6B0AB06,
         hash_dec_signed = -156194042,
@@ -3636,8 +2902,6 @@ Components.HorseTails = {
     {
         hashid = 85,
         category = "tails",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xA63CAE10,
         hash = 0xF867D611,
         hash_dec_signed = -127412719,
@@ -3651,18 +2915,12 @@ Components.HorseManes = {
     {
         hashid = 1,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
-        hash = 0x0235DBF1,
-        hash_dec_signed = 37084145,
-        category_hash_dec_signed = -1442703445,
+        hash = 0x0235DBF1
     },
     {
         hashid = 2,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0354F6B7,
         hash_dec_signed = 55899831,
@@ -3671,8 +2929,6 @@ Components.HorseManes = {
     {
         hashid = 3,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0512377B,
         hash_dec_signed = 85079931,
@@ -3681,8 +2937,6 @@ Components.HorseManes = {
     {
         hashid = 4,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x054A3CB0,
         hash_dec_signed = 88751280,
@@ -3691,8 +2945,6 @@ Components.HorseManes = {
     {
         hashid = 5,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0632F2B7,
         hash_dec_signed = 104002231,
@@ -3701,8 +2953,6 @@ Components.HorseManes = {
     {
         hashid = 6,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x09836E71,
         hash_dec_signed = 159608433,
@@ -3711,8 +2961,6 @@ Components.HorseManes = {
     {
         hashid = 7,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x09A640A3,
         hash_dec_signed = 161890467,
@@ -3721,8 +2969,6 @@ Components.HorseManes = {
     {
         hashid = 8,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0AFB7C24,
         hash_dec_signed = 184253476,
@@ -3731,8 +2977,6 @@ Components.HorseManes = {
     {
         hashid = 9,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0B52F0BC,
         hash_dec_signed = 189984956,
@@ -3741,8 +2985,6 @@ Components.HorseManes = {
     {
         hashid = 10,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x0DCF5321,
         hash_dec_signed = 231691041,
@@ -3751,8 +2993,6 @@ Components.HorseManes = {
     {
         hashid = 11,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x130E341A,
         hash_dec_signed = 319697946,
@@ -3761,8 +3001,6 @@ Components.HorseManes = {
     {
         hashid = 12,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x14098229,
         hash_dec_signed = 336167465,
@@ -3771,8 +3009,6 @@ Components.HorseManes = {
     {
         hashid = 13,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x16923E26,
         hash_dec_signed = 378682918,
@@ -3781,8 +3017,6 @@ Components.HorseManes = {
     {
         hashid = 14,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x18199F48,
         hash_dec_signed = 404332360,
@@ -3791,8 +3025,6 @@ Components.HorseManes = {
     {
         hashid = 15,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x1A5A45B6,
         hash_dec_signed = 442123702,
@@ -3801,8 +3033,6 @@ Components.HorseManes = {
     {
         hashid = 16,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x1DF21752,
         hash_dec_signed = 502404946,
@@ -3811,8 +3041,6 @@ Components.HorseManes = {
     {
         hashid = 17,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x1FDC6D0F,
         hash_dec_signed = 534539535,
@@ -3821,8 +3049,6 @@ Components.HorseManes = {
     {
         hashid = 18,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x241D7FBD,
         hash_dec_signed = 605913021,
@@ -3831,8 +3057,6 @@ Components.HorseManes = {
     {
         hashid = 19,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x25627B98,
         hash_dec_signed = 627211160,
@@ -3841,8 +3065,6 @@ Components.HorseManes = {
     {
         hashid = 20,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x2D47B5FD,
         hash_dec_signed = 759674365,
@@ -3851,8 +3073,6 @@ Components.HorseManes = {
     {
         hashid = 21,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x2E378E8A,
         hash_dec_signed = 775392906,
@@ -3861,8 +3081,6 @@ Components.HorseManes = {
     {
         hashid = 22,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x2FCAF0CB,
         hash_dec_signed = 801829067,
@@ -3871,8 +3089,6 @@ Components.HorseManes = {
     {
         hashid = 23,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x388E4B32,
         hash_dec_signed = 948849458,
@@ -3881,8 +3097,6 @@ Components.HorseManes = {
     {
         hashid = 24,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x3A7C2C86,
         hash_dec_signed = 981216390,
@@ -3891,8 +3105,6 @@ Components.HorseManes = {
     {
         hashid = 25,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x3BFE2A17,
         hash_dec_signed = 1006512663,
@@ -3901,8 +3113,6 @@ Components.HorseManes = {
     {
         hashid = 26,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x3F1FEE4C,
         hash_dec_signed = 1059057228,
@@ -3911,8 +3121,6 @@ Components.HorseManes = {
     {
         hashid = 27,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x419D9470,
         hash_dec_signed = 1100846192,
@@ -3921,8 +3129,6 @@ Components.HorseManes = {
     {
         hashid = 28,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x41EA9196,
         hash_dec_signed = 1105891734,
@@ -3931,8 +3137,6 @@ Components.HorseManes = {
     {
         hashid = 29,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x446A6F01,
         hash_dec_signed = 1147825921,
@@ -3941,8 +3145,6 @@ Components.HorseManes = {
     {
         hashid = 30,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x483AC803,
         hash_dec_signed = 1211811843,
@@ -3951,8 +3153,6 @@ Components.HorseManes = {
     {
         hashid = 31,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x4F148D45,
         hash_dec_signed = 1326746949,
@@ -3961,8 +3161,6 @@ Components.HorseManes = {
     {
         hashid = 32,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x4FCC51B3,
         hash_dec_signed = 1338790323,
@@ -3971,8 +3169,6 @@ Components.HorseManes = {
     {
         hashid = 33,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x50AC7CC6,
         hash_dec_signed = 1353481414,
@@ -3981,8 +3177,6 @@ Components.HorseManes = {
     {
         hashid = 34,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x52DC15C8,
         hash_dec_signed = 1390155208,
@@ -3991,8 +3185,6 @@ Components.HorseManes = {
     {
         hashid = 35,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5445B9C0,
         hash_dec_signed = 1413855680,
@@ -4001,8 +3193,6 @@ Components.HorseManes = {
     {
         hashid = 36,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5D596CCD,
         hash_dec_signed = 1566141645,
@@ -4011,8 +3201,6 @@ Components.HorseManes = {
     {
         hashid = 37,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5DE62AE8,
         hash_dec_signed = 1575365352,
@@ -4021,8 +3209,6 @@ Components.HorseManes = {
     {
         hashid = 38,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5ED14B9F,
         hash_dec_signed = 1590774687,
@@ -4031,8 +3217,6 @@ Components.HorseManes = {
     {
         hashid = 39,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5F0395A3,
         hash_dec_signed = 1594070435,
@@ -4041,8 +3225,6 @@ Components.HorseManes = {
     {
         hashid = 40,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x5FE29755,
         hash_dec_signed = 1608685397,
@@ -4051,8 +3233,6 @@ Components.HorseManes = {
     {
         hashid = 41,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x6038F7FF,
         hash_dec_signed = 1614346239,
@@ -4061,8 +3241,6 @@ Components.HorseManes = {
     {
         hashid = 42,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x648A3924,
         hash_dec_signed = 1686780196,
@@ -4071,8 +3249,6 @@ Components.HorseManes = {
     {
         hashid = 43,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x66215D77,
         hash_dec_signed = 1713462647,
@@ -4081,8 +3257,6 @@ Components.HorseManes = {
     {
         hashid = 44,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x6B3A6471,
         hash_dec_signed = 1798988913,
@@ -4091,8 +3265,6 @@ Components.HorseManes = {
     {
         hashid = 45,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x6CB9310E,
         hash_dec_signed = 1824076046,
@@ -4101,8 +3273,6 @@ Components.HorseManes = {
     {
         hashid = 46,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x6D9412B5,
         hash_dec_signed = 1838420661,
@@ -4111,8 +3281,6 @@ Components.HorseManes = {
     {
         hashid = 47,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x6F4510C4,
         hash_dec_signed = 1866797252,
@@ -4121,8 +3289,6 @@ Components.HorseManes = {
     {
         hashid = 48,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x7098D141,
         hash_dec_signed = 1889063233,
@@ -4131,8 +3297,6 @@ Components.HorseManes = {
     {
         hashid = 49,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x7D902D5A,
         hash_dec_signed = 2106600794,
@@ -4141,8 +3305,6 @@ Components.HorseManes = {
     {
         hashid = 50,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x817B10F6,
         hash_dec_signed = -2122641162,
@@ -4151,8 +3313,6 @@ Components.HorseManes = {
     {
         hashid = 51,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x83563E39,
         hash_dec_signed = -2091499975,
@@ -4161,8 +3321,6 @@ Components.HorseManes = {
     {
         hashid = 52,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x838E5EB8,
         hash_dec_signed = -2087821640,
@@ -4171,8 +3329,6 @@ Components.HorseManes = {
     {
         hashid = 53,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x86457C9A,
         hash_dec_signed = -2042266470,
@@ -4181,8 +3337,6 @@ Components.HorseManes = {
     {
         hashid = 54,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x8679685F,
         hash_dec_signed = -2038863777,
@@ -4191,8 +3345,6 @@ Components.HorseManes = {
     {
         hashid = 55,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x92B2579E,
         hash_dec_signed = -1833805922,
@@ -4201,8 +3353,6 @@ Components.HorseManes = {
     {
         hashid = 56,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x94F58186,
         hash_dec_signed = -1795849850,
@@ -4211,8 +3361,6 @@ Components.HorseManes = {
     {
         hashid = 57,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x960C1B33,
         hash_dec_signed = -1777591501,
@@ -4221,8 +3369,6 @@ Components.HorseManes = {
     {
         hashid = 58,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x96FE6589,
         hash_dec_signed = -1761712759,
@@ -4231,8 +3377,6 @@ Components.HorseManes = {
     {
         hashid = 59,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x97105EF6,
         hash_dec_signed = -1760534794,
@@ -4241,8 +3385,6 @@ Components.HorseManes = {
     {
         hashid = 60,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x97D095F4,
         hash_dec_signed = -1747937804,
@@ -4251,8 +3393,6 @@ Components.HorseManes = {
     {
         hashid = 61,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x99F5A3FA,
         hash_dec_signed = -1711954950,
@@ -4261,8 +3401,6 @@ Components.HorseManes = {
     {
         hashid = 62,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0x9DF8175C,
         hash_dec_signed = -1644685476,
@@ -4271,8 +3409,6 @@ Components.HorseManes = {
     {
         hashid = 63,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xA0F4F423,
         hash_dec_signed = -1594559453,
@@ -4281,8 +3417,6 @@ Components.HorseManes = {
     {
         hashid = 64,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xA193A97A,
         hash_dec_signed = -1584158342,
@@ -4291,8 +3425,6 @@ Components.HorseManes = {
     {
         hashid = 65,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xA4E1B8DE,
         hash_dec_signed = -1528710946,
@@ -4301,8 +3433,6 @@ Components.HorseManes = {
     {
         hashid = 66,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xA64BFD6D,
         hash_dec_signed = -1504969363,
@@ -4311,8 +3441,6 @@ Components.HorseManes = {
     {
         hashid = 67,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xA7A4DD49,
         hash_dec_signed = -1482367671,
@@ -4321,8 +3449,6 @@ Components.HorseManes = {
     {
         hashid = 68,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xAA3FAC1A,
         hash_dec_signed = -1438667750,
@@ -4331,8 +3457,6 @@ Components.HorseManes = {
     {
         hashid = 69,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xABA8475F,
         hash_dec_signed = -1415035041,
@@ -4341,8 +3465,6 @@ Components.HorseManes = {
     {
         hashid = 70,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xACA2B4B1,
         hash_dec_signed = -1398623055,
@@ -4351,8 +3473,6 @@ Components.HorseManes = {
     {
         hashid = 71,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xB13D134B,
         hash_dec_signed = -1321397429,
@@ -4361,8 +3481,6 @@ Components.HorseManes = {
     {
         hashid = 72,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xB288D42C,
         hash_dec_signed = -1299655636,
@@ -4371,8 +3489,6 @@ Components.HorseManes = {
     {
         hashid = 73,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xB2FB934B,
         hash_dec_signed = -1292135605,
@@ -4381,8 +3497,6 @@ Components.HorseManes = {
     {
         hashid = 74,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xB5F379E6,
         hash_dec_signed = -1242334746,
@@ -4391,8 +3505,6 @@ Components.HorseManes = {
     {
         hashid = 75,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xB881489D,
         hash_dec_signed = -1199486819,
@@ -4401,8 +3513,6 @@ Components.HorseManes = {
     {
         hashid = 76,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xBD7B6B05,
         hash_dec_signed = -1115985147,
@@ -4411,8 +3521,6 @@ Components.HorseManes = {
     {
         hashid = 77,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xC0085B74,
         hash_dec_signed = -1073194124,
@@ -4421,8 +3529,6 @@ Components.HorseManes = {
     {
         hashid = 78,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xC15371C1,
         hash_dec_signed = -1051495999,
@@ -4431,8 +3537,6 @@ Components.HorseManes = {
     {
         hashid = 79,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xC8646863,
         hash_dec_signed = -932943773,
@@ -4441,8 +3545,6 @@ Components.HorseManes = {
     {
         hashid = 80,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xC929BFA7,
         hash_dec_signed = -920010841,
@@ -4451,8 +3553,6 @@ Components.HorseManes = {
     {
         hashid = 81,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xC9D16B31,
         hash_dec_signed = -909022415,
@@ -4461,8 +3561,6 @@ Components.HorseManes = {
     {
         hashid = 82,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xCDC9C8E7,
         hash_dec_signed = -842413849,
@@ -4471,8 +3569,6 @@ Components.HorseManes = {
     {
         hashid = 83,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xCF434F57,
         hash_dec_signed = -817672361,
@@ -4481,8 +3577,6 @@ Components.HorseManes = {
     {
         hashid = 84,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xD152FE09,
         hash_dec_signed = -783090167,
@@ -4491,8 +3585,6 @@ Components.HorseManes = {
     {
         hashid = 85,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xD43503D5,
         hash_dec_signed = -734723115,
@@ -4501,8 +3593,6 @@ Components.HorseManes = {
     {
         hashid = 86,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xD4E65BE5,
         hash_dec_signed = -723100699,
@@ -4511,8 +3601,6 @@ Components.HorseManes = {
     {
         hashid = 87,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xD894BF28,
         hash_dec_signed = -661340376,
@@ -4521,8 +3609,6 @@ Components.HorseManes = {
     {
         hashid = 88,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xD9CE8DB4,
         hash_dec_signed = -640774732,
@@ -4531,8 +3617,6 @@ Components.HorseManes = {
     {
         hashid = 89,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xDC62E996,
         hash_dec_signed = -597497450,
@@ -4541,8 +3625,6 @@ Components.HorseManes = {
     {
         hashid = 90,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xE02377D6,
         hash_dec_signed = -534546474,
@@ -4551,8 +3633,6 @@ Components.HorseManes = {
     {
         hashid = 91,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xE0BC27A6,
         hash_dec_signed = -524539994,
@@ -4561,8 +3641,6 @@ Components.HorseManes = {
     {
         hashid = 92,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xE12C9C64,
         hash_dec_signed = -517170076,
@@ -4571,8 +3649,6 @@ Components.HorseManes = {
     {
         hashid = 93,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xE1435081,
         hash_dec_signed = -515682175,
@@ -4581,8 +3657,6 @@ Components.HorseManes = {
     {
         hashid = 94,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xE9FE04D0,
         hash_dec_signed = -369228592,
@@ -4591,8 +3665,6 @@ Components.HorseManes = {
     {
         hashid = 95,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xEA46E28C,
         hash_dec_signed = -364453236,
@@ -4601,8 +3673,6 @@ Components.HorseManes = {
     {
         hashid = 96,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xEAB72F85,
         hash_dec_signed = -357093499,
@@ -4611,8 +3681,6 @@ Components.HorseManes = {
     {
         hashid = 97,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xF2E555D8,
         hash_dec_signed = -219851304,
@@ -4621,8 +3689,6 @@ Components.HorseManes = {
     {
         hashid = 98,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xF304C014,
         hash_dec_signed = -217792492,
@@ -4631,8 +3697,6 @@ Components.HorseManes = {
     {
         hashid = 99,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xFC74DF3B,
         hash_dec_signed = -59449541,
@@ -4641,8 +3705,6 @@ Components.HorseManes = {
     {
         hashid = 100,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xFF020F3A,
         hash_dec_signed = -16642246,
@@ -4651,8 +3713,6 @@ Components.HorseManes = {
     {
         hashid = 101,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xFF17AB82,
         hash_dec_signed = -15225982,
@@ -4661,8 +3721,6 @@ Components.HorseManes = {
     {
         hashid = 102,
         category = "manes",
-        ped_type = "horse",
-        is_multiplayer = false,
         category_hash = 0xAA0217AB,
         hash = 0xFFF3B76A,
         hash_dec_signed = -805014,
@@ -4676,18 +3734,12 @@ Components.HorseMasks = {
     {
         hashid = 1,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
-        hash = 0x08A78F53,
-        hash_dec_signed = 145198931,
-        category_hash_dec_signed = -749728163,
+        hash = 0x08A78F53
     },
     {
         hashid = 2,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x13AC6E51,
         hash_dec_signed = 330067537,
@@ -4696,8 +3748,6 @@ Components.HorseMasks = {
     {
         hashid = 3,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x226B2F76,
         hash_dec_signed = 577449846,
@@ -4706,8 +3756,6 @@ Components.HorseMasks = {
     {
         hashid = 4,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x30044BAC,
         hash_dec_signed = 805587884,
@@ -4716,8 +3764,6 @@ Components.HorseMasks = {
     {
         hashid = 5,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x406FC6C7,
         hash_dec_signed = 1081067207,
@@ -4726,8 +3772,6 @@ Components.HorseMasks = {
     {
         hashid = 6,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x4C8C83A4,
         hash_dec_signed = 1284277156,
@@ -4736,8 +3780,6 @@ Components.HorseMasks = {
     {
         hashid = 7,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x4E22622C,
         hash_dec_signed = 1310876204,
@@ -4746,8 +3788,6 @@ Components.HorseMasks = {
     {
         hashid = 8,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x53EEEBD4,
         hash_dec_signed = 1408166868,
@@ -4756,8 +3796,6 @@ Components.HorseMasks = {
     {
         hashid = 9,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x61BEAE08,
         hash_dec_signed = 1639886344,
@@ -4766,8 +3804,6 @@ Components.HorseMasks = {
     {
         hashid = 10,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x68FB97DE,
         hash_dec_signed = 1761318878,
@@ -4776,8 +3812,6 @@ Components.HorseMasks = {
     {
         hashid = 11,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x69CD996E,
         hash_dec_signed = 1775081838,
@@ -4786,8 +3820,6 @@ Components.HorseMasks = {
     {
         hashid = 12,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x6B355791,
         hash_dec_signed = 1798657937,
@@ -4796,8 +3828,6 @@ Components.HorseMasks = {
     {
         hashid = 13,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x702A4AF3,
         hash_dec_signed = 1881819891,
@@ -4806,8 +3836,6 @@ Components.HorseMasks = {
     {
         hashid = 14,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x7A773AC1,
         hash_dec_signed = 2054634177,
@@ -4816,8 +3844,6 @@ Components.HorseMasks = {
     {
         hashid = 15,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x7BFA791B,
         hash_dec_signed = 2080012571,
@@ -4826,8 +3852,6 @@ Components.HorseMasks = {
     {
         hashid = 16,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x872A0C5A,
         hash_dec_signed = -2027287462,
@@ -4836,8 +3860,6 @@ Components.HorseMasks = {
     {
         hashid = 17,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x8C471684,
         hash_dec_signed = -1941498236,
@@ -4846,8 +3868,6 @@ Components.HorseMasks = {
     {
         hashid = 18,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x8DB38601,
         hash_dec_signed = -1917614591,
@@ -4856,8 +3876,6 @@ Components.HorseMasks = {
     {
         hashid = 19,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x8DCC1CBE,
         hash_dec_signed = -1916003138,
@@ -4866,8 +3884,6 @@ Components.HorseMasks = {
     {
         hashid = 20,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x90A62272,
         hash_dec_signed = -1868160398,
@@ -4876,8 +3892,6 @@ Components.HorseMasks = {
     {
         hashid = 21,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x9946F874,
         hash_dec_signed = -1723402124,
@@ -4886,8 +3900,6 @@ Components.HorseMasks = {
     {
         hashid = 22,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x9A11B219,
         hash_dec_signed = -1710116327,
@@ -4896,8 +3908,6 @@ Components.HorseMasks = {
     {
         hashid = 23,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x9DB125FC,
         hash_dec_signed = -1649334788,
@@ -4906,8 +3916,6 @@ Components.HorseMasks = {
     {
         hashid = 24,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xA45049C6,
         hash_dec_signed = -1538242106,
@@ -4916,8 +3924,6 @@ Components.HorseMasks = {
     {
         hashid = 25,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xB0395F88,
         hash_dec_signed = -1338417272,
@@ -4926,8 +3932,6 @@ Components.HorseMasks = {
     {
         hashid = 26,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xB395D1C5,
         hash_dec_signed = -1282027067,
@@ -4936,8 +3940,6 @@ Components.HorseMasks = {
     {
         hashid = 27,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xB567EBF5,
         hash_dec_signed = -1251480587,
@@ -4946,8 +3948,6 @@ Components.HorseMasks = {
     {
         hashid = 28,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xBD887906,
         hash_dec_signed = -1115129594,
@@ -4956,8 +3956,6 @@ Components.HorseMasks = {
     {
         hashid = 29,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xC4886BDC,
         hash_dec_signed = -997692452,
@@ -4966,8 +3964,6 @@ Components.HorseMasks = {
     {
         hashid = 30,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xC70D8F40,
         hash_dec_signed = -955412672,
@@ -4976,8 +3972,6 @@ Components.HorseMasks = {
     {
         hashid = 31,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xC907FCA9,
         hash_dec_signed = -922223447,
@@ -4986,8 +3980,6 @@ Components.HorseMasks = {
     {
         hashid = 32,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xD6E279B1,
         hash_dec_signed = -689800783,
@@ -4996,8 +3988,6 @@ Components.HorseMasks = {
     {
         hashid = 33,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xDDCDB9A0,
         hash_dec_signed = -573720160,
@@ -5006,8 +3996,6 @@ Components.HorseMasks = {
     {
         hashid = 34,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xE3278C28,
         hash_dec_signed = -483947480,
@@ -5016,8 +4004,6 @@ Components.HorseMasks = {
     {
         hashid = 35,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xEC10D626,
         hash_dec_signed = -334440922,
@@ -5026,8 +4012,6 @@ Components.HorseMasks = {
     {
         hashid = 36,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xEEF65F11,
         hash_dec_signed = -285843695,
@@ -5036,8 +4020,6 @@ Components.HorseMasks = {
     {
         hashid = 37,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xF606EC4A,
         hash_dec_signed = -167318454,
@@ -5046,8 +4028,6 @@ Components.HorseMasks = {
     {
         hashid = 38,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xFA5B72BB,
         hash_dec_signed = -94670149,
@@ -5056,8 +4036,6 @@ Components.HorseMasks = {
     {
         hashid = 39,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xD70C73EA,
         hash_dec_signed = -687049750,
@@ -5066,8 +4044,6 @@ Components.HorseMasks = {
     {
         hashid = 40,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xF17728C7,
         hash_dec_signed = -243849017,
@@ -5076,8 +4052,6 @@ Components.HorseMasks = {
     {
         hashid = 41,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x68DB4FAD,
         hash_dec_signed = 1759203245,
@@ -5086,8 +4060,6 @@ Components.HorseMasks = {
     {
         hashid = 42,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x62C5B02A,
         hash_dec_signed = 1657122858,
@@ -5096,8 +4068,6 @@ Components.HorseMasks = {
     {
         hashid = 43,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xF0ED62FF,
         hash_dec_signed = -252878081,
@@ -5106,8 +4076,6 @@ Components.HorseMasks = {
     {
         hashid = 44,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x2E776EE6,
         hash_dec_signed = 779579110,
@@ -5116,8 +4084,6 @@ Components.HorseMasks = {
     {
         hashid = 45,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x75637CBD,
         hash_dec_signed = 1969454269,
@@ -5126,8 +4092,6 @@ Components.HorseMasks = {
     {
         hashid = 46,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x4A992729,
         hash_dec_signed = 1251551017,
@@ -5136,8 +4100,6 @@ Components.HorseMasks = {
     {
         hashid = 47,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x4E312E61,
         hash_dec_signed = 1311845985,
@@ -5146,8 +4108,6 @@ Components.HorseMasks = {
     {
         hashid = 48,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x48099436,
         hash_dec_signed = 1208587318,
@@ -5156,8 +4116,6 @@ Components.HorseMasks = {
     {
         hashid = 49,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x77987353,
         hash_dec_signed = 2006479699,
@@ -5166,8 +4124,6 @@ Components.HorseMasks = {
     {
         hashid = 50,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0xAD6DDEFD,
         hash_dec_signed = -1385308419,
@@ -5176,8 +4132,6 @@ Components.HorseMasks = {
     {
         hashid = 51,
         category = "masks",
-        ped_type = "horse",
-        is_multiplayer = true,
         category_hash = 0xD3500E5D,
         hash = 0x5B22BA68,
         hash_dec_signed = 1529002600,
@@ -5191,18 +4145,12 @@ Components.HorseMustaches = {
 	{
 		hashid = 1,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
-		hash = 0x004BBEED,
-		hash_dec_signed = 4964077,
-		category_hash_dec_signed = 819920351,
+		hash = 0x004BBEED
 	},
 	{
 		hashid = 2,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x0960D117,
 		hash_dec_signed = 157339927,
@@ -5211,8 +4159,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 3,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x281A6D81,
 		hash_dec_signed = 672820609,
@@ -5221,8 +4167,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 4,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x334F83D3,
 		hash_dec_signed = 860849107,
@@ -5231,8 +4175,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 5,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x5497E784,
 		hash_dec_signed = 1419241348,
@@ -5241,8 +4183,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 6,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x67590D8F,
 		hash_dec_signed = 1733889423,
@@ -5251,8 +4191,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 7,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x91887491,
 		hash_dec_signed = -1853328239,
@@ -5261,8 +4199,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 8,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0x9ADAF492,
 		hash_dec_signed = -1696926574,
@@ -5271,8 +4207,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 9,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xAC459767,
 		hash_dec_signed = -1404725401,
@@ -5281,8 +4215,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 10,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xAF2A2FD8,
 		hash_dec_signed = -1356189736,
@@ -5291,8 +4223,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 11,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xB755402E,
 		hash_dec_signed = -1219149778,
@@ -5301,8 +4231,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 12,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xCFBA5E50,
 		hash_dec_signed = -809869744,
@@ -5311,8 +4239,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 13,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xDC895660,
 		hash_dec_signed = -594979232,
@@ -5321,8 +4247,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 14,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xEAEEF32B,
 		hash_dec_signed = -353438933,
@@ -5331,8 +4255,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 15,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xED8D1970,
 		hash_dec_signed = -309520016,
@@ -5341,8 +4263,6 @@ Components.HorseMustaches = {
 	{
 		hashid = 16,
 		category = "mustaches",
-		ped_type = "horse",
-		is_multiplayer = true,
 		category_hash = 0x30DEFDDF,
 		hash = 0xF7203FC3,
 		hash_dec_signed = -148881469,
