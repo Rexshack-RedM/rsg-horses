@@ -972,6 +972,12 @@ local function Flee()
     HorseCalled = false
 end
 
+for _, command in ipairs(Config.FleeHorseCommands) do
+    RegisterCommand(command, function(source, args, raw)
+        Flee()
+    end)
+end
+
 RegisterNetEvent("rsg-horses:client:storehorse", function(data)
     if (horsePed ~= 0) then
         TriggerServerEvent("rsg-horses:server:SetHoresUnActive", HorseId)
