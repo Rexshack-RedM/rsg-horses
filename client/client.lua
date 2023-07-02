@@ -7,6 +7,7 @@ local horseComps = {}
 local timeout = false
 local timeoutTimer = 30
 local horsePed = 0
+local horseBlip = nil
 local horseSpawned = false
 local HorseCalled = false
 local horsexp = 0
@@ -363,11 +364,16 @@ local function SpawnHorse()
 
                 local heading = 300
 
-                SetEntityAsMissionEntity(horsePed, false, false)
-                SetModelAsNoLongerNeeded(model)
-                SetEntityAsNoLongerNeeded(horsePed)
+                getControlOfEntity(horsePed)
+
+                if horseBlip then
+                    RemoveBlip(horseBlip)
+                end
+
+                SetEntityAsMissionEntity(horsePed, true, true)
                 DeleteEntity(horsePed)
                 DeletePed(horsePed)
+                SetEntityAsNoLongerNeeded(horsePed)
 
                 horsePed = 0
 
@@ -390,7 +396,7 @@ local function SpawnHorse()
                 getControlOfEntity(horsePed)
 
                 Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
-                local horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
+                horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                 Citizen.InvokeNative(0x9CB1A1623062F402, horseBlip, data.name) -- SetBlipName
                 Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true) -- SetPedOwnsAnimal
 
