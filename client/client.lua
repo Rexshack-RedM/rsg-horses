@@ -246,14 +246,6 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                         end
                     },
                     {
-                        icon = "fas fa-award",
-                        label =  Lang:t('menu.horse_trainer_shop'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                        TriggerEvent('rsg-horsetrainer:client:OpenTrainerShop')
-                        end
-                    },
-                    {
                         icon = "fas fa-shopping-basket",
                         label =  Lang:t('menu.horse_shop'),
                         targeticon = "fas fa-eye",
@@ -581,16 +573,16 @@ function CustomHorse()
     MenuData.CloseAll()
     local elements =
     {
-        {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = horseComps.blankets or 0, desc = "",   type = "slider", min = 0, max = 65},
-        {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = horseComps.saddles or 0, desc = "",   type = "slider", min = 0, max = 136},
-        {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = horseComps.horns or 0, desc = "",   type = "slider", min = 0, max = 14},
-        {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = horseComps.saddlebags or 0, desc = "",   type = "slider", min = 0, max = 20},
-        {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = horseComps.stirrups or 0, desc = "",   type = "slider", min = 0, max = 11},
-        {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = horseComps.bedrolls or 0, desc = "",   type = "slider", min = 0, max = 30},
-        {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = horseComps.tails or 0, desc = "",   type = "slider", min = 0, max = 85},
-        {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = horseComps.manes or 0, desc = "",   type = "slider", min = 0, max = 102},
-        {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = horseComps.masks or 0, desc = "",     type = "slider", min = 0, max = 51},
-        {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = horseComps.mustaches or 0, desc = "", type = "slider", min = 0, max = 16}
+        {label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = horseComps.blankets or 0,   desc = "", type = "slider", min = 0, max = 65},
+        {label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = horseComps.saddles or 0,    desc = "", type = "slider", min = 0, max = 136},
+        {label = Lang:t('menu.custom_horns'),       category = 'horns',      value = horseComps.horns or 0,      desc = "", type = "slider", min = 0, max = 14},
+        {label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = horseComps.saddlebags or 0, desc = "", type = "slider", min = 0, max = 20},
+        {label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = horseComps.stirrups or 0,   desc = "", type = "slider", min = 0, max = 11},
+        {label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = horseComps.bedrolls or 0,   desc = "", type = "slider", min = 0, max = 30},
+        {label = Lang:t('menu.custom_tails'),       category = 'tails',      value = horseComps.tails or 0,      desc = "", type = "slider", min = 0, max = 85},
+        {label = Lang:t('menu.custom_manes'),       category = 'manes',      value = horseComps.manes or 0,      desc = "", type = "slider", min = 0, max = 102},
+        {label = Lang:t('menu.custom_masks'),       category = 'masks',      value = horseComps.masks or 0,      desc = "", type = "slider", min = 0, max = 51},
+        {label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = horseComps.mustaches or 0,  desc = "", type = "slider", min = 0, max = 16}
     }
 
     MenuData.Open('default', GetCurrentResourceName(), 'horse_menu',
