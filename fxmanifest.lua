@@ -6,6 +6,7 @@ lua54 'yes'
 description 'rsg-horses'
 
 shared_scripts {
+    '@ox_lib/init.lua',
     'shared/config.lua',
     'shared/horse_comp.lua',
     '@rsg-core/shared/locale.lua',
@@ -28,7 +29,8 @@ server_scripts {
 
 dependencies {
     'rsg-core',
-    'menu_base'
+    'menu_base',
+    'ox_lib',
 }
 
 export 'CheckHorseLevel'

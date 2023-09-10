@@ -879,7 +879,6 @@ end)
 -- move horse to player
 function moveHorseToPlayer()
     Citizen.CreateThread(function()
-        --Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 5.0, 15.0, 0, 0)
         Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 7.2, 2.0, 0, 0)
         while horseSpawned == true do
             local coords = GetEntityCoords(PlayerPedId())
@@ -1010,88 +1009,62 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
     end)
 end)
 
+-- horse menu
 RegisterNetEvent('rsg-horses:client:menu', function()
-    local GetHorse = {
-        {
-            header = Lang:t('menu.my_horses'),
-            isMenuHeader = true,
-            icon = "fa-solid fa-circle-user",
-        },
-    }
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(cb)
-        for _, v in pairs(cb) do
-            GetHorse[#GetHorse + 1] = {
-                header = v.name,
-                txt = Lang:t('menu.my_horse_gender')..v.gender..Lang:t('menu.my_horse_xp')..v.horsexp..Lang:t('menu.my_horse_active')..v.active,
-                icon = "fa-solid fa-circle-user",
-                params = {
-                    event = "rsg-horses:client:SpawnHorse",
-                    args = {
-                        player = v,
-                        active = 1
-                    }
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
+        if horses ~= nil then
+            local options = {}
+            for i = 1, #horses do
+                local horses = horses[i]
+                options[#options + 1] = {
+                    title = horses.name,
+                    description = Lang:t('menu.my_horse_gender')..horses.gender..Lang:t('menu.my_horse_xp')..horses.horsexp..Lang:t('menu.my_horse_active')..horses.active,
+                    icon = 'fa-solid fa-horse',
+                    event = 'rsg-horses:client:SpawnHorse',
+                    args = { player = horses, active = 1 },
+                    arrow = true
                 }
-            }
+            end
+            lib.registerContext({
+                id = 'horses_view',  -- Corrected the context ID here
+                title = "Horse Menu",
+                position = 'top-right',
+                options = options
+            })
+            lib.showContext('horses_view')  -- Use the correct context ID here
+        else
+            RSGCore.Functions.Notify("you currently do not have any horses", 'error')
         end
-        exports['rsg-menu']:openMenu(GetHorse)
     end)
 end)
 
+-- sell horse menu
 RegisterNetEvent('rsg-horses:client:MenuDel', function()
-    local GetHorse = {
-        {
-            header = Lang:t('menu.sell_horses'),
-            isMenuHeader = true,
-            icon = "fa-solid fa-circle-user",
-        },
-    }
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(cb)
-        for _, v in pairs(cb) do
-            GetHorse[#GetHorse + 1] = {
-                header = v.name,
-                txt = "Sell you horse",
-                icon = "fa-solid fa-circle-user",
-                params = {
-                    event = "rsg-horses:client:MenuDelC",
-                    args = {}
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
+        if horses ~= nil then
+            local options = {}
+            for i = 1, #horses do
+                local horses = horses[i]
+                options[#options + 1] = {
+                    title = horses.name,
+                    description = 'sell your horse',
+                    icon = 'fa-solid fa-horse',
+                    serverEvent = 'rsg-horses:server:deletehorse',
+                    args = { horseid = horses.id },
+                    arrow = true
                 }
-            }
+            end
+            lib.registerContext({
+                id = 'sellhorse_menu',  -- Corrected the context ID here
+                title = "Sell Horse Menu",
+                position = 'top-right',
+                options = options
+            })
+            lib.showContext('sellhorse_menu')  -- Use the correct context ID here
+        else
+            RSGCore.Functions.Notify("you currently do not have any horses to sell", 'error')
         end
-        exports['rsg-menu']:openMenu(GetHorse)
     end)
-end)
-
-
-RegisterNetEvent('rsg-horses:client:MenuDelC', function(data)
-    local GetHorse = {
-        {
-            header = "| Confirm Sell Horses |",
-            isMenuHeader = true,
-            icon = "fa-solid fa-circle-user",
-        },
-    }
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(cb)
-        for _, v in pairs(cb) do
-            GetHorse[#GetHorse + 1] = {
-                header = v.name,
-                txt = Lang:t('menu.sell_warning'),
-                icon = "fa-solid fa-circle-user",
-                params = {
-                    event = "rsg-horses:client:DeleteHorse",
-                    args = {
-                        player = v,
-                        active = 1
-                    }
-                }
-            }
-        end
-        exports['rsg-menu']:openMenu(GetHorse)
-    end)
-end)
-
-RegisterNetEvent('rsg-horses:client:DeleteHorse', function(data)
-    RSGCore.Functions.Notify(Lang:t('success.horse_sold'), 'success', 7500)
-    TriggerServerEvent("rsg-horses:server:DelHores", data.player.id)
 end)
 
 -------------------------------------------------------------------------------

@@ -119,36 +119,38 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     TriggerClientEvent('RSGCore:Notify', src, 'Horse name changed to \''..name..'\' successfully!', 'success')
 end)
 
-RegisterServerEvent('rsg-horses:server:DelHores', function(id)
+-- sell horse
+RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local modelHorse = nil
+    local horseid = data.horseid
     local player_horses = MySQL.query.await('SELECT * FROM player_horses WHERE id = @id AND `citizenid` = @citizenid', {
-        ['@id'] = id,
+        ['@id'] = horseid,
         ['@citizenid'] = Player.PlayerData.citizenid
     })
     for i = 1, #player_horses do
-        if tonumber(player_horses[i].id) == tonumber(id) then
+        if tonumber(player_horses[i].id) == tonumber(horseid) then
             modelHorse = player_horses[i].horse
-            MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { id, Player.PlayerData.citizenid })
+            MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { data.horseid, Player.PlayerData.citizenid })
         end
     end
     for k,v in pairs(Config.BoxZones) do
         for j,n in pairs(v) do
             if n.model == modelHorse then
-                Player.Functions.AddMoney('cash', n.price * 0.5)
+                local sellprice = n.price * 0.5
+                Player.Functions.AddMoney('cash', sellprice)
+                TriggerClientEvent('RSGCore:Notify', src, 'Horse sold for $'..sellprice, 'success')
             end
         end
     end
 end)
 
-RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb,comps)
+RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local GetHorse = {}
-    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid', {
-        ['@citizenid'] = Player.PlayerData.citizenid,
-    })    
+    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid', { ['@citizenid'] = Player.PlayerData.citizenid })    
     if horses[1] ~= nil then
         cb(horses)
     end
