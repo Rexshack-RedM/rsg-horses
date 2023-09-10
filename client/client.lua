@@ -73,22 +73,20 @@ end)
 
 -- rename horse name command
 RegisterCommand('sethorsename',function()
-    local input = exports['rsg-input']:ShowInput({
-        header = "Name your horse",
-        submitText = "Confirm",
-        inputs = {
-            {
-                type = 'text',
-                isRequired = true,
-                name = 'realinput',
-                text = 'text'
-            }
-        }
+    local input = lib.inputDialog('Rename Your Active Horse', {
+        { 
+            type = 'input',
+            isRequired = true,
+            label = 'Set Name',
+            icon = 'fas fa-horse-head'
+        },
     })
-
-    if input == nil then return end
-
-    TriggerServerEvent('rsg-horses:renameHorse', input.realinput)
+    
+    if not input then
+        return
+    end
+    
+    TriggerServerEvent('rsg-horses:renameHorse', input[1])
 end)
 
 -- create stable zones
@@ -207,50 +205,10 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                 options = {
                     {
                         icon = "fas fa-horse-head",
-                        label = Lang:t('menu.horse_view_horses'),
+                        label = 'Open Menu',
                         targeticon = "fas fa-eye",
                         action = function()
-                            TriggerEvent("rsg-horses:client:menu")
-                        end
-                    },
-                    {
-                        icon = "fas fa-horse-head",
-                        label = Lang:t('menu.horse_store_horse'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                            TriggerEvent("rsg-horses:client:storehorse")
-                        end
-                    },
-                    {
-                        icon = "fas fa-horse-head",
-                        label = Lang:t('menu.horse_sell'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                            TriggerEvent("rsg-horses:client:MenuDel")
-                        end
-                    },
-                    {
-                        icon = "fas fa-horse-head",
-                        label =  Lang:t('menu.horse_customize'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                        TriggerEvent('rsg-horses:client:custShop')
-                        end
-                    },
-                    {
-                        icon = "fas fa-horse-head",
-                        label =  Lang:t('menu.horse_trade'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                        TriggerEvent('rsg-horses:client:tradehorse')
-                        end
-                    },
-                    {
-                        icon = "fas fa-shopping-basket",
-                        label =  Lang:t('menu.horse_shop'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                        TriggerEvent('rsg-horses:client:OpenHorseShop')
+                            TriggerEvent("rsg-horses:client:stablemenu")
                         end
                     },
                 },
@@ -260,6 +218,58 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
             table.insert(npcs, ped)
         end
     end
+end)
+
+RegisterNetEvent('rsg-horses:client:stablemenu', function()
+    lib.registerContext({
+        id = 'stable_menu',
+        title = 'Stable Menu',
+        options = {
+            {
+                title = Lang:t('menu.horse_view_horses'),
+                description = 'view your horses and stats',
+                icon = 'fa-solid fa-eye',
+                event = 'rsg-horses:client:menu',
+                arrow = true
+            },
+            {
+                title = Lang:t('menu.horse_customize'),
+                description = 'customize your active horse',
+                icon = 'fa-solid fa-screwdriver-wrench',
+                event = 'rsg-horses:client:custShop',
+                arrow = true
+            },
+            {
+                title = Lang:t('menu.horse_sell'),
+                description = 'no longer need a horse, sell it here',
+                icon = 'fa-solid fa-coins',
+                event = 'rsg-horses:client:MenuDel',
+                arrow = true
+            },
+            {
+                title =  Lang:t('menu.horse_trade'),
+                description = 'trade your horse with nearby player',
+                icon = 'fa-solid fa-handshake',
+                event = 'rsg-horses:client:tradehorse',
+                arrow = true
+            },
+            {
+                title =  Lang:t('menu.horse_shop'),
+                description = 'shop for horse equipment and snacks',
+                event = 'rsg-horses:client:OpenHorseShop',
+                icon = 'fa-solid fa-shop',
+                arrow = true
+            },
+            {
+                title = Lang:t('menu.horse_store_horse'),
+                description = 'put away your horse',
+                icon = 'fa-solid fa-warehouse',
+                event = 'rsg-horses:client:storehorse',
+                arrow = true
+            },
+        }
+    })
+    lib.showContext("stable_menu")
 end)
 
 -- destroy stable/npcs once left zone
@@ -994,6 +1004,8 @@ RegisterNetEvent("rsg-horses:client:storehorse", function(data)
         RSGCore.Functions.Notify(Lang:t('success.storing_horse'), 'success', 7500)
         Flee()
         HorseCalled = false
+    else
+        RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
     end
 end)
 
@@ -1029,6 +1041,8 @@ RegisterNetEvent('rsg-horses:client:menu', function()
                 id = 'horses_view',  -- Corrected the context ID here
                 title = "Horse Menu",
                 position = 'top-right',
+                menu = 'stable_menu',
+                onBack = function() end,
                 options = options
             })
             lib.showContext('horses_view')  -- Use the correct context ID here
@@ -1058,6 +1072,8 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function()
                 id = 'sellhorse_menu',  -- Corrected the context ID here
                 title = "Sell Horse Menu",
                 position = 'top-right',
+                menu = 'stable_menu',
+                onBack = function() end,
                 options = options
             })
             lib.showContext('sellhorse_menu')  -- Use the correct context ID here
