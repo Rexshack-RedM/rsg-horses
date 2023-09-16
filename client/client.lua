@@ -73,11 +73,11 @@ end)
 
 -- rename horse name command
 RegisterCommand('sethorsename',function()
-    local input = lib.inputDialog('Rename Your Active Horse', {
+    local input = lib.inputDialog(Lang:t('menu.horse_rename'), {
         { 
             type = 'input',
             isRequired = true,
-            label = 'Set Name',
+            label = Lang:t('menu.horse_setname'),
             icon = 'fas fa-horse-head'
         },
     })
@@ -205,7 +205,7 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                 options = {
                     {
                         icon = "fas fa-horse-head",
-                        label = 'Open Menu',
+                        label = Lang:t('menu.open_menu'),
                         targeticon = "fas fa-eye",
                         action = function()
                             TriggerEvent("rsg-horses:client:stablemenu")
@@ -227,42 +227,42 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function()
         options = {
             {
                 title = Lang:t('menu.horse_view_horses'),
-                description = 'view your horses and stats',
+                description = Lang:t('menu.horse_view_horses_sub'),
                 icon = 'fa-solid fa-eye',
                 event = 'rsg-horses:client:menu',
                 arrow = true
             },
             {
                 title = Lang:t('menu.horse_customize'),
-                description = 'customize your active horse',
+                description = Lang:t('menu.horse_customize_sub'),
                 icon = 'fa-solid fa-screwdriver-wrench',
                 event = 'rsg-horses:client:custShop',
                 arrow = true
             },
             {
                 title = Lang:t('menu.horse_sell'),
-                description = 'no longer need a horse, sell it here',
+                description = Lang:t('menu.horse_sell_sub'),
                 icon = 'fa-solid fa-coins',
                 event = 'rsg-horses:client:MenuDel',
                 arrow = true
             },
             {
                 title =  Lang:t('menu.horse_trade'),
-                description = 'trade your horse with nearby player',
+                description = Lang:t('menu.horse_trade_sub'),
                 icon = 'fa-solid fa-handshake',
                 event = 'rsg-horses:client:tradehorse',
                 arrow = true
             },
             {
                 title =  Lang:t('menu.horse_shop'),
-                description = 'shop for horse equipment and snacks',
+                description = Lang:t('menu.horse_shop_sub'),
                 event = 'rsg-horses:client:OpenHorseShop',
                 icon = 'fa-solid fa-shop',
                 arrow = true
             },
             {
                 title = Lang:t('menu.horse_store_horse'),
-                description = 'put away your horse',
+                description = Lang:t('menu.horse_store_horse_sub'),
                 icon = 'fa-solid fa-warehouse',
                 event = 'rsg-horses:client:storehorse',
                 arrow = true
@@ -1047,7 +1047,7 @@ RegisterNetEvent('rsg-horses:client:menu', function()
             })
             lib.showContext('horses_view')  -- Use the correct context ID here
         else
-            RSGCore.Functions.Notify("you currently do not have any horses", 'error')
+            RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
         end
     end)
 end)
@@ -1061,7 +1061,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function()
                 local horses = horses[i]
                 options[#options + 1] = {
                     title = horses.name,
-                    description = 'sell your horse',
+                    description = Lang:t('menu.sell_your_horse'),
                     icon = 'fa-solid fa-horse',
                     serverEvent = 'rsg-horses:server:deletehorse',
                     args = { horseid = horses.id },
@@ -1070,7 +1070,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function()
             end
             lib.registerContext({
                 id = 'sellhorse_menu',  -- Corrected the context ID here
-                title = "Sell Horse Menu",
+                title = Lang:t('menu.sell_horse_menu'),
                 position = 'top-right',
                 menu = 'stable_menu',
                 onBack = function() end,
@@ -1078,7 +1078,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function()
             })
             lib.showContext('sellhorse_menu')  -- Use the correct context ID here
         else
-            RSGCore.Functions.Notify("you currently do not have any horses to sell", 'error')
+            RSGCore.Functions.Notify(Lang:t('error.sell_no_horses'), 'error')
         end
     end)
 end)
@@ -1396,14 +1396,14 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
     local distance = #(playercoords - horsecoords)
 
     if horsePed == 0 then
-        RSGCore.Functions.Notify('No active horse spawned!', 'error')
+        RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error')
 
         return
     end
 
     if IsEntityDead(horsePed) then
         if distance > 1.5 then
-            RSGCore.Functions.Notify('Your horse is too far away!', 'error')
+            RSGCore.Functions.Notify(Lang:t('error.horse_too_far'), 'error')
 
             return
         end
@@ -1422,7 +1422,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
         SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
         TaskPlayAnim(playerPed, healAnim1Dict1, healAnim1, 1.0, 1.0, -1, 0, false, false, false)
 
-        RSGCore.Functions.Progressbar("reviving-horse", "Reviving Horse..", 3000, false, true,
+        RSGCore.Functions.Progressbar("reviving-horse", Lang:t('menu.reviving_horse'), 3000, false, true,
         {
             disableMovement = true,
             disableCarMovement = false,
@@ -1435,7 +1435,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
             SpawnHorse()
         end)
     else
-        RSGCore.Functions.Notify('Horse is not injured nor dead!', 'error')
+        RSGCore.Functions.Notify(Lang:t('error.horse_not_injured_dead'), 'error')
     end
 end)
 
@@ -1446,7 +1446,7 @@ AddEventHandler('rsg-horses:client:OpenHorseShop', function()
 
     local ShopItems = {}
 
-    ShopItems.label = "Horse Shop"
+    ShopItems.label = Lang:t('menu.horse_shop')
     ShopItems.items = Config.HorseShop
     ShopItems.slots = #Config.HorseShop
     TriggerServerEvent("inventory:server:OpenInventory", "shop", "HorseShop_"..math.random(1, 99), ShopItems)

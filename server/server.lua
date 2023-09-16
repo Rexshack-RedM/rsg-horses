@@ -51,7 +51,7 @@ RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
     })
 
     if not result[1] then
-        RSGCore.Functions.Notify(src, 'No horse set as active!', 'error', 3000)
+        RSGCore.Functions.Notify(src, Lang:t('error.no_active_horse'), 'error', 3000)
 
         return
     end
@@ -112,7 +112,7 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     local newName = MySQL.query.await('UPDATE player_horses SET name = ? WHERE citizenid = ? AND active = ?' , {name, Player.PlayerData.citizenid, 1})
 
     if newName == nil then
-        TriggerClientEvent('RSGCore:Notify', src, 'Failed to change horse name!', 'error')
+        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.name_change_failed'), 'error')
         return
     end
 
@@ -140,7 +140,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
             if n.model == modelHorse then
                 local sellprice = n.price * 0.5
                 Player.Functions.AddMoney('cash', sellprice)
-                TriggerClientEvent('RSGCore:Notify', src, 'Horse sold for $'..sellprice, 'success')
+                TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_sold_for')..sellprice, 'success')
             end
         end
     end

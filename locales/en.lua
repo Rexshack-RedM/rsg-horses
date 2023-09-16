@@ -1,6 +1,6 @@
 local Translations = {
     error = {
-        horse_too_far = 'Your Horse Is Too Far!',
+        horse_too_far = 'Your horse is too far!',
         no_nearby_player = 'No nearby person!',
         near_road = 'You need to be near a road!',
         no_horse_found = 'No Horse Found!',
@@ -12,6 +12,11 @@ local Translations = {
         no_holster = 'you don\'t have a horse holster!',
         no_cash = 'you don\'t have enough cash to do that!',
         not_enough_xp = 'you don\'t have enough XP to do that!',
+        no_horses = 'you currently do not have any horses',
+        sell_no_horses = 'you currently do not have any horses to sell',
+        horse_not_injured_dead = 'Horse is not injured nor dead!',
+        no_active_horse = 'No horse set as active!',
+        name_change_failed = 'Failed to change horse name!',
     },
     success = {
         horse_traded = 'Horse has been traded with nearest person',
@@ -19,6 +24,7 @@ local Translations = {
         storing_horse = 'Storing your horse',
         horse_sold = 'Horse has been successfully sold',
         horse_owned = 'you now own this horse',
+        horse_sold_for = 'Horse sold for $',
     },
     primary = {
         lantern_equiped = 'Horse lantern equiped!',
@@ -34,10 +40,17 @@ local Translations = {
         horse_male = 'Male',
         horse_female = 'Female',
         horse_view_horses = 'View Horses',
+        horse_view_horses_sub = 'view your horses and stats',
         horse_store_horse = 'Store Horse',
+        horse_store_horse_sub = 'put away your horse',
         horse_sell = 'Sell Horse',
+        horse_sell_sub = 'no longer need a horse, sell it here',
         horse_customize = 'Customize Horse',
+        horse_customize_sub = 'customize your active horse',
         horse_trade = 'Trade Horse',
+        horse_trade_sub = 'trade your horse with nearby player',
+        horse_rename = 'Rename Your Active Horse',
+        horse_setname = 'Set Name',
         custom_blankets = 'Blankets',
         custom_saddles = 'Saddles',
         custom_horns = 'Horns',
@@ -57,6 +70,11 @@ local Translations = {
         sell_warning = 'Doing this will make you lose your horse forever!',
         horse_trainer_shop = 'Shop (Horse Trainer Only)',
         horse_shop = 'Horse Shop',
+        horse_shop_sub = 'shop for horse equipment and snacks',
+        open_menu = 'Open Menu',
+        sell_horse_menu = 'Sell Horse Menu',
+        sell_your_horse = 'Sell Horse Menu',
+        reviving_horse = 'Reviving Horse..',
     },
 }
 
