@@ -140,8 +140,6 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                     SetEntityCanBeDamaged(entity, false)
                     SetEntityInvincible(entity, true)
                     SetBlockingOfNonTemporaryEvents(npc, true)
-                    Citizen.InvokeNative(0xC80A74AC829DDD92, entity, GetPedRelationshipGroupHash(entity))
-                    Citizen.InvokeNative(0xBF25EB89375A37AD, 1, GetPedRelationshipGroupHash(entity), `PLAYER`)
                     exports['rsg-target']:AddTargetEntity(entity, {
                         options = {
                             {
