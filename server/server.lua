@@ -98,14 +98,38 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
 end)
 
 -------------------------------------------------------------------------------
-
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
-    if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
-        return
+    local isBloodMoney = false
+
+    -- Retrieve the bloodmoney value from the config based on the horse model
+    for _, zone in pairs(Config.BoxZones) do
+        for _, horse in ipairs(zone) do
+            if horse.model == model and horse.bloodmoney then
+                isBloodMoney = true
+                break
+            end
+        end
+        if isBloodMoney then
+            break
+        end
     end
+
+    if isBloodMoney then
+        if (Player.PlayerData.money.bloodmoney < price) then
+            TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_bloodmoney'), 'error')
+            return
+        end
+        Player.Functions.RemoveMoney('bloodmoney', price)
+    else
+        if (Player.PlayerData.money.cash < price) then
+            TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
+            return
+        end
+        Player.Functions.RemoveMoney('cash', price)
+    end
+
     local horseid = GenerateHorseid()
     MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, gender, active) VALUES(@citizenid, @horseid, @name, @horse, @gender, @active)', {
         ['@citizenid'] = Player.PlayerData.citizenid,
@@ -115,9 +139,12 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsena
         ['@gender'] = gender,
         ['@active'] = false,
     })
-    Player.Functions.RemoveMoney('cash', price)
+    
     TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_owned'), 'success')
 end)
+
+
+
 
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     local src = source
