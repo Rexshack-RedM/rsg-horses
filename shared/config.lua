@@ -273,6 +273,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_gypsycob_splashedpiebald",
             ["price"] = 650,
             ["names"] = "Splashed Pie Bald Irish Vanner",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(-1341.15, 2401.66, 307.08),
@@ -280,6 +281,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_missourifoxtrotter_dapplegrey",
             ["price"] = 450,
             ["names"] = "Dapple Grey Fox Trotter",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(-1339.84, 2404.34, 307.08),
@@ -287,6 +289,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_missourifoxtrotter_buckskinbrindle",
             ["price"] = 600,
             ["names"] = "Buckskin Brindle Fox Trotter",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(-1340.76, 2402.88, 307.08),
@@ -294,6 +297,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_norfolkroadster_speckledgrey",
             ["price"] = 300,
             ["names"] = "Speckled Grey Roadster",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(-1343.29, 2397.1, 307.08),
@@ -301,6 +305,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_norfolkroadster_spottedtricolor",
             ["price"] = 500,
             ["names"] = "Tri Color Roadster",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(-1342.87, 2398.36, 307.08),
@@ -308,6 +313,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_breton_steelgrey",
             ["price"] = 450,
             ["names"] = "Steel Grey Breton",
+			["bloodmoney"] = false,
         },
     },
     ["vanhorn"] = {
@@ -317,6 +323,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kladruber_black",
             ["price"] = 300,
             ["names"] = "Black Kladruber",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(2964.53, 801.19, 51.49),
@@ -324,6 +331,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_hungarianhalfbred_liverchestnut",
             ["price"] = 400,
             ["names"] = "Liver Chestnut Hungarian Halfbred",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(2967.34, 801.36, 51.42),
@@ -331,6 +339,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kentuckysaddle_black",
             ["price"] = 70,
             ["names"] = "Black Kentucky Saddler",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(2970.28, 801.52, 51.52),
@@ -338,6 +347,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_morgan_liverchestnut_pc",
             ["price"] = 70,
             ["names"] = "Liver Chestnut Morgan",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(2973.12, 801.27, 51.52),
@@ -345,6 +355,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_thoroughbred_blackchestnut",
             ["price"] = 300,
             ["names"] = "Black Chestnut Thoroughbred",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(2972.74, 792.47, 51.5),
@@ -352,6 +363,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_turkoman_silver",
             ["price"] = 450,
             ["names"] = "Silver Turkoman",
+			["bloodmoney"] = false,
         },
     },
     ["saintdenis"] = {
@@ -361,6 +373,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_tennesseewalker_chestnut",
             ["price"] = 55,
             ["names"] = "Chestnut Tennessee Walker",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(2508.98, -1449.32, 46.4),
@@ -368,6 +381,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_tennesseewalker_goldpalomino_pc",
             ["price"] = 75,
             ["names"] = "Gold Palomino Tennessee Walker",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(2508.71, -1446.48, 46.42),
@@ -375,6 +389,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_americanstandardbred_lightbuckskin",
             ["price"] = 150,
             ["names"] = "Light Buckskin American Standardbred",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(2508.92, -1444.31, 46.43),
@@ -382,6 +397,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_tennesseewalker_flaxenroan",
             ["price"] = 80,
             ["names"] = "Flaxen Roan Tennessee Walker",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(2508.99, -1438.3, 46.44),
@@ -389,6 +405,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_tennesseewalker_redroan",
             ["price"] = 60,
             ["names"] = "Red Roan Tennessee Walker",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(2508.62, -1441.26, 46.51),
@@ -396,6 +413,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kladruber_white",
             ["price"] = 300,
             ["names"] = "White Kladruber",
+			["bloodmoney"] = false,
         },
     },
     ["rhodes"] = {
@@ -405,6 +423,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_morgan_flaxenchestnut",
             ["price"] = 60,
             ["names"] = "Flaxen Chestnut Morgan",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(1204.99, -192.58, 101.49),
@@ -412,6 +431,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kladruber_dapplerosegrey",
             ["price"] = 600,
             ["names"] = "Dapple Rose Grey Kladruber",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(1205.33, -195.26, 101.39),
@@ -419,6 +439,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kladruber_cremello",
             ["price"] = 550,
             ["names"] = "Cremello Kladruber",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(1206.23, -198.26, 101.49),
@@ -426,6 +447,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_breton_sorrel",
             ["price"] = 250,
             ["names"] = "Sorrel Breton",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(1214.58, -195.64, 101.38),
@@ -433,6 +455,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_ardennes_irongreyroan",
             ["price"] = 450,
             ["names"] = "Iron Grey Roan Ardennes",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(1213.95, -192.89, 101.45),
@@ -440,6 +463,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_shire_lightgrey",
             ["price"] = 60,
             ["names"] = "Light Grey Shire",
+			["bloodmoney"] = false,
         },
     },
     ["valentine"] = {
@@ -450,6 +474,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_dutchwarmblood_chocolateroan",
             ["price"] = 250,
             ["names"] = "Chocolate Roan Warmblood",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(-362.45, 771.06, 116.53),
@@ -457,6 +482,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_dutchwarmblood_sootybuckskin",
             ["price"] = 150,
             ["names"] = "Sooty Buckskin Warmblood",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(-368.03, 770.17, 116.53),
@@ -464,6 +490,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kentuckysaddle_silverbay",
             ["price"] = 55,
             ["names"] = "Silver Bay Kentucky Saddle",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(-372.58, 769.81, 116.43),
@@ -471,6 +498,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kentuckysaddle_buttermilkbuckskin_pc",
             ["price"] = 70,
             ["names"] = "Buttermilk Buckskin Kentucky Saddler",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(-377.73, 769.48, 116.3),
@@ -478,6 +506,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_morgan_bay",
             ["price"] = 50,
             ["names"] = "Bay Morgan",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(-363.47, 782.77, 116.17),
@@ -485,6 +514,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_morgan_bayroan",
             ["price"] = 55,
             ["names"] = "Bay Roan Morgan",
+			["bloodmoney"] = false,
         },
         [7] = {
             ["coords"] = vector3(-366.36, 782.3, 116.15),
@@ -492,6 +522,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_mustang_reddunovero",
             ["price"] = 500,
             ["names"] = "Red Overo Mustang",
+			["bloodmoney"] = false,
         },
         [8] = {
             ["coords"] = vector3(-369.15, 782.53, 116.16),
@@ -499,6 +530,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_suffolkpunch_sorrel",
             ["price"] = 60,
             ["names"] = "Sorrel Suffolk Punch",
+			["bloodmoney"] = false,
         },
         [9] = {
             ["coords"] = vector3(-372.02, 781.94, 116.17),
@@ -506,6 +538,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_turkoman_darkbay",
             ["price"] = 350,
             ["names"] = "Dark Bay Turkoman",
+			["bloodmoney"] = false,
         },
         [10] = {
             ["coords"] = vector3(-374.94, 782.11, 116.19),
@@ -513,6 +546,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_turkoman_gold",
             ["price"] = 500,
             ["names"] = "Gold Turkoman",
+			["bloodmoney"] = false,
         },
         [11] = {
             ["coords"] = vector3(-375.38, 790.93, 116.14),
@@ -520,6 +554,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_andalusian_rosegray",
             ["price"] = 250,
             ["names"] = "Rose Gray Andalusian",
+			["bloodmoney"] = false,
         },
         [12] = {
             ["coords"] = vector3(-372.33, 791.02, 116.14),
@@ -527,6 +562,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_breton_redroan",
             ["price"] = 250,
             ["names"] = "Red Roan Breton",
+			["bloodmoney"] = false,
         },
         [13] = {
             ["coords"] = vector3(-369.49, 791.53, 116.35),
@@ -534,6 +570,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_americanpaint_tobiano",
             ["price"] = 60,
             ["names"] = "American Paint Tobiano",
+			["bloodmoney"] = false,
         },
     },
     ["strawberry"] = {
@@ -543,6 +580,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_arabian_white",
             ["price"] = 750,
             ["names"] = "White Arabian",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(-1817.16, -558.1, 156.18),
@@ -550,6 +588,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_belgian_blondchestnut",
             ["price"] = 60,
             ["names"] = "Blonde Chestnut Belgian",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(-1820.25, -557.28, 156.13),
@@ -557,6 +596,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_gypsycob_whiteblagdon",
             ["price"] = 300,
             ["names"] = "White Blagdon Irish Vanner",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(-1822.8, -556.54, 156.18),
@@ -564,6 +604,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_gypsycob_skewbald",
             ["price"] = 500,
             ["names"] = "Skewbald Irish Vanner",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(-1825.12, -564.83, 156.06),
@@ -571,6 +612,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_americanpaint_splashedwhite",
             ["price"] = 100,
             ["names"] = "Splashed White American Paint",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(-1822.42, -565.68, 156.12),
@@ -578,6 +620,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_norfolkroadster_piebaldroan",
             ["price"] = 400,
             ["names"] = "Piebald Roan Roadster",
+			["bloodmoney"] = false,
         },
     },
     ["blackwater"] = {
@@ -587,13 +630,14 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_thoroughbred_dapplegrey",
             ["price"] = 130,
             ["names"] = "Dapple Grey Thoroughbred",
-        },
+			["bloodmoney"] = false,
         [2] = {
             ["coords"] = vector3(-863.67, -1370.8, 43.71),
             ["heading"] = 90.00,
             ["model"] = "a_c_horse_mustang_grullodun",
             ["price"] = 200,
             ["names"] = "Grullo Dun Mustang",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(-860.54, -1371.12, 43.71),
@@ -601,6 +645,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_nokota_whiteroan",
             ["price"] = 200,
             ["names"] = "White Roan Nokota",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(-859.52, -1361.72, 43.66),
@@ -608,6 +653,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_nokota_blueroan",
             ["price"] = 250,
             ["names"] = "Blue Roan Nokota",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(-863.33, -1361.55, 43.65),
@@ -615,6 +661,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kentuckysaddle_grey",
             ["price"] = 55,
             ["names"] = "Grey Kentucky Saddler",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(-867.02, -1361.5, 43.66),
@@ -622,6 +669,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_kentuckysaddle_chestnutpinto",
             ["price"] = 65,
             ["names"] = "Chestnut Pinto Kentucky Saddler",
+			["bloodmoney"] = false,
         },
     },
     ["tumbleweed"] = {
@@ -631,6 +679,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_mustang_wildbay",
             ["price"] = 200,
             ["names"] = "Wild Bay Mustang",
+			["bloodmoney"] = false,
         },
         [2] = {
             ["coords"] = vector3(-5516.52, -3049.36, -2.39),
@@ -638,6 +687,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_mustang_goldendun",
             ["price"] = 350,
             ["names"] = "Golden Dun Mustang",
+			["bloodmoney"] = false,
         },
         [3] = {
             ["coords"] = vector3(-5519.14, -3049.17, -2.39),
@@ -645,6 +695,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_missourifoxtrotter_silverdapplepinto",
             ["price"] = 700,
             ["names"] = "Silver Dapple Pinto Missouri Fox Trotter",
+			["bloodmoney"] = false,
         },
         [4] = {
             ["coords"] = vector3(-5522.1, -3049.14, -2.36),
@@ -652,6 +703,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_appaloosa_blanket",
             ["price"] = 100,
             ["names"] = "Blanket Appaloosa",
+			["bloodmoney"] = false,
         },
         [5] = {
             ["coords"] = vector3(-5525.21, -3049.12, -2.39),
@@ -659,6 +711,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_appaloosa_brownleopard",
             ["price"] = 250,
             ["names"] = "Brown Leopard Appaloosa",
+			["bloodmoney"] = false,
         },
         [6] = {
             ["coords"] = vector3(-5525.09, -3039.77, -2.32),
@@ -666,6 +719,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_americanstandardbred_palominodapple",
             ["price"] = 130,
             ["names"] = "Palomino Dapple American Standardbred",
+			["bloodmoney"] = false,
         },
         [7] = {
             ["coords"] = vector3(-5522.55, -3039.45, -2.18),
@@ -673,6 +727,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_americanstandardbred_silvertailbuckskin",
             ["price"] = 250,
             ["names"] = "Silver Tail Buckstin American Standardbred",
+			["bloodmoney"] = false,
         },
         [8] = {
             ["coords"] = vector3(-5519.27, -3039.19, -2.21),
@@ -680,6 +735,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_belgian_mealychestnut",
             ["price"] = 60,
             ["names"] = "Mealy Chestnut Belgian",
+			["bloodmoney"] = false,
         },
         [9] = {
             ["coords"] = vector3(-5534.55, -3051.61, -1.42),
@@ -687,6 +743,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_breton_grullodun",
             ["price"] = 500,
             ["names"] = "Grullo Dun Breton",
+			["bloodmoney"] = false,
         },
         [10] = {
             ["coords"] = vector3(-5538.84, -3052.61, -1.11),
@@ -694,6 +751,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_criollo_sorrelovero",
             ["price"] = 450,
             ["names"] = "Sorrel Overo Criollo",
+			["bloodmoney"] = false,
         },
         [11] = {
             ["coords"] = vector3(-5543.72, -3053.49, -0.89),
@@ -701,6 +759,7 @@ Config.BoxZones = {
             ["model"] = "a_c_horse_criollo_dun",
             ["price"] = 300,
             ["names"] = "Dun Criollo",
+			["bloodmoney"] = false,
         },
     },
-}
+}}
