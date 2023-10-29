@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS `player_horses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `citizenid` varchar(50) NOT NULL,
-  `horseid` varchar(6) NOT NULL,
+  `horseid` varchar(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `horse` varchar(50) NOT NULL,
+  `horse` varchar(50) DEFAULT NULL,
   `horsexp` int(11) DEFAULT 0,
   `saddle` varchar(50) DEFAULT '0',
   `blanket` varchar(50) DEFAULT '0',
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `player_horses` (
   `mask` varchar(50) DEFAULT '0',
   `mustache` varchar(50) DEFAULT '0',
   `gender` varchar(11) NOT NULL,
+  `wild` varchar(11) DEFAULT NULL,
   `active` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
