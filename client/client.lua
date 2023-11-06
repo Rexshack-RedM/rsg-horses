@@ -147,29 +147,21 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                 label =  n.names.." || " .. n.price ..  "$",
                                 targeticon = "fas fa-eye",
                                 action = function(newnames)
-                                    local dialog = exports['rsg-input']:ShowInput({
-                                        header = Lang:t('menu.horse_setup'),
-                                        submitText = Lang:t('menu.horse_buy'),
-                                        inputs = {
-                                            {
-                                                text = Lang:t('menu.horse_name'),
-                                                name = "horsename",
-                                                type = "text",
-                                                isRequired = true,
-                                            },
-                                            {
-                                                text = Lang:t('menu.horse_gender'),
-                                                name = "horsegender",
-                                                type = "radio",
-                                                options = {
-                                                    { value = "male",   text = Lang:t('menu.horse_male') },
-                                                    { value = "female", text = Lang:t('menu.horse_female') },
-                                                },
-                                            },
-                                        }
+                                    local dialog = lib.inputDialog('Horse Setup', {
+                                        { type = 'input', label = 'Horse Name', required = true },
+                                        { type = 'select', label = 'Horse Gender', options = {
+                                            { value = 'male', label = 'Male' },
+                                            { value = 'female', label = 'Female' }
+                                        }}
                                     })
-                                    if dialog and dialog.horsename and dialog.horsegender then
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, dialog.horsename, dialog.horsegender)
+                                
+                                    if not dialog then return end
+                                
+                                    local horseName = dialog[1] -- Accede al primer campo (Horse Name)
+                                    local horseGender = dialog[2] -- Accede al segundo campo (Horse Gender)
+                                
+                                    if horseName and horseGender then
+                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, horseName, horseGender)
                                     else
                                         return
                                     end
