@@ -157,8 +157,8 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                 
                                     if not dialog then return end
                                 
-                                    local horseName = dialog[1] -- Accede al primer campo (Horse Name)
-                                    local horseGender = dialog[2] -- Accede al segundo campo (Horse Gender)
+                                    local horseName = dialog[1]
+                                    local horseGender = dialog[2]
                                 
                                     if horseName and horseGender then
                                         TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, horseName, horseGender)
