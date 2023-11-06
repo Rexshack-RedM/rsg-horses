@@ -51,6 +51,22 @@ RSGCore.Functions.CreateUseableItem("carrot", function(source, item)
     end
 end)
 
+ -- feed Stimulant cheval 
+ RSGCore.Functions.CreateUseableItem("stimulantcheval", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+    end
+end)
+
+ -- feed apple
+ RSGCore.Functions.CreateUseableItem("apple", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+    end
+end)
+
 -- feed horse sugarcube
 RSGCore.Functions.CreateUseableItem("sugarcube", function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
