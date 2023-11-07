@@ -1317,6 +1317,53 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
     end
 
+    if itemName == 'apple' then
+        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+
+        Wait(5000)
+
+        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
+        local newHealth = horseHealth + Config.FeedAppleHealth
+        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+        local newStamina = horseStamina + Config.FeedAppleStamina
+
+        if Config.Debug then
+            print(horseStamina)
+            print(Config.FeedCarrotStamina)
+        end
+
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
+        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+
+        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    end
+
+    if itemName == 'stimulantcheval' then
+        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -1355254781, 0, 0) -- TaskAnimalInteraction
+
+        Wait(5000)
+
+               TaskAnimalInteraction(PlayerPedId(), horsePed, -1355254781, GetHashKey("consumable_horse_stimulant"), 0)
+
+                local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0)
+                local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1)
+
+                    if not tonumber(valueHealth) then valueHealth = 0 end
+                    if not tonumber(valueStamina) then valueStamina = 0 end
+                Citizen.Wait(3500)
+                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, valueHealth + Config.FeedStimumantHealth)
+                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, valueStamina + Config.FeedStimumantStamina)
+
+
+                Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, 1000.0)
+                Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, 1000.0)
+
+                Citizen.InvokeNative(0x50C803A4CD5932C5, true) --core
+                Citizen.InvokeNative(0xD4EE21B7CC7FD350, true) --core
+
+        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    end
+
     if itemName == 'sugarcube' then
         Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
 

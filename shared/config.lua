@@ -56,8 +56,12 @@ Config.Level10 = 2000
 -- player feed horse settings
 Config.FeedCarrotHealth = 10 -- amount of health increase when you feed your horse a carrot
 Config.FeedCarrotStamina = 10 -- amount of stamina increase when you feed your horse a carrot
+Config.FeedAppleHealth = 15 -- amount of health increase when you feed your horse a carrot
+Config.FeedAppleStamina = 15 -- amount of stamina increase when you feed your horse a carrot
 Config.FeedSugarCubeHealth = 25 -- amount of health increase when you feed your horse a sugarcube
 Config.FeedSugarCubeStamina = 25 -- amount of stamina increase when you feed your horse a sugarcube
+Config.FeedStimumantHealth = 100  -- amount of health increase when you inject your horse with a stim
+Config.FeedStimumantStamina = 100   --amount of health increase when you inject your horse with a stim
 
 -- horse bonding settings
 Config.MaxBondingLevel = 5000
