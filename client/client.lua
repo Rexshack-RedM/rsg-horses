@@ -1323,9 +1323,9 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         Wait(5000)
 
         local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
-        local newHealth = horseHealth + Config.FeedCarrotHealth
+        local newHealth = horseHealth + Config.FeedAppleHealth
         local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
-        local newStamina = horseStamina + Config.FeedCarrotStamina
+        local newStamina = horseStamina + Config.FeedAppleStamina
 
         if Config.Debug then
             print(horseStamina)
