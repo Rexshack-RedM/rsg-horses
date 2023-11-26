@@ -535,10 +535,12 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, faceFeature)
                 Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
 
+                moveHorseToPlayer()
+                
+                Wait(5000)
+                
                 horseSpawned = true
                 HorseCalled = true
-
-                moveHorseToPlayer()
                 
                 if Config.Automount == true then
                     TaskMountAnimal(PlayerPedId(), horsePed, 10000, -1, 1.0, 1, 0, 0)
@@ -1471,6 +1473,39 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
         end)
     else
         RSGCore.Functions.Notify(Lang:t('error.horse_not_injured_dead'), 'error')
+    end
+end)
+
+-------------------------------------------------------------------------------
+
+local horsebusy = false
+local candoaction = false
+
+Citizen.CreateThread(function()
+    while true do
+        local sleep = 1000
+        local playerPed = PlayerPedId()
+        local dist = #(GetEntityCoords(playerPed) - GetEntityCoords(horsePed))
+        local ZoneTypeId = 1
+        local x,y,z =  table.unpack(GetEntityCoords(PlayerPedId()))
+        local town = Citizen.InvokeNative(0x43AD8FC02B429D33, x,y,z, ZoneTypeId)
+        if town == false then
+            candoaction = true
+        end
+        if horsePed ~= 0 and horsebusy and dist < 12 then
+            if Citizen.InvokeNative(0x57AB4A3080F85143, horsePed) then -- IsPedUsingAnyScenario
+                ClearPedTasks(horsePed)
+                horsebusy = false
+            end
+        end
+        if horsePed ~= 0 and not horsebusy and dist > 12 and horseSpawned and candoaction then
+            if not Citizen.InvokeNative(0xAAB0FE202E9FC9F0, horsePed, -1) then -- IsMountSeatFree
+                return
+            end
+            Citizen.InvokeNative(0x524B54361229154F, horsePed, joaat('WORLD_ANIMAL_HORSE_RESTING_DOMESTIC'), -1, true, 0, GetEntityHeading(horsePed), false) -- TaskStartScenarioInPlaceHash
+            horsebusy = true
+        end
+        Wait(sleep)
     end
 end)
 
