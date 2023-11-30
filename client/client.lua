@@ -338,6 +338,7 @@ local function SpawnHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if (data) then
             local ped = PlayerPedId()
+            local player = PlayerId()
             local model = GetHashKey(data.horse)
             local location = GetEntityCoords(ped)
             local x, y, z = table.unpack(location)
@@ -532,8 +533,14 @@ local function SpawnHorse()
                     faceFeature = 1.0
                 end
 
+                Citizen.InvokeNative(0xB8B6430EAD2D2437, horsePed, joaat('PLAYER_HORSE')) -- SetPedPersonality
                 Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, faceFeature)
                 Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
+
+                -- ModifyPlayerUiPromptForPed / Horse Target Prompts / (Block = 0, Hide = 1, Grey Out = 2)
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 35, 1, true) -- TARGET_INFO
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 49, 1, true) -- HORSE_BRUSH
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 50, 1, true) -- HORSE_FEED
 
                 moveHorseToPlayer()
                 
