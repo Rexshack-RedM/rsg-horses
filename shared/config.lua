@@ -68,7 +68,7 @@ Config.MaxBondingLevel = 5000
 
 -- config blips
 Config.Blip = {
-    blipName = 'Horse Stable', -- Config.Blip.blipName
+    blipName = Lang:t('menu.horse_blip_name'), -- Config.Blip.blipName
     blipSprite = 'blip_shop_horse', -- Config.Blip.blipSprite
     blipScale = 0.1 -- Config.Blip.blipScale
 }

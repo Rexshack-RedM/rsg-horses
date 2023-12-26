@@ -4,14 +4,15 @@ game 'rdr3'
 lua54 'yes'
 
 description 'rsg-horses'
-version '1.0.6'
+version '1.0.7'
 
 shared_scripts {
     '@ox_lib/init.lua',
-    'shared/config.lua',
-    'shared/horse_comp.lua',
     '@rsg-core/shared/locale.lua',
+    'shared/horse_comp.lua',
     'locales/en.lua', -- Change this to your preferred language
+    'locales/*.lua',
+    'shared/config.lua',
 }
 
 client_scripts {
