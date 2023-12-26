@@ -150,8 +150,8 @@ RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
                                     local dialog = lib.inputDialog('Horse Setup', {
                                         { type = 'input', label = 'Horse Name', required = true },
                                         { type = 'select', label = 'Horse Gender', options = {
-                                            { value = 'male', label = 'Male' },
-                                            { value = 'female', label = 'Female' }
+                                            { value = 'male', label = 'Gelding' },
+                                            { value = 'female', label = 'Mare' }
                                         }}
                                     })
                                 
