@@ -213,7 +213,7 @@ end)
 RegisterNetEvent('rsg-horses:client:stablemenu', function()
     lib.registerContext({
         id = 'stable_menu',
-        title = 'Stable Menu',
+        title = Lang:t('menu.stable_menu'),
         options = {
             {
                 title = Lang:t('menu.horse_view_horses'),
@@ -1036,7 +1036,7 @@ RegisterNetEvent('rsg-horses:client:menu', function()
             end
             lib.registerContext({
                 id = 'horses_view',  -- Corrected the context ID here
-                title = "Horse Menu",
+                title = Lang:t('menu.horse_view_horses'),
                 position = 'top-right',
                 menu = 'stable_menu',
                 onBack = function() end,

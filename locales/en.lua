@@ -76,6 +76,8 @@ local Translations = {
         sell_horse_menu = 'Sell Horse Menu',
         sell_your_horse = 'Sell Horse Menu',
         reviving_horse = 'Reviving Horse..',
+        horse_blip_name = 'Horse Stable',
+        stable_menu = 'Stable Menu',
     },
 }
 
