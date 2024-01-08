@@ -348,6 +348,18 @@ function GenerateHorseid()
     return horseid
 end
 
+-- Check if Player has horsebrush before brush the horse
+RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName(item) then
+        TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item)
+	else
+		TriggerClientEvent('RSGCore:Notify', src, "You don't have "..item, 'error')
+    end
+end)
+-- end
+
 --------------------------------------------------------------------------------------------------
 -- start version check
 --------------------------------------------------------------------------------------------------

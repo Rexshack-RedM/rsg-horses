@@ -541,7 +541,34 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 35, 1, true) -- TARGET_INFO
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 49, 1, true) -- HORSE_BRUSH
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 50, 1, true) -- HORSE_FEED
-
+				
+				-- Horse Target Actions
+				exports['rsg-target']:AddTargetEntity(horsePed, {
+					options = {
+						{
+							type = "client",
+							icon = "fa-solid fa-horse-head",
+							targeticon = "fas fa-eye",
+							label = "Inventory",
+							action = function(entity)
+								TriggerEvent('rsg-horses:client:inventoryHorse')
+								TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+							end
+						},
+						{
+							type = "client",
+							icon = "fa-solid fa-shower",
+							targeticon = "fas fa-eye",
+							label = "Brush",
+							action = function(entity)
+								TriggerServerEvent("rsg-horses:server:brushhorse", "horsebrush")
+							end
+						},
+					},
+					distance = 1.5,
+				})				
+				-- Horse Target Actions end
+				
                 moveHorseToPlayer()
                 
                 Wait(5000)
@@ -1109,6 +1136,13 @@ CreateThread(function()
                 Flee()
             end
         end
+		
+		-- Disable Player Attacks if target is active
+		local active = exports['rsg-target']:IsTargetActive()
+        if active then
+            DisableControlAction(0x07CE1E61, "INPUT_ATTACK", true)
+        end
+		-- end
     end
 end)
 
