@@ -1,20 +1,9 @@
+# rsg-horses
+
 # RexshackGaming
 - discord : https://discord.gg/eW3ADkf4Af
-- youtube : https://www.youtube.com/channel/UCikEgGfXO-HCPxV5rYHEVbA
+- youtube : https://www.youtube.com/@rexshack/videos
 - github : https://github.com/Rexshack-RedM
-
-# Dependancies
-- rsg-core
-- menu_base
-
-# Installation
-- make sure that you don't have any other horse/stable system running
-- ensure that the dependancies are added and started
-- add the following table to your database : player_horses.sql
-- add rsg-horses to your resources folder
-
-# Starting the resource
-- add the following to your server.cfg file : ensure rsg-horses
 
 # Controls Set and Info
 - some keys need bonding level to work
@@ -31,7 +20,7 @@
 - [C] look behind
 - [E] mount/dismount
 - [H] call horse
-- [G] horse inventory (when standing near your horse)
+- [G] or [target] horse inventory (when standing near your horse)
 - [LCTRL] backup horse (when not moving)
 - [LCTRL] to skid when moving
 - [SPACEBAR] horse jump

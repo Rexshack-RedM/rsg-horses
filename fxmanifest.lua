@@ -1,10 +1,9 @@
 fx_version 'cerulean'
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 game 'rdr3'
-lua54 'yes'
 
 description 'rsg-horses'
-version '1.0.7'
+version '1.0.8'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -34,6 +33,8 @@ dependencies {
     'menu_base',
     'ox_lib',
 }
+
+lua54 'yes'
 
 export 'CheckHorseLevel'
 export 'CheckHorseBondingLevel'

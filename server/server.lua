@@ -352,10 +352,10 @@ end
 RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemByName(item) then
+    if Player.Functions.GetItemByName(item) then
         TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item)
-	else
-		TriggerClientEvent('RSGCore:Notify', src, "You don't have "..item, 'error')
+    else
+        TriggerClientEvent('RSGCore:Notify', src, "You don't have "..item, 'error')
     end
 end)
 -- end

@@ -55,11 +55,11 @@ Config.Level10 = 2000
 
 -- player feed horse settings
 Config.HorseFeed = {
-	-- medicineHash is optional. If u do not set, the default value wil be: consumable_horse_stimulant
-	["carrot"] 			= { health = 10,	stamina = 10,	ismedicine = false },
-	["apple"] 			= { health = 15,	stamina = 15,	ismedicine = false },
-	["stimulantcheval"] = { health = 100,	stamina = 100,	ismedicine = true,	medicineHash = "consumable_horse_stimulant" },
-	["sugarcube"] 		= { health = 25,	stamina = 25,	ismedicine = false },
+    -- medicineHash is optional. If u do not set, the default value wil be: consumable_horse_stimulant
+    ["carrot"]          = { health = 10,  stamina = 10,  ismedicine = false },
+    ["apple"]           = { health = 15,  stamina = 15,  ismedicine = false },
+    ["stimulantcheval"] = { health = 100, stamina = 100, ismedicine = true, medicineHash = "consumable_horse_stimulant" },
+    ["sugarcube"]       = { health = 25,  stamina = 25,  ismedicine = false },
 }
 
 -- horse bonding settings
