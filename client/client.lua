@@ -1338,64 +1338,27 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
         return
     end
+	
+	if Config.HorseFeed[itemName] ~= nil then
+		if Config.HorseFeed[itemName]["ismedicine"] ~= nil then			
+			if Config.HorseFeed[itemName]["ismedicine"] == true then
+				-- is medicine				
+				Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -1355254781, 0, 0) -- TaskAnimalInteraction
 
-    if itemName == 'carrot' then
-        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
-
-        Wait(5000)
-
-        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
-        local newHealth = horseHealth + Config.FeedCarrotHealth
-        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
-        local newStamina = horseStamina + Config.FeedCarrotStamina
-
-        if Config.Debug then
-            print(horseStamina)
-            print(Config.FeedCarrotStamina)
-        end
-
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
-
-        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    end
-
-    if itemName == 'apple' then
-        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
-
-        Wait(5000)
-
-        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
-        local newHealth = horseHealth + Config.FeedAppleHealth
-        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
-        local newStamina = horseStamina + Config.FeedAppleStamina
-
-        if Config.Debug then
-            print(horseStamina)
-            print(Config.FeedCarrotStamina)
-        end
-
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
-
-        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    end
-
-    if itemName == 'stimulantcheval' then
-        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -1355254781, 0, 0) -- TaskAnimalInteraction
-
-        Wait(5000)
-
-               TaskAnimalInteraction(PlayerPedId(), horsePed, -1355254781, GetHashKey("consumable_horse_stimulant"), 0)
+				Wait(5000)
+				
+				local medicineHash = "consumable_horse_stimulant"
+				if Config.HorseFeed[itemName]["medicineHash"] ~= nil then medicineHash = Config.HorseFeed[itemName]["medicineHash"] end
+                TaskAnimalInteraction(PlayerPedId(), horsePed, -1355254781, GetHashKey(medicineHash), 0)
 
                 local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0)
                 local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1)
 
-                    if not tonumber(valueHealth) then valueHealth = 0 end
-                    if not tonumber(valueStamina) then valueStamina = 0 end
+                if not tonumber(valueHealth) then valueHealth = 0 end
+                if not tonumber(valueStamina) then valueStamina = 0 end
                 Citizen.Wait(3500)
-                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, valueHealth + Config.FeedStimumantHealth)
-                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, valueStamina + Config.FeedStimumantStamina)
+                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, valueHealth + Config.HorseFeed[itemName]["health"])
+                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, valueStamina + Config.HorseFeed[itemName]["stamina"])
 
 
                 Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, 1000.0)
@@ -1404,24 +1367,34 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 Citizen.InvokeNative(0x50C803A4CD5932C5, true) --core
                 Citizen.InvokeNative(0xD4EE21B7CC7FD350, true) --core
 
-        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    end
+				PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+				
+				
+			elseif Config.HorseFeed[itemName]["ismedicine"] == false then
+				-- is not medicine				
+				Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
 
-    if itemName == 'sugarcube' then
-        Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
-
-        Wait(5000)
-
-        local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
-        local newHealth = horseHealth + Config.FeedSugarCubeHealth
-        local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
-        local newStamina = horseStamina + Config.FeedSugarCubeStamina
-
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
-        Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
-
-        PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
-    end
+				Wait(5000)
+		
+				local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0) -- GetAttributeCoreValue (Health)
+				local newHealth = horseHealth + Config.HorseFeed[itemName]["health"]
+				local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+				local newStamina = horseStamina + Config.HorseFeed[itemName]["stamina"]
+		
+				Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth) -- SetAttributeCoreValue (Health)
+				Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
+		
+				PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)				
+			else
+				-- have invalid config
+				RSGCore.Functions.Notify("[FEED] Feed: "..itemName.." have INVALID ismedicine config!", 'error')
+			end
+		else
+			RSGCore.Functions.Notify("[FEED] Feed: "..itemName.." do not have ismedicine config!", 'error')
+		end
+	else
+		RSGCore.Functions.Notify("[FEED] Feed: "..itemName.." do not exits!", 'error')
+	end
 end)
 
 -- player brush horse
