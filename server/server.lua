@@ -362,6 +362,41 @@ end)
 -- end
 
 --------------------------------------------------------------------------------------------------
+-- horse check system
+--------------------------------------------------------------------------------------------------
+UpkeepInterval = function()
+
+    local result = MySQL.query.await('SELECT * FROM player_horses')
+
+    if not result then goto continue end
+
+    for i = 1, #result do
+        local id = result[i].id
+        local horsename = result[i].name
+        local ownercid = result[i].citizenid
+        local currentTime = os.time()
+        local timeDifference = currentTime - result[i].born
+        local daysPassed = math.floor(timeDifference / (24 * 60 * 60))
+
+        --print(id, horsename, ownercid, daysPassed)
+
+        if daysPassed == Config.HorseDieAge then
+            MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
+            TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', 'Horse Died', 'red', horsename..' belonging to '..ownercid..' died of old age!')
+            goto continue
+        end
+    end
+
+    ::continue::
+    
+    print('horse check cycle complete')
+
+    SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
+end
+
+SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
+
+--------------------------------------------------------------------------------------------------
 -- start version check
 --------------------------------------------------------------------------------------------------
 CheckVersion()

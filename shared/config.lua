@@ -19,6 +19,12 @@ Config.SpawnOnRoadOnly = false
 Config.HorseInvWeight = 15000
 Config.HorseInvSlots = 20
 
+-- horse check system
+Config.CheckCycle = 60 -- mins
+
+-- horse age in days till it dies
+Config.HorseDieAge = 90 -- days
+
 -- horse inventory weight by level (horse trainer)
 Config.Level1InvWeight = 2000
 Config.Level1InvSlots = 2
