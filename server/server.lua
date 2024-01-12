@@ -123,13 +123,14 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsena
         return
     end
     local horseid = GenerateHorseid()
-    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, gender, active) VALUES(@citizenid, @horseid, @name, @horse, @gender, @active)', {
+    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, gender, active, born) VALUES(@citizenid, @horseid, @name, @horse, @gender, @active, @born)', {
         ['@citizenid'] = Player.PlayerData.citizenid,
         ['@horseid'] = horseid,
         ['@name'] = horsename,
         ['@horse'] = model,
         ['@gender'] = gender,
         ['@active'] = false,
+        ['@born'] = os.time()
     })
     Player.Functions.RemoveMoney('cash', price)
     TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_owned'), 'success')
