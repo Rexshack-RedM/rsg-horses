@@ -381,10 +381,25 @@ UpkeepInterval = function()
         --print(id, horsename, ownercid, daysPassed)
 
         if daysPassed == Config.HorseDieAge then
+
+            -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
             TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', 'Horse Died', 'red', horsename..' belonging to '..ownercid..' died of old age!')
+
+            -- telegram message to the horse owner
+            MySQL.insert('INSERT INTO telegrams (citizenid, recipient, sender, sendername, subject, sentDate, message) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            {   ownercid,
+                'Horse Owner',
+                '22222222',
+                'Horse Stables',
+                horsename..' passed away',
+                os.date("%x"),
+                'I am sorry to inform you that your horse '..horsename..' has passed away, please visit your friendly horse trainer to discuss a replacement!',
+            })
+
             goto continue
         end
+
     end
 
     ::continue::
