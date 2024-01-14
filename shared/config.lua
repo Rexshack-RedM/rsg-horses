@@ -25,6 +25,12 @@ Config.CheckCycle = 60 -- mins
 -- horse age in days till it dies
 Config.HorseDieAge = 90 -- days
 
+-- horse Following key - not working yet. The horse starts follow but can't stop so i commented out the lines to disable and not bug the horse.
+Config.HorseFollowKey = Keys.L
+
+-- Change to player fall down horse after Prancing horse
+Config.HorseSkillPullUpFailPercent = 20
+
 -- horse inventory weight by level (horse trainer)
 Config.Level1InvWeight = 2000
 Config.Level1InvSlots = 2

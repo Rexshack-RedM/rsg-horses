@@ -25,6 +25,7 @@ local Zones = {}
 local zonename = nil
 local inStableZone = false
 -------------------
+local horseCurrentlyFollowingPlayer = nil
 
 -- Export for Horse Level checks
 exports('CheckHorseLevel', function()
@@ -280,6 +281,30 @@ RegisterNetEvent('rsg-horses:client:distroyStable', function()
         SetEntityAsNoLongerNeeded(v)
     end
 end)
+
+-- Horse stop following player
+local function stopFollowing() 
+    -- why it isn/t working?! - must fix
+    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), horsePed, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    horseCurrentlyFollowingPlayer = nil
+    RSGCore.Functions.Notify('Horse stops follow you!', 'success', 7500)
+end
+
+-- Horse start following player
+local function startFollowing() 
+    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), horsePed, true) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    horseCurrentlyFollowingPlayer = PlayerPedId()
+    RSGCore.Functions.Notify('Horse is following you!', 'success', 7500)
+end
+
+-- Toggle Horse following player
+local function toggleFollowing()
+    if horseCurrentlyFollowingPlayer ~= nil then
+        stopFollowing()
+    else
+        startFollowing()
+    end
+end
 
 -- trade horse
 local function TradeHorse()
@@ -562,6 +587,33 @@ local function SpawnHorse()
                             label = "Brush",
                             action = function(entity)
                                 TriggerServerEvent("rsg-horses:server:brushhorse", "horsebrush")
+                            end
+                        },
+                        --{
+                        --    type = "client",
+                        --    icon = "fa-solid fa-person-walking-arrow-right",
+                        --    targeticon = "fas fa-eye",
+                        --    label = "Follow",
+                        --    action = function(entity)
+                        --        TriggerEvent('rsg-horses:client:Follow')
+                        --    end
+                        --},
+                        {
+                            type = "client",
+                            icon = "fa-solid fa-hand",
+                            targeticon = "fas fa-eye",
+                            label = "Lead",
+                            action = function(entity)
+                                TriggerEvent('rsg-horses:client:LeadHorse')
+                            end                            
+                        },
+                        {
+                            type = "client",
+                            icon = "fa-solid fa-right-from-bracket",
+                            targeticon = "fas fa-eye",
+                            label = "Flee",
+                            action = function(entity)
+                                TriggerEvent('rsg-horses:client:FleeHorse')
                             end
                         },
                     },
@@ -945,6 +997,25 @@ function getControlOfEntity(entity)
     return NetworkHasControlOfEntity(entity)
 end
 
+-- Check Key pressed
+function ActionsOnKeyPress()
+    -- Prancing horse (458)
+    if IsControlPressed(0, Keys.HorseStop) and IsControlJustPressed(0, Keys.ContextA) then
+        local rnd = math.random(100);
+        if (rnd > Config.HorseSkillPullUpFailPercent) then
+            Citizen.InvokeNative(0xA09CFD29100F06C3, GetMount(PlayerPedId()), 1, 0, 0)
+        else
+            Citizen.InvokeNative(0xA09CFD29100F06C3, GetMount(PlayerPedId()), 2, 0, 0)
+        end
+        Citizen.Wait(6000)
+    end
+
+    ---- Toggle following horse - not working yet. The horse follows but it can not stop following. I disabled till i can fix this.
+    --if IsControlJustPressed(Config.HorseFollowKey) then
+    --    TriggerEvent('rsg-horses:client:Follow')
+    --end
+end
+
 Citizen.CreateThread(function()
     while true do
         if (timeout) then
@@ -994,24 +1065,6 @@ RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     RSGCore.Functions.Notify(Lang:t('success.horse_active'), 'success', 7500)
 end)
 
-AddEventHandler('rsg-horses:client:FleeHorse', function()
-    if horsePed then
-        getControlOfEntity(horsePed)
-
-        if horseBlip then
-            RemoveBlip(horseBlip)
-        end
-
-        SetEntityAsMissionEntity(horsePed, true, true)
-        DeleteEntity(horsePed)
-        DeletePed(horsePed)
-        SetEntityAsNoLongerNeeded(horsePed)
-
-        horsePed = 0
-        HorseCalled = false
-    end
-end)
-
 -- flee horse
 local function Flee()
     TaskAnimalFlee(horsePed, PlayerPedId(), -1)
@@ -1021,6 +1074,26 @@ local function Flee()
     horsePed = 0
     HorseCalled = false
 end
+
+AddEventHandler('rsg-horses:client:FleeHorse', function()
+    if horseSpawned ~= 0 then
+        Flee()
+    end
+end)
+
+AddEventHandler('rsg-horses:client:LeadHorse', function()
+    -- lead 0x9A7A4A54596FE09D
+    -- stop lead  0xED27560703F37258
+    -- is leading horse 0xEFC4303DDC6E60D3
+    Citizen.InvokeNative(0x9A7A4A54596FE09D, PlayerPedId(), horsePed)
+end)
+
+-- Follow horse
+AddEventHandler('rsg-horses:client:Follow', function()
+    if horsePed ~= 0 then
+       toggleFollowing()
+    end
+end)
 
 RegisterNetEvent("rsg-horses:client:storehorse", function(data)
     if (horsePed ~= 0) then
@@ -1537,3 +1610,12 @@ AddEventHandler('rsg-horses:client:OpenHorseShop', function()
 end)
 
 -------------------------------------------------------------------------------
+
+function Interactions()
+    while true do
+        Citizen.Wait(0)
+        ActionsOnKeyPress()
+    end
+end
+
+Citizen.CreateThread(Interactions)

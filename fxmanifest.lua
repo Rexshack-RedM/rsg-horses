@@ -11,6 +11,7 @@ shared_scripts {
     'shared/horse_comp.lua',
     'locales/en.lua', -- Change this to your preferred language
     'locales/*.lua',
+    'shared/keys.lua',
     'shared/config.lua',
 }
 
