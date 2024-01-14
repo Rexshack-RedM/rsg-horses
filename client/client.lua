@@ -564,6 +564,26 @@ local function SpawnHorse()
                                 TriggerServerEvent("rsg-horses:server:brushhorse", "horsebrush")
                             end
                         },
+                        {
+                            type = "client",
+                            icon = "fa-solid fa-hand",
+                            targeticon = "fas fa-eye",
+                            label = "Lead",
+                            action = function(entity)
+                                TriggerEvent('rsg-horses:client:LeadHorse')
+                            end                            
+                        },
+                        {
+                            type = "client",
+                            icon = "fa-solid fa-right-from-bracket",
+                            targeticon = "fas fa-eye",
+                            label = "Flee",
+                            action = function(entity)
+                                TaskAnimalFlee(horsePed, PlayerPedId(), -1)
+                                Wait(10000)
+                                TriggerEvent('rsg-horses:client:FleeHorse')
+                            end
+                        },
                     },
                     distance = 1.5,
                 })                
@@ -945,6 +965,20 @@ function getControlOfEntity(entity)
     return NetworkHasControlOfEntity(entity)
 end
 
+-- Check Key pressed
+function ActionsOnKeyPress()
+    -- Prancing horse (458)
+    if IsControlPressed(0, 0xE16B9AAD) and IsControlJustPressed(0, 0x5181713D) then
+        local rnd = math.random(100);
+        if (rnd > Config.HorseSkillPullUpFailPercent) then
+            Citizen.InvokeNative(0xA09CFD29100F06C3, GetMount(PlayerPedId()), 1, 0, 0)
+        else
+            Citizen.InvokeNative(0xA09CFD29100F06C3, GetMount(PlayerPedId()), 2, 0, 0)
+        end
+        Citizen.Wait(6000)
+    end
+end
+
 Citizen.CreateThread(function()
     while true do
         if (timeout) then
@@ -1021,6 +1055,11 @@ local function Flee()
     horsePed = 0
     HorseCalled = false
 end
+
+-- Lead Horse
+AddEventHandler('rsg-horses:client:LeadHorse', function()
+    Citizen.InvokeNative(0x9A7A4A54596FE09D, PlayerPedId(), horsePed)
+end)
 
 RegisterNetEvent("rsg-horses:client:storehorse", function(data)
     if (horsePed ~= 0) then
@@ -1537,3 +1576,12 @@ AddEventHandler('rsg-horses:client:OpenHorseShop', function()
 end)
 
 -------------------------------------------------------------------------------
+
+function Interactions()
+    while true do
+        Citizen.Wait(0)
+        ActionsOnKeyPress()
+    end
+end
+
+Citizen.CreateThread(Interactions)

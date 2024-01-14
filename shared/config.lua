@@ -25,6 +25,9 @@ Config.CheckCycle = 60 -- mins
 -- horse age in days till it dies
 Config.HorseDieAge = 90 -- days
 
+-- Change to player fall down horse after Prancing horse
+Config.HorseSkillPullUpFailPercent = 20
+
 -- horse inventory weight by level (horse trainer)
 Config.Level1InvWeight = 2000
 Config.Level1InvSlots = 2
