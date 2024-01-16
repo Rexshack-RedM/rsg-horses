@@ -251,13 +251,6 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function()
                 arrow = true
             },
             {
-                title =  Lang:t('menu.horse_trainer_shop'),
-                description = Lang:t('menu.horse_trainer_shop_sub'),
-                event = 'rsg-horsetrainer:client:OpenTrainerShop',
-                icon = 'fa-solid fa-shop',
-                arrow = true
-            },
-            {
                 title = Lang:t('menu.horse_store_horse'),
                 description = Lang:t('menu.horse_store_horse_sub'),
                 icon = 'fa-solid fa-warehouse',
