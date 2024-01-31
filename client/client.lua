@@ -41,22 +41,135 @@ exports('CheckActiveHorse', function()
     return horsePed
 end)
 
+local CameraPrompt, RotatePrompt, ZoomPrompt
+local HorsePrompts = GetRandomIntInRange(0, 0xffffff)
+
+CreateThread(function()
+	local text = 'Rotate'
+	RotatePrompt = PromptRegisterBegin()
+	PromptSetControlAction(RotatePrompt, RSGCore.Shared.Keybinds['A'])
+	PromptSetControlAction(RotatePrompt, RSGCore.Shared.Keybinds['D']) 
+	local str4 = CreateVarString(10, 'LITERAL_STRING', text)
+	PromptSetText(RotatePrompt, str4)
+	PromptSetEnabled(RotatePrompt, true)
+	PromptSetVisible(RotatePrompt, true)
+	PromptSetStandardMode(RotatePrompt, 1)
+	PromptSetGroup(RotatePrompt, HorsePrompts)
+	PromptRegisterEnd(RotatePrompt)
+
+	local text = 'Zoom'
+	ZoomPrompt = PromptRegisterBegin()
+	PromptSetControlAction(ZoomPrompt, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_UP'])
+	PromptSetControlAction(ZoomPrompt, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_DOWN'])
+	local str2 = CreateVarString(10, 'LITERAL_STRING', text)
+	PromptSetText(ZoomPrompt, str2)
+	PromptSetEnabled(ZoomPrompt, true)
+	PromptSetVisible(ZoomPrompt, true)
+	PromptSetStandardMode(ZoomPrompt, 1)
+	PromptSetGroup(ZoomPrompt, HorsePrompts)
+	PromptRegisterEnd(ZoomPrompt)
+
+	local text = 'Up/Down'
+	CameraPrompt = PromptRegisterBegin()
+	PromptSetControlAction(CameraPrompt, RSGCore.Shared.Keybinds['W'])
+	PromptSetControlAction(CameraPrompt, RSGCore.Shared.Keybinds['S'])
+	local str = CreateVarString(10, 'LITERAL_STRING', text)
+	PromptSetText(CameraPrompt, str)
+	PromptSetEnabled(CameraPrompt, true)
+	PromptSetVisible(CameraPrompt, true)
+	PromptSetStandardMode(CameraPrompt, 1)
+	PromptSetGroup(CameraPrompt, HorsePrompts)
+	PromptRegisterEnd(CameraPrompt)
+end)
+
 RegisterNetEvent('rsg-horses:client:custShop', function()
     local function createCamera(horsePed)
+        FreezeEntityPosition(PlayerPedId(), true)
+        DoScreenFadeOut(2000)
+        Wait(1000)
+        DoScreenFadeIn(1000)
+
+        DisableAllControlActions(0)
+
         local coords = GetEntityCoords(horsePed)
+
         CustomHorse()
-        groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(groundCam, coords.x + 0.5, coords.y - 3.6, coords.z )
-        SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
-        SetCamActive(groundCam, true)
-        RenderScriptCams(true, false, 1, true, true)
-        fixedCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(fixedCam, coords.x + 0.5,coords.y - 3.6,coords.z+1.8)
-        SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
-        SetCamActive(fixedCam, true)
-        SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
-        Wait(3900)
-        DestroyCam(groundCam)
+            
+        local groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
+        if groundCam == nil then
+                RSGCore.Functions.Notify('Could not create ground camera', 'error', 7500)
+            return
+        else
+            SetCamCoord(groundCam, coords.x , coords.y - 2.6, coords.z )
+            SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
+            SetCamActive(groundCam, true)
+            RenderScriptCams(true, false, 1, true, true)
+        end
+            
+        local fixedCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
+        if fixedCam == nil then
+            RSGCore.Functions.Notify('Could not create fixed camera', 'error', 7500)
+            DestroyCam(groundCam)
+            return
+        else 
+            SetCamCoord(fixedCam, coords.x,coords.y - 2.6,coords.z+1.8)
+            SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
+            SetCamActive(fixedCam, true)
+            SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
+                -- Controlar la cámara de forma interactiva
+            CreateThread(function()
+                while true do
+                    Wait(0)
+                    DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 10.0, 100.0)
+
+                    local label = CreateVarString(10, 'LITERAL_STRING', 'RSG HORSES')
+                    PromptSetActiveGroupThisFrame(HorsePrompts, label)
+
+                    DisableControlAction(0, 0xAC4BD4F1, true)
+
+                    if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then
+                        local heading = GetEntityHeading(horsePed)
+                        local x = heading - 40
+                        SetPedDesiredHeading( horsePed, x)
+                    end
+                    if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then
+                        local heading = GetEntityHeading(horsePed)
+                        local x = heading + 40
+                        SetPedDesiredHeading( horsePed, x)
+                    end
+                    if IsControlPressed(2, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_UP']) then
+                        local zoom = GetCamCoord(fixedCam)
+                        local y = zoom.y + 0.5
+                        if y <= coords.y - 1 then
+                            SetCamCoord(fixedCam, zoom.x, y, zoom.z)
+                        end
+                    end
+                    if IsControlPressed(2, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_DOWN']) then
+                        local zoom = GetCamCoord(fixedCam)
+                        local y = zoom.y - 0.5
+                        if y >= coords.y - 5 then
+                            SetCamCoord(fixedCam, zoom.x, y, zoom.z)
+                        end
+                    end
+                    if IsDisabledControlPressed(2, RSGCore.Shared.Keybinds['W']) then
+                        local height = GetCamCoord(fixedCam)
+                        local z = height.z + 0.25
+                        if z <= coords.z + 2.0 then
+                            SetCamCoord(fixedCam, height.x, height.y, z)
+                        end
+                    end
+                    if IsDisabledControlPressed(2, RSGCore.Shared.Keybinds['S']) then
+                        local height = GetCamCoord(fixedCam)
+                        local z = height.z - 0.25
+                        if z >= coords.z - 0.25 then
+                            SetCamCoord(fixedCam, height.x, height.y, z)
+                        end
+                    end
+                end
+            end)
+            Wait(3900)
+            DestroyCam(groundCam)
+        end
     end
     if horsePed ~= 0 then
         local pcoords = GetEntityCoords(PlayerPedId())
@@ -896,11 +1009,13 @@ end)
 ----------------------------------------------------------------------------------------------------
 
 RegisterNetEvent('rsg-horses:closeMenu', function()
-    exports['rsg-menu']:closeMenu()
+    DoScreenFadeOut(1000)
+
+    FreezeEntityPosition(PlayerPedId(), false)
+    DestroyAllCams(true)
 
     Wait(1000)
-
-    DestroyAllCams(true)
+    DoScreenFadeIn(1000)
 end)
 
 -- move horse to player
