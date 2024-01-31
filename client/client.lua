@@ -116,7 +116,7 @@ RegisterNetEvent('rsg-horses:client:custShop', function()
             SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
             SetCamActive(fixedCam, true)
             SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
-                -- Controlar la cámara de forma interactiva
+                -- Control  cam
             CreateThread(function()
                 while true do
                     Wait(0)
