@@ -627,8 +627,7 @@ function CustomHorse()
     end,
     function(_, menu)
         menu.close()
-
-        TriggerEvent('rsg-horses:closeMenu')
+        DestroyAllCams(true)
     end)
 end
 
@@ -894,14 +893,6 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
 end)
 
 ----------------------------------------------------------------------------------------------------
-
-RegisterNetEvent('rsg-horses:closeMenu', function()
-    exports['rsg-menu']:closeMenu()
-
-    Wait(1000)
-
-    DestroyAllCams(true)
-end)
 
 -- move horse to player
 function moveHorseToPlayer()
