@@ -77,6 +77,10 @@ local Translations = {
         sell_your_horse = 'Menú Vender Caballo',
         reviving_horse = 'Revivir caballo..',
     },
+    action = {
+        drink = 'Horse Drink',
+        graze = 'Horse Graze'
+    },
 }
 
 if GetConvar('rsg_locale', 'en') == 'es' then

@@ -79,6 +79,10 @@ local Translations = {
         horse_blip_name = 'Horse Stable',
         stable_menu = 'Stable Menu',
     },
+    action = {
+        drink = 'Horse Drink',
+        graze = 'Horse Graze'
+    },
 }
 
 Lang = Locale:new({
