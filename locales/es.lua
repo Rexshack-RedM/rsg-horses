@@ -78,8 +78,9 @@ local Translations = {
         reviving_horse = 'Revivir caballo..',
     },
     action = {
-        drink = 'Horse Drink',
-        graze = 'Horse Graze'
+        horses = 'Horse Action',
+        drink = 'Drink',
+        graze = 'Graze'
     },
 }
 

@@ -59,8 +59,9 @@ local Translations = {
         horse_shop = 'Loja de Cavalos',
     },
     action = {
-        drink = 'Horse Drink',
-        graze = 'Horse Graze'
+        horses = 'Horse Action',
+        drink = 'Drink',
+        graze = 'Graze'
     },
 }
 

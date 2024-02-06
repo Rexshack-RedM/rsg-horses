@@ -80,8 +80,9 @@ local Translations = {
         stable_menu = 'Stable Menu',
     },
     action = {
-        drink = 'Horse Drink',
-        graze = 'Horse Graze'
+        horses = 'Horse Action',
+        drink = 'Drink',
+        graze = 'Graze'
     },
 }
 
