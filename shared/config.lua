@@ -6,6 +6,11 @@ Config.Debug = false
 -- horse inventory hotkey, please refer to '[framework]/rsg-core/shared/keybinds.lua' for complete list of hotkeys
 Config.HorseInvKey = 0x760A9C6F -- G
 
+Config.Prompt = {
+    HorseDrink = 0xD8CF0C95,
+    HorseGraze = 0xD8CF0C95
+}
+
 -- target help to use [L-ALT]
 Config.TargetHelp = true
 
@@ -66,6 +71,26 @@ Config.HorseFeed = {
     ["apple"]           = { health = 15,  stamina = 15,  ismedicine = false },
     ["stimulantcheval"] = { health = 100, stamina = 100, ismedicine = true, medicineHash = "consumable_horse_stimulant" },
     ["sugarcube"]       = { health = 25,  stamina = 25,  ismedicine = false },
+}
+
+--horse action
+Config.ObjectAction = true
+
+Config.BoostAction = {
+    Health = math.random(3, 9),
+    Stamina = math.random(3, 9)
+}
+
+Config.ObjectActionList = {
+    [1] = {`p_watertrough02x`, "drink"},
+    [2] = {`p_watertrough01x`, "drink"},
+    [3] = {`p_haypile01x`, "feed"},
+}
+
+Config.Anim = {
+    Drink  = { dict = 'amb_creature_mammal@world_horse_drink_ground@base', anim = 'base',   duration = 20 }, --duration in seconds
+    Drink2 = { dict = 'amb_creature_mammal@prop_horse_drink_trough@idle0', anim = 'idle_a', duration = 20 },
+    Graze  = { dict = 'amb_creature_mammal@world_horse_grazing@idle',      anim = 'idle_a', duration = 20 }
 }
 
 -- horse bonding settings
