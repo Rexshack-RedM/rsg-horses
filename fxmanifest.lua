@@ -22,6 +22,7 @@ client_scripts {
     '@PolyZone/ComboZone.lua',
     'client/client.lua',
     'client/action.lua',
+    'client/dataview.lua'
 }
 
 server_scripts {

@@ -82,7 +82,11 @@ local Translations = {
     action = {
         horses = 'Horse Action',
         drink = 'Drink',
-        graze = 'Graze'
+        graze = 'Graze',
+        play = 'Play',
+        lay = 'Lay',
+        saddlebag = 'Open Saddlebag',
+        horsebrush = 'Brush'
     },
 }
 
