@@ -32,7 +32,7 @@ local BrushPrompt
 -------------------
 
 function SetupHorsePrompts()
-    if horsexp >= Config.TrickXp then
+    if horsexp >= Config.TrickXp.Lay then
         local string = Lang:t('action.lay')
         HorseLayPrompts = PromptRegisterBegin()
         PromptSetControlAction(HorseLayPrompts, Config.Prompt.HorseLay)
@@ -44,6 +44,10 @@ function SetupHorsePrompts()
         PromptSetGroup(HorseLayPrompts, HorsePrompts)
         Citizen.InvokeNative(0xC5F428EE08FA7F2C, HorseLayPrompts, true)
         PromptRegisterEnd(HorseLayPrompts)
+
+    end
+
+    if horsexp >= Config.TrickXp.Play then
 
         local string2 = Lang:t('action.play')
         HorsePLayPrompts = PromptRegisterBegin()
@@ -1211,12 +1215,12 @@ Citizen.CreateThread(function()
         Citizen.Wait(1)
         if horsePed ~= nil then
             if Citizen.InvokeNative(0xC92AC953F0A982AE, HorseLayPrompts) then
-                if horsexp >= Config.TrickXp then
+                if horsexp >= Config.TrickXp.Lay then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_resting@stand_enter', 'base')
                 end
             end
             if Citizen.InvokeNative(0xC92AC953F0A982AE, HorsePLayPrompts) then
-                if horsexp >= Config.TrickXp then
+                if horsexp >= Config.TrickXp.Play then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_wallow_shake@idle', 'idle_a')
                 end
             end

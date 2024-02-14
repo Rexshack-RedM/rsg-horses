@@ -18,7 +18,10 @@ Config.Prompt = {
 -- target help to use [L-ALT]
 Config.TargetHelp = true
 
-Config.TrickXp = 0
+Config.TrickXp = {
+    Lay = 1000,
+    Play = 2000
+}
 
 -- horse automount
 Config.Automount = false
