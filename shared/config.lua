@@ -8,11 +8,20 @@ Config.HorseInvKey = 0x760A9C6F -- G
 
 Config.Prompt = {
     HorseDrink = 0xD8CF0C95,
-    HorseGraze = 0xD8CF0C95
+    HorseGraze = 0xD8CF0C95,
+    HorseLay = 0xD8CF0C95,
+    HorsePlay = 0x620A6C5E,
+    HorseSaddleBag = 0xC7B5340A,
+    HorseBrush = 0x63A38F2C
 }
 
 -- target help to use [L-ALT]
 Config.TargetHelp = true
+
+Config.TrickXp = {
+    Lay = 1000,
+    Play = 2000
+}
 
 -- horse automount
 Config.Automount = false
