@@ -24,6 +24,7 @@ local holsterUsed = false
 local Zones = {}
 local zonename = nil
 local inStableZone = false
+local inStableCustom = false
 local HorsePrompts
 local HorseLayPrompts
 local SaddleBagPrompt
@@ -103,27 +104,119 @@ exports('CheckActiveHorse', function()
     return horsePed
 end)
 
-RegisterNetEvent('rsg-horses:client:custShop', function()
+RegisterNetEvent('hdrp-horses:client:custShop', function()
     local function createCamera(horsePed)
         local coords = GetEntityCoords(horsePed)
-        CustomHorse()
-        groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(groundCam, coords.x + 0.5, coords.y - 3.6, coords.z)
-        SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
-        SetCamActive(groundCam, true)
-        RenderScriptCams(true, false, 1, true, true)
-        fixedCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(fixedCam, coords.x + 0.5, coords.y - 3.6, coords.z + 1.8)
-        SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
-        SetCamActive(fixedCam, true)
-        SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
-        Wait(3900)
-        DestroyCam(groundCam)
+        DoScreenFadeOut(1000)
+
+        inStableCustom = true
+        LocalPlayer.state:set("inv_busy", true, true)
+        FreezeEntityPosition(PlayerPedId(), true)
+
+        Wait(10)
+
+        -- SHOW PromptSetActive A/D W/S UP/DOWN BACKSPACE
+
+        -- DisableAllControlActions(0)
+        -- DisableControlAction(0, 0xAC4BD4F1, true) -- Keybinds 'OpenWheelMenu' -- DISABLE WEAPON_WHEEL_MENU
+
+        CustomHorse() -- Open Menu rsg-menubase
+
+        DoScreenFadeIn(2000)
+
+        local groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
+        if groundCam == nil then
+            print("Error: No se pudo crear la cámara en el suelo.")
+            return
+        else
+            SetCamCoord(groundCam, coords.x , coords.y - 2.0, coords.z )
+            SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
+            SetCamActive(groundCam, true)
+            RenderScriptCams(true, false, 1, true, true)
+        end
+
+        local fixedCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
+        if fixedCam == nil then
+            print("Error: No se pudo crear la cámara fija.")
+            DestroyCam(groundCam)
+            return
+        else
+            SetCamCoord(fixedCam, coords.x - 1, coords.y - 2.0, coords.z + 1.0)
+            SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
+            SetCamActive(fixedCam, true)
+            SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
+            Wait(3900)
+            DestroyCam(groundCam)
+        end
+
+        CreateThread(function()
+            while true do
+                Wait(0)
+                if IsControlPressed(2, RSGCore.Shared.Keybinds['BACKSPACE']) then
+
+                    inStableCustom = false
+                    LocalPlayer.state:set("inv_busy", false, true)
+                    FreezeEntityPosition(PlayerPedId(), false)
+
+                    RenderScriptCams(false, false, 0, true, true)
+                    DestroyCam(fixedCam)
+                    DestroyCam(groundCam)
+
+                    break
+                end
+                if not inStableCustom then
+                    -- MovePlayer()
+                else
+                    -- MoveHorse()
+                    if IsControlPressed(0, RSGCore.Shared.Keybinds['A']) then
+                        local heading = GetEntityHeading(horsePed)
+                        local x = heading - 40
+                        SetPedDesiredHeading(horsePed, x)
+                    end
+                    if IsControlPressed(0, RSGCore.Shared.Keybinds['D']) then
+                        local heading = GetEntityHeading(horsePed)
+                        local x = heading + 40
+                        SetPedDesiredHeading(horsePed, x)
+                    end
+                    -- Zoom +/-
+                    -- if IsControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_UP']) then
+                    --     local zoom = GetCamCoord(fixedCam)
+                    --     local y = zoom.y + 0.25
+                    --     if y <= coords.y - 1 then
+                    --         SetCamCoord(fixedCam, zoom.x, y, zoom.z)
+                    --     end
+                    -- end
+                    -- if IsControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_DOWN']) then 
+                    --     local zoom = GetCamCoord(fixedCam)
+                    --     local y = zoom.y - 0.25
+                    --     if y >= coords.y - 5 then
+                    --         SetCamCoord(fixedCam, zoom.x, y, zoom.z)
+                    --     end
+                    -- end
+                    -- up/down
+                    if IsControlPressed(0, RSGCore.Shared.Keybinds['W']) then
+                        local height = GetCamCoord(fixedCam)
+                        local z = height.z + 0.1
+                        if z <= coords.z + 2.0 then
+                            SetCamCoord(fixedCam, height.x, height.y, z)
+                        end
+                    end
+                    if IsControlPressed(0, RSGCore.Shared.Keybinds['S']) then
+                        local height = GetCamCoord(fixedCam)
+                        local z = height.z - 0.1
+                        if z >= coords.z - 0.3 then
+                            SetCamCoord(fixedCam, height.x, height.y, z)
+                        end
+                    end
+                end
+            end
+        end)
     end
+
     if horsePed ~= 0 then
         local pcoords = GetEntityCoords(PlayerPedId())
         local coords = GetEntityCoords(horsePed)
-        if #(pcoords - coords) <= 30.0 then
+        if #(pcoords - coords) <= 10.0 then
             createCamera(horsePed)
         else
             RSGCore.Functions.Notify(Lang:t('error.horse_too_far'), 'error', 7500)
@@ -936,9 +1029,9 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
     end
 end)
 
-----------------------------------------------------------------------------------------------------
-
+--------------------------------------------------
 -- move horse to player
+--------------------------------------------------
 function moveHorseToPlayer()
     Citizen.CreateThread(function()
         Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 7.2, 2.0, 0, 0)
@@ -988,8 +1081,6 @@ end)
 
 AddEventHandler('onResourceStop', function(resource)
     if (resource == GetCurrentResourceName()) then
-        DestroyAllCams()
-
         for k, v in pairs(entities) do
             DeletePed(v)
             SetEntityAsNoLongerNeeded(v)
@@ -1002,6 +1093,10 @@ AddEventHandler('onResourceStop', function(resource)
             DeletePed(horsePed)
             SetEntityAsNoLongerNeeded(horsePed)
         end
+        MenuData.CloseAll() -- close rsg-menubase
+        LocalPlayer.state:set("inv_busy", false, true) -- open inventory
+        FreezeEntityPosition(PlayerPedId(), false) -- clean PED
+        DestroyAllCams(true) -- Destroy Cams
     end
 end)
 
