@@ -104,7 +104,7 @@ exports('CheckActiveHorse', function()
     return horsePed
 end)
 
-RegisterNetEvent('hdrp-horses:client:custShop', function()
+RegisterNetEvent('rsg-horses:client:custShop', function()
     local function createCamera(horsePed)
         local coords = GetEntityCoords(horsePed)
         DoScreenFadeOut(1000)
