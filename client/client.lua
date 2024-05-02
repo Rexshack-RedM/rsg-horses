@@ -149,7 +149,7 @@ RegisterCommand('sethorsename', function()
     TriggerServerEvent('rsg-horses:renameHorse', input[1])
 end)
 
-RegisterNetEvent('rsg-horses:client:stablemenu', function()
+RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
     lib.registerContext({
         id = 'stable_menu',
         title = Lang:t('menu.stable_menu'),
@@ -159,6 +159,7 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function()
                 description = Lang:t('menu.horse_view_horses_sub'),
                 icon = 'fa-solid fa-eye',
                 event = 'rsg-horses:client:menu',
+                args = { stableid = stableid },
                 arrow = true
             },
             {
@@ -194,6 +195,7 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function()
                 description = Lang:t('menu.horse_store_horse_sub'),
                 icon = 'fa-solid fa-warehouse',
                 event = 'rsg-horses:client:storehorse',
+                args = { stableid = stableid },
                 arrow = true
             },
         }
@@ -903,9 +905,9 @@ local function Flee()
     HorseCalled = false
 end
 
-RegisterNetEvent("rsg-horses:client:storehorse", function(data)
+RegisterNetEvent('rsg-horses:client:storehorse', function(data)
     if (horsePed ~= 0) then
-        TriggerServerEvent("rsg-horses:server:SetHoresUnActive", HorseId)
+        TriggerServerEvent('rsg-horses:server:SetHoresUnActive', HorseId, data.stableid)
         RSGCore.Functions.Notify(Lang:t('success.storing_horse'), 'success', 7500)
         Flee()
         HorseCalled = false
@@ -927,7 +929,8 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
 end)
 
 -- horse menu
-RegisterNetEvent('rsg-horses:client:menu', function()
+RegisterNetEvent('rsg-horses:client:menu', function(data)
+
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
 
         if horses == nil then
@@ -961,7 +964,7 @@ RegisterNetEvent('rsg-horses:client:menu', function()
         })
         lib.showContext('horses_view')
 
-    end)
+    end, data.stableid)
 
 end)
 

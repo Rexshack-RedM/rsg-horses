@@ -8,7 +8,7 @@ CreateThread(function()
             local distance = #(playerCoords - v.npccoords.xyz)
 
             if distance < Config.DistanceSpawn and not spawnedPeds[k] then
-                local spawnedPed = NearNPC(v.npcmodel, v.npccoords)
+                local spawnedPed = NearNPC(v.npcmodel, v.npccoords, v.stableid)
                 spawnedPeds[k] = { spawnedPed = spawnedPed }
             end
             
@@ -26,7 +26,7 @@ CreateThread(function()
     end
 end)
 
-function NearNPC(npcmodel, npccoords)
+function NearNPC(npcmodel, npccoords, stableid)
     RequestModel(npcmodel)
     while not HasModelLoaded(npcmodel) do
         Wait(50)
@@ -58,7 +58,7 @@ function NearNPC(npcmodel, npccoords)
                 label = 'Stable Menu',
                 targeticon = 'fa-solid fa-eye',
                 action = function()
-                    TriggerEvent('rsg-horses:client:stablemenu')
+                    TriggerEvent('rsg-horses:client:stablemenu', stableid)
                 end
             },
         },

@@ -145,12 +145,13 @@ RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { true, id, Player.PlayerData.citizenid })
 end)
 
-RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id)
+RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, false})
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, id, Player.PlayerData.citizenid })
+    MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, id, Player.PlayerData.citizenid })
 end)
 
 RegisterServerEvent('rsg-horses:renameHorse', function(name)
@@ -193,11 +194,11 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     end
 end)
 
-RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb)
+RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local GetHorse = {}
-    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid', { ['@citizenid'] = Player.PlayerData.citizenid })    
+    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND stable=@stableid', { ['@citizenid'] = Player.PlayerData.citizenid, ['@stableid'] = stableid })    
     if horses[1] ~= nil then
         cb(horses)
     else
