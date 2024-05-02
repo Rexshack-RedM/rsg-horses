@@ -8,7 +8,7 @@ CreateThread(function()
             local distance = #(playerCoords - value.horsecoords.xyz)
 
             if distance < Config.DistanceSpawn and not spawnedHorses[key] then
-                local spawnedHorse = NearHorse(value.horsemodel, value.horsecoords, value.horseprice, value.horsename )
+                local spawnedHorse = NearHorse(value.horsemodel, value.horsecoords, value.horseprice, value.horsename, value.stableid )
                 spawnedHorses[key] = { spawnedHorse = spawnedHorse }
             end
             
@@ -26,7 +26,7 @@ CreateThread(function()
     end
 end)
 
-function NearHorse(horsemodel, horsecoords, horseprice, horsename)
+function NearHorse(horsemodel, horsecoords, horseprice, horsename, stableid)
 
     RequestModel(horsemodel)
     
@@ -79,7 +79,7 @@ function NearHorse(horsemodel, horsecoords, horseprice, horsename)
                     local setHorseGender = dialog[2]
                     
                     if setHorseName and setHorseGender then
-                        TriggerServerEvent('rsg-horses:server:BuyHorse', horseprice, horsemodel, setHorseName, setHorseGender)
+                        TriggerServerEvent('rsg-horses:server:BuyHorse', horseprice, horsemodel, stableid, setHorseName, setHorseGender)
                     else
                         return
                     end

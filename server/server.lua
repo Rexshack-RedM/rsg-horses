@@ -115,7 +115,7 @@ end)
 
 -------------------------------------------------------------------------------
 
-RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsename, gender)
+RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.money.cash < price) then
@@ -123,7 +123,8 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, horsena
         return
     end
     local horseid = GenerateHorseid()
-    MySQL.insert('INSERT INTO player_horses(citizenid, horseid, name, horse, gender, active, born) VALUES(@citizenid, @horseid, @name, @horse, @gender, @active, @born)', {
+    MySQL.insert('INSERT INTO player_horses(stable, citizenid, horseid, name, horse, gender, active, born) VALUES(@stable, @citizenid, @horseid, @name, @horse, @gender, @active, @born)', {
+        ['@stable'] = stable,
         ['@citizenid'] = Player.PlayerData.citizenid,
         ['@horseid'] = horseid,
         ['@name'] = horsename,
