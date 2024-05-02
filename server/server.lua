@@ -199,6 +199,8 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, 
     local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid', { ['@citizenid'] = Player.PlayerData.citizenid })    
     if horses[1] ~= nil then
         cb(horses)
+    else
+        cb(nil)
     end
 end)
 

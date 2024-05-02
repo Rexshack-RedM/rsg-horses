@@ -1,7 +1,6 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 -------------------
 local entities = {}
-local npcs = {}
 local horseComps = {}
 -------------------
 local timeout = false
@@ -32,6 +31,7 @@ local BrushPrompt
 -------------------
 
 function SetupHorsePrompts()
+
     if horsexp >= Config.TrickXp.Lay then
         local string = Lang:t('action.lay')
         HorseLayPrompts = PromptRegisterBegin()
@@ -44,11 +44,9 @@ function SetupHorsePrompts()
         PromptSetGroup(HorseLayPrompts, HorsePrompts)
         Citizen.InvokeNative(0xC5F428EE08FA7F2C, HorseLayPrompts, true)
         PromptRegisterEnd(HorseLayPrompts)
-
     end
 
     if horsexp >= Config.TrickXp.Play then
-
         local string2 = Lang:t('action.play')
         HorsePLayPrompts = PromptRegisterBegin()
         PromptSetControlAction(HorsePLayPrompts, Config.Prompt.HorsePlay)
@@ -151,133 +149,6 @@ RegisterCommand('sethorsename', function()
     TriggerServerEvent('rsg-horses:renameHorse', input[1])
 end)
 
--- create stable zones
-CreateThread(function()
-    for k = 1, #Config.StableZones do
-        Zones[k] = PolyZone:Create(Config.StableZones[k].zones, {
-            name = Config.StableZones[k].name,
-            minZ = Config.StableZones[k].minz,
-            maxZ = Config.StableZones[k].maxz,
-            debugPoly = false,
-        })
-        Zones[k]:onPlayerInOut(function(isPointInside)
-            if isPointInside then
-                inStableZone = true
-                zonename = Zones[k].name
-                TriggerEvent('rsg-horses:client:triggerStable', zonename)
-                if Config.TargetHelp == true then
-                    exports['rsg-core']:DrawText('use [L-ALT] to target', 'left')
-                end
-            else
-                inStableZone = false
-                TriggerEvent('rsg-horses:client:distroyStable')
-                if Config.TargetHelp == true then
-                    exports['rsg-core']:HideText()
-                end
-            end
-        end)
-    end
-end)
-
--- trigger stables and create peds and horses
-RegisterNetEvent('rsg-horses:client:triggerStable', function(zone)
-    if inStableZone == true then
-        for k, v in pairs(Config.BoxZones) do
-            if k == zone then
-                for j, n in pairs(v) do
-                    Wait(1)
-                    local model = GetHashKey(n.model)
-                    while (not HasModelLoaded(model)) do
-                        RequestModel(model)
-                        Wait(1)
-                    end
-                    local entity = CreatePed(model, n.coords.x, n.coords.y, n.coords.z - 1, n.heading, false, true, 0, 0)
-                    while not DoesEntityExist(entity) do
-                        Wait(1)
-                    end
-                    local hasSpawned = true
-                    table.insert(entities, entity)
-                    Citizen.InvokeNative(0x283978A15512B2FE, entity, true)
-                    FreezeEntityPosition(entity, true)
-                    SetEntityCanBeDamaged(entity, false)
-                    SetEntityInvincible(entity, true)
-                    SetBlockingOfNonTemporaryEvents(npc, true)
-                    exports['rsg-target']:AddTargetEntity(entity, {
-                        options = {
-                            {
-                                icon = "fas fa-horse-head",
-                                label = n.names .. " || " .. n.price .. "$",
-                                targeticon = "fas fa-eye",
-                                action = function(newnames)
-                                    local dialog = lib.inputDialog('Horse Setup', {
-                                        { type = 'input', label = 'Horse Name', required = true },
-                                        {
-                                            type = 'select',
-                                            label = 'Horse Gender',
-                                            options = {
-                                                { value = 'male',   label = 'Gelding' },
-                                                { value = 'female', label = 'Mare' }
-                                            }
-                                        }
-                                    })
-
-                                    if not dialog then return end
-
-                                    local horseName = dialog[1]
-                                    local horseGender = dialog[2]
-
-                                    if horseName and horseGender then
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', n.price, n.model, horseName,
-                                            horseGender)
-                                    else
-                                        return
-                                    end
-                                end
-                            }
-                        },
-                        distance = 2.5,
-                    })
-                    Citizen.InvokeNative(0x9587913B9E772D29, entity, 0)
-                    SetModelAsNoLongerNeeded(model)
-                end
-            else
-            end
-        end
-        for key, value in pairs(Config.ModelSpawns) do
-            while not HasModelLoaded(value.model) do
-                RequestModel(value.model)
-                Wait(1)
-            end
-            local ped = CreatePed(value.model, value.coords.x, value.coords.y, value.coords.z - 1.0, value.heading, false,
-                false, 0, 0)
-            while not DoesEntityExist(ped) do
-                Wait(1)
-            end
-            Citizen.InvokeNative(0x283978A15512B2FE, ped, true)
-            SetEntityCanBeDamaged(ped, false)
-            SetEntityInvincible(ped, true)
-            FreezeEntityPosition(ped, true)
-            SetBlockingOfNonTemporaryEvents(ped, true)
-            Wait(1)
-            exports['rsg-target']:AddTargetEntity(ped, {
-                options = {
-                    {
-                        icon = "fas fa-horse-head",
-                        label = Lang:t('menu.open_menu'),
-                        targeticon = "fas fa-eye",
-                        action = function()
-                            TriggerEvent("rsg-horses:client:stablemenu")
-                        end
-                    },
-                },
-                distance = 2.5,
-            })
-            SetModelAsNoLongerNeeded(value.model)
-            table.insert(npcs, ped)
-        end
-    end
-end)
-
 RegisterNetEvent('rsg-horses:client:stablemenu', function()
     lib.registerContext({
         id = 'stable_menu',
@@ -328,18 +199,6 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function()
         }
     })
     lib.showContext("stable_menu")
-end)
-
--- destroy stable/npcs once left zone
-RegisterNetEvent('rsg-horses:client:distroyStable', function()
-    for k, v in pairs(entities) do
-        DeletePed(v)
-        SetEntityAsNoLongerNeeded(v)
-    end
-    for k, v in pairs(npcs) do
-        DeletePed(v)
-        SetEntityAsNoLongerNeeded(v)
-    end
 end)
 
 -- trade horse
@@ -413,7 +272,6 @@ local function SpawnHorse()
 
             if Config.SpawnOnRoadOnly and not onRoad then
                 RSGCore.Functions.Notify(Lang:t('error.near_road'), 'error')
-
                 return
             end
 
@@ -931,7 +789,6 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
         end
 
         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(mustachesHash), true, true, true)
-
         TriggerServerEvent('rsg-horses:server:SaveMustaches', mustachesHash)
     end
 end)
@@ -973,7 +830,7 @@ function getControlOfEntity(entity)
     return NetworkHasControlOfEntity(entity)
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
         if (timeout) then
             if (timeoutTimer == 0) then
@@ -994,10 +851,6 @@ AddEventHandler('onResourceStop', function(resource)
             DeletePed(v)
             SetEntityAsNoLongerNeeded(v)
         end
-        for k, v in pairs(npcs) do
-            DeletePed(v)
-            SetEntityAsNoLongerNeeded(v)
-        end
         if (horsePed ~= 0) then
             DeletePed(horsePed)
             SetEntityAsNoLongerNeeded(horsePed)
@@ -1006,11 +859,11 @@ AddEventHandler('onResourceStop', function(resource)
 end)
 
 CreateThread(function()
-    for key, value in pairs(Config.ModelSpawns) do
-        local StablesBlip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, value.coords)
-        SetBlipSprite(StablesBlip, GetHashKey(Config.Blip.blipSprite), true)
+    for key, value in pairs(Config.StableSettings) do
+        local StablesBlip = BlipAddForCoords(1664425300, value.coords)
+        SetBlipSprite(StablesBlip, joaat(Config.Blip.blipSprite), true)
         SetBlipScale(StablesBlip, Config.Blip.blipScale)
-        Citizen.InvokeNative(0x9CB1A1623062F402, StablesBlip, Config.Blip.blipName)
+        SetBlipName(StablesBlip, Config.Blip.blipName)
     end
 end)
 
@@ -1076,34 +929,40 @@ end)
 -- horse menu
 RegisterNetEvent('rsg-horses:client:menu', function()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
-        if horses ~= nil then
-            local options = {}
-            for i = 1, #horses do
-                local horses = horses[i]
-                options[#options + 1] = {
-                    title = horses.name,
-                    description = Lang:t('menu.my_horse_gender') ..
-                    horses.gender ..
-                    Lang:t('menu.my_horse_xp') .. horses.horsexp .. Lang:t('menu.my_horse_active') .. horses.active,
-                    icon = 'fa-solid fa-horse',
-                    event = 'rsg-horses:client:SpawnHorse',
-                    args = { player = horses, active = 1 },
-                    arrow = true
-                }
-            end
-            lib.registerContext({
-                id = 'horses_view', -- Corrected the context ID here
-                title = Lang:t('menu.horse_view_horses'),
-                position = 'top-right',
-                menu = 'stable_menu',
-                onBack = function() end,
-                options = options
-            })
-            lib.showContext('horses_view') -- Use the correct context ID here
-        else
+
+        if horses == nil then
             RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+            return
         end
+
+        local options = {}
+
+        for i = 1, #horses do
+            local horses = horses[i]
+            options[#options + 1] = {
+                title = horses.name,
+                description = Lang:t('menu.my_horse_gender') ..
+                horses.gender ..
+                Lang:t('menu.my_horse_xp') .. horses.horsexp .. Lang:t('menu.my_horse_active') .. horses.active,
+                icon = 'fa-solid fa-horse',
+                event = 'rsg-horses:client:SpawnHorse',
+                args = { player = horses, active = 1 },
+                arrow = true
+            }
+        end
+
+        lib.registerContext({
+            id = 'horses_view',
+            title = Lang:t('menu.horse_view_horses'),
+            position = 'top-right',
+            menu = 'stable_menu',
+            onBack = function() end,
+            options = options
+        })
+        lib.showContext('horses_view')
+
     end)
+
 end)
 
 -- sell horse menu
@@ -1187,27 +1046,27 @@ CreateThread(function()
 end)
 
 function HorseActions(target, dict, anim)
-	if not target then return end
-	if not IsEntityPlayingAnim(target, dict, anim, 3) then
-		if not HasAnimDictLoaded(dict) then
-			RequestAnimDict(dict)
-		end
-		if not HasAnimDictLoaded("amb_creature_mammal@world_horse_resting@stand_enter") then
-			local dictz = "amb_creature_mammal@world_horse_resting@stand_enter"
-			RequestAnimDict(dictz)
-		end
+    if not target then return end
+    if not IsEntityPlayingAnim(target, dict, anim, 3) then
+        if not HasAnimDictLoaded(dict) then
+            RequestAnimDict(dict)
+        end
+        if not HasAnimDictLoaded("amb_creature_mammal@world_horse_resting@stand_enter") then
+            local dictz = "amb_creature_mammal@world_horse_resting@stand_enter"
+            RequestAnimDict(dictz)
+        end
         TaskPlayAnim(target, "amb_creature_mammal@world_horse_resting@stand_enter", "enter", 1.0, 1.0, -1, 2, 0.0, false, false, false, '', false)
         Citizen.Wait(3000)
-		TaskPlayAnim(target, dict, anim, 1.0, 1.0, -1, 2, 0.0, false, false, false, '', false)
-	else
-		if not HasAnimDictLoaded("amb_creature_mammal@world_horse_resting@quick_exit") then
-			local dictx = "amb_creature_mammal@world_horse_resting@quick_exit"
-			RequestAnimDict(dictx)
-		end
-		TaskPlayAnim(target, "amb_creature_mammal@world_horse_resting@quick_exit", "quick_exit", 1.0, 1.0, -1, 2, 0.0, false, false, false, '', false)
-		Citizen.Wait(3000)
-		ClearPedTasks(target)
-	end
+        TaskPlayAnim(target, dict, anim, 1.0, 1.0, -1, 2, 0.0, false, false, false, '', false)
+    else
+        if not HasAnimDictLoaded("amb_creature_mammal@world_horse_resting@quick_exit") then
+            local dictx = "amb_creature_mammal@world_horse_resting@quick_exit"
+            RequestAnimDict(dictx)
+        end
+        TaskPlayAnim(target, "amb_creature_mammal@world_horse_resting@quick_exit", "quick_exit", 1.0, 1.0, -1, 2, 0.0, false, false, false, '', false)
+        Citizen.Wait(3000)
+        ClearPedTasks(target)
+    end
 end
 
 Citizen.CreateThread(function()
