@@ -29,6 +29,8 @@ local SaddleBagPrompt
 local HorsePLayPrompts
 local BrushPrompt
 -------------------
+local closestStable = nil
+-------------------
 
 function SetupHorsePrompts()
 
@@ -86,6 +88,52 @@ function SetupHorsePrompts()
 
 end
 
+------------------------------------
+-- get closest stable to store horse
+------------------------------------
+local function SetClosestStableLocation()
+    local pos = GetEntityCoords(cache.ped, true)
+    local current = nil
+    local dist = nil
+
+    for k, v in pairs(Config.StableSettings) do
+        local dest = vector3(v.coords.x, v.coords.y, v.coords.z)
+        local dist2 = #(pos - dest)
+
+        if current then
+            if dist2 < dist then
+                current = v.stableid
+                dist = dist2
+            end
+        else
+            dist = dist2
+            current = v.stableid
+        end
+    end
+
+    if current ~= closestStable then
+        closestStable = current
+    end
+end
+
+------------------------------------
+-- flee horse
+------------------------------------
+local function Flee()
+    TaskAnimalFlee(horsePed, cache.ped, -1)
+    Wait(10000)
+	if Config.StoreFleedHorse then
+		SetClosestStableLocation()
+		TriggerServerEvent('rsg-horses:server:fleeStoreHorse', closestStable)
+	end
+    DeleteEntity(horsePed)
+    horsePed = 0
+    HorseCalled = false
+end
+
+------------------------------------
+-- exports
+------------------------------------
 -- Export for Horse Level checks
 exports('CheckHorseLevel', function()
     return horseLevel
@@ -894,16 +942,6 @@ AddEventHandler('rsg-horses:client:FleeHorse', function()
         HorseCalled = false
     end
 end)
-
--- flee horse
-local function Flee()
-    TaskAnimalFlee(horsePed, PlayerPedId(), -1)
-    Wait(10000)
-
-    DeleteEntity(horsePed)
-    horsePed = 0
-    HorseCalled = false
-end
 
 RegisterNetEvent('rsg-horses:client:storehorse', function(data)
     if (horsePed ~= 0) then

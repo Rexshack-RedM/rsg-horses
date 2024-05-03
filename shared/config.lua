@@ -15,29 +15,22 @@ Config.Prompt = {
     HorseBrush = 0x63A38F2C
 }
 
--- target help to use [L-ALT]
-Config.TargetHelp = false
-
 Config.TrickXp = {
     Lay = 1000,
     Play = 2000
 }
 
--- horse automount
-Config.Automount = false
-
--- Always spawn on road
-Config.SpawnOnRoadOnly = false
-
--- horse inventory
-Config.HorseInvWeight = 15000
-Config.HorseInvSlots = 20
-
--- horse check system
-Config.CheckCycle = 60 -- mins
-
--- horse age in days till it dies
-Config.HorseDieAge = 90 -- days
+---------------------------------
+-- general settings
+---------------------------------
+Config.TargetHelp = false -- target help to use [L-ALT]
+Config.Automount = false -- horse automount
+Config.SpawnOnRoadOnly = false -- always spawn on road
+Config.HorseInvWeight = 15000 -- horse inventory weight
+Config.HorseInvSlots = 20 -- horse inventory slots
+Config.CheckCycle = 60 -- horse check system (mins)
+Config.HorseDieAge = 90 -- horse age in days till it dies (days)
+Config.StoreFleedHorse = true -- store horse if flee is used
 
 ---------------------------------
 -- horse inventory weight by level
