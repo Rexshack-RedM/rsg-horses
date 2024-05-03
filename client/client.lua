@@ -20,9 +20,6 @@ local lanternUsed = false
 local holsterequiped = false
 local holsterUsed = false
 -------------------
-local Zones = {}
-local zonename = nil
-local inStableZone = false
 local HorsePrompts
 local HorseLayPrompts
 local SaddleBagPrompt
