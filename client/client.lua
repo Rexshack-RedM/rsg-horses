@@ -1509,3 +1509,33 @@ AddEventHandler('rsg-horses:client:OpenHorseShop', function()
 end)
 
 -------------------------------------------------------------------------------
+
+RegisterNetEvent('rsg-horses:client:gethorselocation', function()
+
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetAllHorses', function(results)
+
+        if results ~= nil then
+            local options = {}
+            for i = 1, #results do
+                local results = results[i]
+                options[#options + 1] = {
+                    title = 'Horse: '..results.name,
+                    description = 'is stabled in '..results.stable..' active: '..results.active,
+                    icon = 'fa-solid fa-horse',
+                }
+            end
+            lib.registerContext({
+                id = 'showhorse_menu',
+                title = 'Find Your Horse',
+                position = 'top-right',
+                menu = 'stable_menu',
+                options = options
+            })
+            lib.showContext('showhorse_menu')
+        else
+            RSGCore.Functions.Notify('no horses', 'error')
+        end
+
+    end)
+
+end)

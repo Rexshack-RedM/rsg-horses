@@ -31,6 +31,25 @@ end
 
 -----------------------------------------------------------------------
 
+-- find horse command
+RSGCore.Commands.Add("findhorse", "find where your horses are stored", {}, false, function(source)
+    local src = source
+    TriggerClientEvent('rsg-horses:client:gethorselocation', src)
+end)
+
+RSGCore.Functions.CreateCallback('rsg-horses:server:GetAllHorses', function(source, cb)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid', { ['@citizenid'] = Player.PlayerData.citizenid })    
+    if horses[1] ~= nil then
+        cb(horses)
+    else
+        cb(nil)
+    end
+end)
+
+-----------------------------------------------------------------------
+
 -- player horselantern
 RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
