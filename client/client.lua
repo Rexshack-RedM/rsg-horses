@@ -1528,7 +1528,6 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
                 id = 'showhorse_menu',
                 title = 'Find Your Horse',
                 position = 'top-right',
-                menu = 'stable_menu',
                 options = options
             })
             lib.showContext('showhorse_menu')
