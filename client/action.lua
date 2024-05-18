@@ -45,6 +45,7 @@ local function SetupActionPrompt()
 end
 
 Citizen.CreateThread(function()
+    repeat Wait(1000) until LocalPlayer.state['isLoggedIn']
     SetupActionPrompt()
     while true do
         Citizen.Wait(1)
