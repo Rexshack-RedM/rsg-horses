@@ -374,16 +374,16 @@ local function SpawnHorse()
                 SetPedPromptName(horsePed, data.name)
 
                 -- set horse components
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket), true, true, true)   -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle), true, true, true)    -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket),   true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle),    true, true, true) -- ApplyShopItemToPed
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll), true, true, true)   -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn), true, true, true)      -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup), true, true, true)   -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane), true, true, true)      -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail), true, true, true)      -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask), true, true, true)      -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache), true, true, true)  -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll),   true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn),      true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup),   true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane),      true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail),      true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask),      true, true, true) -- ApplyShopItemToPed
+                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache),  true, true, true) -- ApplyShopItemToPed
                 SetPedConfigFlag(horsePed, 297, true)                                                          -- PCF_ForceInteractionLockonOnTargetPed
                 Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1)                                          -- SetAnimalMood
 
@@ -504,7 +504,7 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
 
                 -- ModifyPlayerUiPromptForPed / Horse Target Prompts / (Block = 0, Hide = 1, Grey Out = 2)
-                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 35, 1, true) -- TARGET_INFO
+                --Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 35, 1, true) -- TARGET_INFO
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 49, 1, true) -- HORSE_BRUSH
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 50, 1, true) -- HORSE_FEED
 

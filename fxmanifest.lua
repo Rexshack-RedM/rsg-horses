@@ -3,7 +3,7 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 game 'rdr3'
 
 description 'rsg-horses'
-version '1.2.3'
+version '1.2.4'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -24,6 +24,7 @@ client_scripts {
     'client/npcs.lua',
     'client/horses.lua',
     'client/action.lua',
+    'client/horseinfo.lua',
     'client/dataview.lua'
 }
 
