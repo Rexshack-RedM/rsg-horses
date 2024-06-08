@@ -44,11 +44,11 @@ local function SetupActionPrompt()
     PromptRegisterEnd(ActionHorseGraze)
 end
 
-Citizen.CreateThread(function()
-    repeat Wait(1000) until LocalPlayer.state['isLoggedIn']
+CreateThread(function()
     SetupActionPrompt()
     while true do
-        Citizen.Wait(1)
+        Wait(1)
+        if cache.ped == nil then return end
         if IsPedLeadingHorse(cache.ped) and not objectInteract then
             local thorse = GetLedHorseFromPed(cache.ped)
             if IsEntityInWater(thorse) then
@@ -59,14 +59,14 @@ Citizen.CreateThread(function()
                     if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseDrink) then
                         objectInteract = true
                         TaskStopLeadingHorse(cache.ped)
-                        Citizen.Wait(500)
+                        Wait(500)
                         RequestAnimDict(Config.Anim.Drink.dict)
                         while not HasAnimDictLoaded(Config.Anim.Drink.dict) do
-                            Citizen.Wait(1)
+                            Wait(1)
                         end
                         local timer = Config.Anim.Drink.duration * 1000
                         TaskPlayAnim(thorse, Config.Anim.Drink.dict, Config.Anim.Drink.anim, 1.0, 1.0, timer, 1, 0, 1, 0, 0, 0, 0)
-                        Citizen.Wait(timer)
+                        Wait(timer)
                         local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 0) -- GetAttributeCoreValue (Health)
                         local newHealth = horseHealth + Config.BoostAction.Health
                         local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 1) -- GetAttributeCoreValue (Stamina)
@@ -97,18 +97,18 @@ Citizen.CreateThread(function()
                             if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseDrink) then
                                 objectInteract = true
                                 TaskStopLeadingHorse(cache.ped)
-                                Citizen.Wait(500)
+                                Wait(500)
                                 TaskGoStraightToCoord(thorse, forward.x, forward.y, forward.z, 1.0, -1, -1, 0)
-                                Citizen.Wait(1000)
+                                Wait(1000)
                                 TaskTurnPedToFaceEntity(thorse, obj, 1000)
-                                Citizen.Wait(1000)
+                                Wait(1000)
                                 RequestAnimDict(Config.Anim.Drink2.dict)
                                 while not HasAnimDictLoaded(Config.Anim.Drink2.dict) do
-                                    Citizen.Wait(1)
+                                    Wait(1)
                                 end
                                 local timer = Config.Anim.Drink2.duration * 1000
                                 TaskPlayAnim(thorse, Config.Anim.Drink2.dict, Config.Anim.Drink2.anim, 1.0, 1.0, timer, 1, 0, 1, 0, 0, 0, 0)
-                                Citizen.Wait(timer)
+                                Wait(timer)
                                 ClearPedTasks(thorse)
                                 local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 0) -- GetAttributeCoreValue (Health)
                                 local newHealth = horseHealth + Config.BoostAction.Health
@@ -125,18 +125,18 @@ Citizen.CreateThread(function()
                             if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseGraze) then
                                 objectInteract = true
                                 TaskStopLeadingHorse(cache.ped)
-                                Citizen.Wait(500)
+                                Wait(500)
                                 TaskGoStraightToCoord(thorse, forward.x, forward.y, forward.z, 1.0, -1, -1, 0)
-                                Citizen.Wait(1000)
+                                Wait(1000)
                                 TaskTurnPedToFaceEntity(thorse, obj, 1000)
-                                Citizen.Wait(1000)
+                                Wait(1000)
                                 RequestAnimDict(Config.Anim.Graze.dict)
                                 while not HasAnimDictLoaded(Config.Anim.Graze.dict) do
-                                    Citizen.Wait(1)
+                                    Wait(1)
                                 end
                                 local timer = Config.Anim.Graze.duration * 1000
                                 TaskPlayAnim(thorse, Config.Anim.Graze.dict, Config.Anim.Graze.anim, 1.0, 1.0, timer, 1, 0, 1, 0, 0, 0, 0)
-                                Citizen.Wait(timer)
+                                Wait(timer)
                                 ClearPedTasks(thorse)
                                 local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 0) -- GetAttributeCoreValue (Health)
                                 local newHealth = horseHealth + Config.BoostAction.Health
@@ -152,7 +152,7 @@ Citizen.CreateThread(function()
                 end
             end
         else
-            Citizen.Wait(1000)
+            Wait(1000)
         end
     end
 end)
