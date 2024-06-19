@@ -436,7 +436,9 @@ UpkeepInterval = function()
 
     ::continue::
     
-    print('horse check cycle complete')
+    if Config.EnableServerNotify then
+        print('horse check cycle complete')
+    end
 
     SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
 end
