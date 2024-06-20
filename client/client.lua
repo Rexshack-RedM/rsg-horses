@@ -373,6 +373,9 @@ local function SpawnHorse()
                 SetPedNameDebug(horsePed, data.name)
                 SetPedPromptName(horsePed, data.name)
 
+                -- set horse dirt
+                Citizen.InvokeNative(0x5DA12E025D47D4E5, horsePed, 16, data.dirt)
+
                 -- set horse components
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket),   true, true, true) -- ApplyShopItemToPed
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle),    true, true, true) -- ApplyShopItemToPed
@@ -1491,6 +1494,18 @@ Citizen.CreateThread(function()
             Citizen.InvokeNative(0x524B54361229154F, horsePed, joaat('WORLD_ANIMAL_HORSE_RESTING_DOMESTIC'), -1, true, 0,
                 GetEntityHeading(horsePed), false)                                                                                                           -- TaskStartScenarioInPlaceHash
             horsebusy = true
+        end
+        Wait(sleep)
+    end
+end)
+
+-- save horse attributes 
+Citizen.CreateThread(function()
+    while true do
+        local sleep = 5000
+        local horsedirt = Citizen.InvokeNative(0x147149F2E909323C, horsePed, 16, Citizen.ResultAsInteger())
+        if horsePed ~= 0 then
+            TriggerServerEvent('rsg-horses:server:sethorseAttributes', horsedirt)
         end
         Wait(sleep)
     end

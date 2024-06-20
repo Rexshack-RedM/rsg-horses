@@ -238,10 +238,7 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(so
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local cid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
-        ['@citizenid'] = cid,
-        ['@active'] = 1
-    })
+    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', { ['@citizenid'] = cid, ['@active'] = 1 })
     if (result[1] ~= nil) then
         cb(result[1])
     else
@@ -392,6 +389,14 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     end
 end)
 -- end
+
+-- horse attributes to database
+RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
+    MySQL.update('UPDATE player_horses SET dirt = ? WHERE id = ? AND citizenid = ?', { dirt, activehorse, Player.PlayerData.citizenid })
+end)
 
 --------------------------------------------------------------------------------------------------
 -- horse check system
