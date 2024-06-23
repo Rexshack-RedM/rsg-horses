@@ -48,7 +48,7 @@ CreateThread(function()
     SetupActionPrompt()
     while true do
         Wait(1)
-        if cache.ped == nil then return end
+        if cache.ped == nil or thorse == nil then return end
         if IsPedLeadingHorse(cache.ped) and not objectInteract then
             local thorse = GetLedHorseFromPed(cache.ped)
             if IsEntityInWater(thorse) then
