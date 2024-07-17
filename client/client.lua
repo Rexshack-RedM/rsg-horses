@@ -219,6 +219,7 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
                 description = Lang:t('menu.horse_sell_sub'),
                 icon = 'fa-solid fa-coins',
                 event = 'rsg-horses:client:MenuDel',
+		args = { stableid = stableid },
                 arrow = true
             },
             {
@@ -1007,34 +1008,38 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
 end)
 
 -- sell horse menu
-RegisterNetEvent('rsg-horses:client:MenuDel', function()
+RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
+
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
-        if horses ~= nil then
-            local options = {}
-            for i = 1, #horses do
-                local horses = horses[i]
-                options[#options + 1] = {
-                    title = horses.name,
-                    description = Lang:t('menu.sell_your_horse'),
-                    icon = 'fa-solid fa-horse',
-                    serverEvent = 'rsg-horses:server:deletehorse',
-                    args = { horseid = horses.id },
-                    arrow = true
-                }
-            end
-            lib.registerContext({
-                id = 'sellhorse_menu', -- Corrected the context ID here
-                title = Lang:t('menu.sell_horse_menu'),
-                position = 'top-right',
-                menu = 'stable_menu',
-                onBack = function() end,
-                options = options
-            })
-            lib.showContext('sellhorse_menu') -- Use the correct context ID here
-        else
-            RSGCore.Functions.Notify(Lang:t('error.sell_no_horses'), 'error')
+
+        if horses == nil then
+            RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+            return
         end
-    end)
+
+        local options = {}
+        for i = 1, #horses do
+            local horses = horses[i]
+            options[#options + 1] = {
+                title = horses.name,
+                description = Lang:t('menu.sell_your_horse'),
+                icon = 'fa-solid fa-horse',
+                serverEvent = 'rsg-horses:server:deletehorse',
+                args = { horseid = horses.id },
+                arrow = true
+            }
+        end
+        lib.registerContext({
+            id = 'sellhorse_menu', -- Corrected the context ID here
+            title = Lang:t('menu.sell_horse_menu'),
+            position = 'top-right',
+            menu = 'stable_menu',
+            onBack = function() end,
+            options = options
+        })
+        lib.showContext('sellhorse_menu') -- Use the correct context ID here
+
+    end, data.stableid)
 end)
 -------------------------------------------------------------------------------
 
