@@ -182,13 +182,11 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
             MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { data.horseid, Player.PlayerData.citizenid })
         end
     end
-    for k,v in pairs(Config.BoxZones) do
-        for j,n in pairs(v) do
-            if n.model == modelHorse then
-                local sellprice = n.price * 0.5
-                Player.Functions.AddMoney('cash', sellprice)
-                TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_sold_for')..sellprice, 'success')
-            end
+    for k, v in pairs(Config.HorseSettings) do
+        if v.horsemodel == modelHorse then
+            local sellprice = v.horseprice * 0.5
+            Player.Functions.AddMoney('cash', sellprice)
+            TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_sold_for')..sellprice, 'success')
         end
     end
 end)
