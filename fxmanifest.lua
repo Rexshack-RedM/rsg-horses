@@ -3,7 +3,7 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 game 'rdr3'
 
 description 'rsg-horses'
-version '1.2.9'
+version '1.3.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
