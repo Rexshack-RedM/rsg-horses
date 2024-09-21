@@ -3,7 +3,7 @@ local RSGCore = exports['rsg-core']:GetCoreObject()
 -----------------------------------------------------------------------
 
 -- find horse command
-RSGCore.Commands.Add("findhorse", "find where your horses are stored", {}, false, function(source)
+RSGCore.Commands.Add('findhorse', 'find where your horses are stored', {}, false, function(source)
     local src = source
     TriggerClientEvent('rsg-horses:client:gethorselocation', src)
 end)
@@ -22,57 +22,57 @@ end)
 -----------------------------------------------------------------------
 
 -- player horselantern
-RSGCore.Functions.CreateUseableItem("horselantern", function(source, item)
+RSGCore.Functions.CreateUseableItem('horselantern', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
-    TriggerClientEvent("rsg-horses:client:equipHorseLantern", source, item.name)
+    TriggerClientEvent('rsg-horses:client:equipHorseLantern', source, item.name)
 end)
 
 -- player horseholster
-RSGCore.Functions.CreateUseableItem("horseholster", function(source, item)
+RSGCore.Functions.CreateUseableItem('horseholster', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
-    TriggerClientEvent("rsg-horses:client:equipHorseHolster", source, item.name)
+    TriggerClientEvent('rsg-horses:client:equipHorseHolster', source, item.name)
 end)
 
 -- feed horse carrot
-RSGCore.Functions.CreateUseableItem("carrot", function(source, item)
+RSGCore.Functions.CreateUseableItem('carrot', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
  -- feed Stimulant cheval 
- RSGCore.Functions.CreateUseableItem("stimulantcheval", function(source, item)
+ RSGCore.Functions.CreateUseableItem('stimulantcheval', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
  -- feed apple
- RSGCore.Functions.CreateUseableItem("apple", function(source, item)
+ RSGCore.Functions.CreateUseableItem('apple', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
--- feed horse sugarcube
-RSGCore.Functions.CreateUseableItem("sugarcube", function(source, item)
+-- feed horse consumable_sugarcube
+RSGCore.Functions.CreateUseableItem('consumable_sugarcube', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("rsg-horses:client:playerfeedhorse", source, item.name)
+        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
 -- brush horse
 RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
-    TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item.name)
+    TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item.name)
 end)
 
 -- horse reviver
-RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
+RSGCore.Functions.CreateUseableItem('horsereviver', function(source, item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
 
@@ -91,7 +91,7 @@ RSGCore.Functions.CreateUseableItem("horsereviver", function(source, item)
         return
     end
 
-    TriggerClientEvent("rsg-horses:client:revivehorse", src, item, result[1])
+    TriggerClientEvent('rsg-horses:client:revivehorse', src, item, result[1])
 end)
 
 RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
@@ -99,7 +99,7 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local Player = RSGCore.Functions.GetPlayer(source)
 
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("inventory:client:ItemBox", src, RSGCore.Shared.Items[item.name], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove')
     end
 end)
 
@@ -234,7 +234,7 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(s
 end)
 
 -- save saddle
-RegisterNetEvent("rsg-horses:server:SaveSaddles", function(SaddleDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveSaddles', function(SaddleDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -243,7 +243,7 @@ RegisterNetEvent("rsg-horses:server:SaveSaddles", function(SaddleDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveBlankets", function(BlanketDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveBlankets', function(BlanketDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -252,7 +252,7 @@ RegisterNetEvent("rsg-horses:server:SaveBlankets", function(BlanketDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveHorns", function(HornDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveHorns', function(HornDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -261,7 +261,7 @@ RegisterNetEvent("rsg-horses:server:SaveHorns", function(HornDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveSaddlebags", function(SaddlebagsDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveSaddlebags', function(SaddlebagsDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -270,7 +270,7 @@ RegisterNetEvent("rsg-horses:server:SaveSaddlebags", function(SaddlebagsDataEnco
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveBedrolls", function(BedrollDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveBedrolls', function(BedrollDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -279,7 +279,7 @@ RegisterNetEvent("rsg-horses:server:SaveBedrolls", function(BedrollDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveStirrups", function(StirrupDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveStirrups', function(StirrupDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -288,7 +288,7 @@ RegisterNetEvent("rsg-horses:server:SaveStirrups", function(StirrupDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveManes", function(ManeDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveManes', function(ManeDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -297,7 +297,7 @@ RegisterNetEvent("rsg-horses:server:SaveManes", function(ManeDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveTails", function(TailDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveTails', function(TailDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -306,7 +306,7 @@ RegisterNetEvent("rsg-horses:server:SaveTails", function(TailDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveMasks", function(MaskDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveMasks', function(MaskDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -315,7 +315,7 @@ RegisterNetEvent("rsg-horses:server:SaveMasks", function(MaskDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:SaveMustaches", function(MaskDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveMustaches', function(MaskDataEncoded)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
@@ -324,7 +324,7 @@ RegisterNetEvent("rsg-horses:server:SaveMustaches", function(MaskDataEncoded)
     end
 end)
 
-RegisterNetEvent("rsg-horses:server:TradeHorse", function(playerId, horseId, source)
+RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, source)
     local src = source
     local Player2 = RSGCore.Functions.GetPlayer(playerId)
     local Playercid2 = Player2.PlayerData.citizenid
@@ -339,7 +339,7 @@ function GenerateHorseid()
     local horseid = nil
     while not UniqueFound do
         horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
-        local result = MySQL.prepare.await("SELECT COUNT(*) as count FROM player_horses WHERE horseid = ?", { horseid })
+        local result = MySQL.prepare.await('SELECT COUNT(*) as count FROM player_horses WHERE horseid = ?', { horseid })
         if result == 0 then
             UniqueFound = true
         end
@@ -352,9 +352,9 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.GetItemByName(item) then
-        TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item)
+        TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item)
     else
-        TriggerClientEvent('RSGCore:Notify', src, "You don't have "..item, 'error')
+        TriggerClientEvent('RSGCore:Notify', src, 'You don't have '..item, 'error')
     end
 end)
 -- end
@@ -399,7 +399,7 @@ UpkeepInterval = function()
                 '22222222',
                 'Horse Stables',
                 horsename..' passed away',
-                os.date("%x"),
+                os.date('%x'),
                 'I am sorry to inform you that your horse '..horsename..' has passed away, please visit your friendly horse trainer to discuss a replacement!',
             })
 
