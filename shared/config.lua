@@ -122,11 +122,7 @@ Config.Blip = {
 -- horse shop
 ---------------------------------
 Config.HorseShop = {
-    [1] = { name = "horsebrush",   price = 5,    amount = 500,  info = {}, type = "item", slot = 1, },
-    [2] = { name = "horselantern", price = 10,   amount = 500,  info = {}, type = "item", slot = 2, },
-    [3] = { name = "horseholster", price = 5,    amount = 500,  info = {}, type = "item", slot = 3, },
-    [4] = { name = "sugarcube",    price = 0.10, amount = 500,  info = {}, type = "item", slot = 4, },
-    [5] = { name = "carrot",       price = 0.10, amount = 500,  info = {}, type = "item", slot = 5, },
+    [1] = { name = 'horse_brush', price = 5, amount = 500, info = {}, type = 'item', slot = 1, },
 }
 
 ---------------------------------

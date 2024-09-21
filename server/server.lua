@@ -66,7 +66,7 @@ RSGCore.Functions.CreateUseableItem("sugarcube", function(source, item)
 end)
 
 -- brush horse
-RSGCore.Functions.CreateUseableItem("horsebrush", function(source, item)
+RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent("rsg-horses:client:playerbrushhorse", source, item.name)
 end)
