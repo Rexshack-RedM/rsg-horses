@@ -197,7 +197,6 @@ local function CameraPromptHorse(horses)
 end
 
 local DisableCamera = function()
-    TriggerServerEvent('rsg-horses:server:SetPlayerBucket')
     RenderScriptCams(false, true, 250, 1, 0)
     DestroyCam(Camera, false)
     SetNuiFocus(false, false)
@@ -205,6 +204,7 @@ local DisableCamera = function()
     Customize = false
     for k, v in pairs(entities) do
         if v.ped and DoesEntityExist(v.ped) then
+            TriggerServerEvent('rsg-horses:server:SetPlayerBucket', false, v.ped)
             DeleteEntity(v.ped)
         end
         entities[k] = nil
@@ -232,10 +232,10 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
     local horseped = horsesdata.horse
     for k, v in pairs(Config.StableSettings) do
         if horsesdata.stable == v.stableid then
-            TriggerServerEvent('rsg-horses:server:SetPlayerBucket', true)
             DoScreenFadeOut(0)
             repeat Wait(0) until IsScreenFadedOut()
             local ped = SpawnHorses(horseped, v.horsecustom, v.horsecustom.w)
+            TriggerServerEvent('rsg-horses:server:SetPlayerBucket', true, ped)
             createCamera(ped)
             DoScreenFadeIn(1000)
             repeat Wait(0) until IsScreenFadedIn()

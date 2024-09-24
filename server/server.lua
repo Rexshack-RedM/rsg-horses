@@ -365,13 +365,15 @@ RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
     MySQL.update('UPDATE player_horses SET dirt = ? WHERE id = ? AND citizenid = ?', { dirt, activehorse, Player.PlayerData.citizenid })
 end)
 
-RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random)
+RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random, ped)
     if random then
         local BucketID = RSGCore.Shared.RandomInt(1000, 9999)
         SetRoutingBucketPopulationEnabled(BucketID, false)
         SetPlayerRoutingBucket(source, BucketID)
+        SetPlayerRoutingBucket(ped, BucketID)
     else
         SetPlayerRoutingBucket(source, 0)
+        SetPlayerRoutingBucket(ped, 0)
     end
 end)
 
