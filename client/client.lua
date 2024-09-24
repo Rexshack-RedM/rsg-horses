@@ -27,6 +27,9 @@ local HorsePLayPrompts
 local BrushPrompt
 -------------------
 local closestStable = nil
+local Customize = false
+local RotatePrompt
+local CustomizePrompt = GetRandomIntInRange(0, 0xffffff)
 -------------------
 
 function SetupHorsePrompts()
@@ -146,33 +149,98 @@ exports('CheckActiveHorse', function()
     return horsePed
 end)
 
-RegisterNetEvent('rsg-horses:client:custShop', function()
-    local function createCamera(horsePed)
-        local coords = GetEntityCoords(horsePed)
-        CustomHorse()
-        groundCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(groundCam, coords.x + 0.5, coords.y - 3.6, coords.z)
-        SetCamRot(groundCam, 10.0, 0.0, 0 + 20)
-        SetCamActive(groundCam, true)
-        RenderScriptCams(true, false, 1, true, true)
-        fixedCam = CreateCam("DEFAULT_SCRIPTED_CAMERA")
-        SetCamCoord(fixedCam, coords.x + 0.5, coords.y - 3.6, coords.z + 1.8)
-        SetCamRot(fixedCam, -20.0, 0, 0 + -10.0)
-        SetCamActive(fixedCam, true)
-        SetCamActiveWithInterp(fixedCam, groundCam, 3900, true, true)
-        Wait(3900)
-        DestroyCam(groundCam)
-    end
-    if horsePed ~= 0 then
-        local pcoords = GetEntityCoords(PlayerPedId())
-        local coords = GetEntityCoords(horsePed)
-        if #(pcoords - coords) <= 30.0 then
-            createCamera(horsePed)
-        else
-            RSGCore.Functions.Notify(Lang:t('error.horse_too_far'), 'error', 7500)
+local function CameraClothing()
+    local str = VarString(10, 'LITERAL_STRING', 'Rotate Horses')
+    RotatePrompt = PromptRegisterBegin()
+    PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[1])
+    PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[2])
+    PromptSetText(RotatePrompt, str)
+    PromptSetEnabled(RotatePrompt, true)
+    PromptSetVisible(RotatePrompt, true)
+    PromptSetStandardMode(RotatePrompt, 1)
+    PromptSetGroup(RotatePrompt, CustomizePrompt)
+    PromptRegisterEnd(RotatePrompt)
+end
+
+local EnableKeys = { 0x4BC9DABB, 0x470DC190, 0x8F9F9E58, Config.Prompt.Rotate[1], Config.Prompt.Rotate[2]}
+
+local function CameraPromptHorse(horses)
+    CreateThread(function()
+        CameraClothing()
+        while Customize do
+            Wait(0)
+
+            DisableAllControlActions(0)
+            for i = 1, #EnableKeys do
+                EnableControlAction(0, EnableKeys[i], true)
+            end
+
+            local Crds = GetEntityCoords(horses)
+
+            local lightRange = 15.0
+            local lightIntensity = 50.0
+            DrawLightWithRange(Crds.x - 5.0, Crds.y - 5.0, Crds.z + 1.0, 255, 255, 255, lightRange, lightIntensity)
+            local promptlabel = 'Customize Horse'
+
+            local label = VarString(10, 'LITERAL_STRING', promptlabel)
+            PromptSetActiveGroupThisFrame(CustomizePrompt, label)
+
+            if IsControlPressed(0, Config.Prompt.Rotate[1]) then
+                SetEntityHeading(horses, GetEntityHeading(horses) - 1)
+            end
+
+            if IsControlPressed(0, Config.Prompt.Rotate[2]) then
+                SetEntityHeading(horses, GetEntityHeading(horses) + 1)
+            end
         end
-    else
-        RSGCore.Functions.Notify('No Horse Detected', 'error', 7500)
+    end)
+end
+
+local DisableCamera = function()
+    TriggerServerEvent('rsg-horses:server:SetPlayerBucket')
+    RenderScriptCams(false, true, 250, 1, 0)
+    DestroyCam(Camera, false)
+    SetNuiFocus(false, false)
+    FreezeEntityPosition(horsePed, false)
+    Customize = false
+    for k, v in pairs(entities) do
+        if v.ped and DoesEntityExist(v.ped) then
+            DeleteEntity(v.ped)
+        end
+        entities[k] = nil
+    end
+end
+
+local function createCamera(horses)
+    local Coords = GetOffsetFromEntityInWorldCoords(horses, 0, 3.5, 0)
+    RenderScriptCams(false, false, 0, 1, 0)
+    DestroyCam(Camera, false)
+    if not DoesCamExist(Camera) then
+        Camera = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+        SetCamActive(Camera, true)
+        RenderScriptCams(true, false, 0, true, true)
+        SetCamCoord(Camera, Coords.x, Coords.y, Coords.z + 1.5)
+        SetCamRot(Camera, -15.0, 0.0, GetEntityHeading(horses) + 180)
+        Customize = true
+        CameraPromptHorse(horses)
+        CustomHorse(horses)
+    end
+end
+
+RegisterNetEvent('rsg-horses:client:custShop', function(data)
+    local horsesdata = data.player
+    local horseped = horsesdata.horse
+    for k, v in pairs(Config.StableSettings) do
+        if horsesdata.stable == v.stableid then
+            TriggerServerEvent('rsg-horses:server:SetPlayerBucket', true)
+            DoScreenFadeOut(0)
+            repeat Wait(0) until IsScreenFadedOut()
+            local ped = SpawnHorses(horseped, v.horsecustom, v.horsecustom.w)
+            createCamera(ped)
+            DoScreenFadeIn(1000)
+            repeat Wait(0) until IsScreenFadedIn()
+            entities[k] = { ped = ped }
+        end
     end
 end)
 
@@ -192,7 +260,7 @@ RegisterCommand('sethorsename', function()
     end
 
     TriggerServerEvent('rsg-horses:renameHorse', input[1])
-end)
+end, false)
 
 RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
     lib.registerContext({
@@ -208,18 +276,11 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
                 arrow = true
             },
             {
-                title = Lang:t('menu.horse_customize'),
-                description = Lang:t('menu.horse_customize_sub'),
-                icon = 'fa-solid fa-screwdriver-wrench',
-                event = 'rsg-horses:client:custShop',
-                arrow = true
-            },
-            {
                 title = Lang:t('menu.horse_sell'),
                 description = Lang:t('menu.horse_sell_sub'),
                 icon = 'fa-solid fa-coins',
                 event = 'rsg-horses:client:MenuDel',
-		args = { stableid = stableid },
+		        args = { stableid = stableid },
                 arrow = true
             },
             {
@@ -549,7 +610,7 @@ TriggerEvent('rsg-menubase:getData', function(call)
     MenuData = call
 end)
 
-function CustomHorse()
+function CustomHorse(horses)
     MenuData.CloseAll()
     local elements =
     {
@@ -576,11 +637,12 @@ function CustomHorse()
                 horseComps[data.current.category] = data.current.value
             end
 
-            TriggerEvent('rsg-horses:client:SaveHorseComponents', data.current.category, data.current.value)
+            TriggerEvent('rsg-horses:client:SaveHorseComponents', horses, data.current.category, data.current.value)
         end,
         function(_, menu)
+            DisableCamera()
+            horseComps = {}
             menu.close()
-            DestroyAllCams(true)
         end)
 end
 
@@ -589,17 +651,12 @@ local RemoveHorseComponents = function(hash)
     Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
 end
 
-AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, value)
-    if not horsePed or horsePed == 0 then
-        RSGCore.Functions.Notify(Lang:t('error.no_horse_found'), 'error')
-
-        return
-    end
+AddEventHandler('rsg-horses:client:SaveHorseComponents', function(horses, category, value)
 
     if category == 'blankets' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x17CEB41A, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0x17CEB41A, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveBlankets', 0)
 
@@ -618,7 +675,7 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(blanketsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(blanketsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveBlankets', blanketsHash)
     elseif category == 'saddles' then
@@ -642,7 +699,7 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(saddlesHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(saddlesHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveSaddles', saddlesHash)
     elseif category == 'horns' then
@@ -666,7 +723,7 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(hornsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(hornsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveHorns', hornsHash)
     elseif category == 'saddlebags' then
@@ -690,7 +747,7 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(saddlebagsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(saddlebagsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveSaddlebags', saddlebagsHash)
     elseif category == 'stirrups' then
@@ -714,13 +771,13 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(stirrupsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(stirrupsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveStirrups', stirrupsHash)
     elseif category == 'bedrolls' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0xEFB31921, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xEFB31921, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveBedrolls', 0)
 
@@ -739,13 +796,13 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(bedrollsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(bedrollsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveBedrolls', bedrollsHash)
     elseif category == 'tails' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0xA63CAE10, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xA63CAE10, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveTails', 0)
 
@@ -764,13 +821,13 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(tailsHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(tailsHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveTails', tailsHash)
     elseif category == 'manes' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0xAA0217AB, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xAA0217AB, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveManes', 0)
 
@@ -789,13 +846,13 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(manesHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(manesHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveManes', manesHash)
     elseif category == 'masks' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0xD3500E5D, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xD3500E5D, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveMasks', 0)
 
@@ -814,13 +871,13 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(masksHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(masksHash), true, true, true)
 
         TriggerServerEvent('rsg-horses:server:SaveMasks', masksHash)
     elseif category == 'mustaches' then
         if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, 0x30DEFDDF, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
+            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0x30DEFDDF, 0)
+            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
 
             TriggerServerEvent('rsg-horses:server:SaveMustaches', 0)
 
@@ -839,7 +896,7 @@ AddEventHandler('rsg-horses:client:SaveHorseComponents', function(category, valu
             end
         end
 
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(mustachesHash), true, true, true)
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(mustachesHash), true, true, true)
         TriggerServerEvent('rsg-horses:server:SaveMustaches', mustachesHash)
     end
 end)
@@ -896,11 +953,13 @@ end)
 
 AddEventHandler('onResourceStop', function(resource)
     if (resource == GetCurrentResourceName()) then
-        DestroyAllCams()
+        DestroyAllCams(true)
 
         for k, v in pairs(entities) do
-            DeletePed(v)
-            SetEntityAsNoLongerNeeded(v)
+            if v.ped and DoesEntityExist(v.ped) then
+                DeleteEntity(v.ped)
+            end
+            entities[k] = nil
         end
         if (horsePed ~= 0) then
             DeletePed(horsePed)
@@ -967,11 +1026,40 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
     end)
 end)
 
+local function HorseOptions(data)
+    local menu = {
+        {
+            title = 'Ride Horse',
+            description = 'Ride This Horse',
+            icon = 'horse',
+            event = 'rsg-horses:client:SpawnHorse',
+            args = { player = data },
+            arrow = true
+        },
+        {
+            title = Lang:t('menu.horse_customize'),
+            description = Lang:t('menu.horse_customize_sub'),
+            icon = 'fa-solid fa-screwdriver-wrench',
+            event = 'rsg-horses:client:custShop',
+            args = { player = data },
+            arrow = true
+        },
+    }
+
+    lib.registerContext({
+        id = 'horses_options',
+        title = Lang:t('menu.horse_view_horses'),
+        position = 'top-right',
+        menu = 'horses_view',
+        onBack = function() end,
+        options = menu
+    })
+    lib.showContext('horses_options')
+end
+
 -- horse menu
 RegisterNetEvent('rsg-horses:client:menu', function(data)
-
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
-
         if horses == nil then
             RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
             return
@@ -980,15 +1068,14 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
         local options = {}
 
         for i = 1, #horses do
-            local horses = horses[i]
+            local horse = horses[i]
             options[#options + 1] = {
-                title = horses.name,
-                description = Lang:t('menu.my_horse_gender') ..
-                horses.gender ..
-                Lang:t('menu.my_horse_xp') .. horses.horsexp .. Lang:t('menu.my_horse_active') .. horses.active,
+                title = horse.name,
+                description = Lang:t('menu.my_horse_gender') .. horse.gender .. Lang:t('menu.my_horse_xp') .. horse.horsexp .. Lang:t('menu.my_horse_active') .. horse.active,
                 icon = 'fa-solid fa-horse',
-                event = 'rsg-horses:client:SpawnHorse',
-                args = { player = horses, active = 1 },
+                onSelect = function ()
+                    HorseOptions(horse)
+                end,
                 arrow = true
             }
         end
@@ -1002,9 +1089,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
             options = options
         })
         lib.showContext('horses_view')
-
     end, data.stableid)
-
 end)
 
 -- sell horse menu
@@ -1019,13 +1104,13 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
 
         local options = {}
         for i = 1, #horses do
-            local horses = horses[i]
+            local horse = horses[i]
             options[#options + 1] = {
-                title = horses.name,
+                title = horse.name,
                 description = Lang:t('menu.sell_your_horse'),
                 icon = 'fa-solid fa-horse',
                 serverEvent = 'rsg-horses:server:deletehorse',
-                args = { horseid = horses.id },
+                args = { horseid = horse.id },
                 arrow = true
             }
         end

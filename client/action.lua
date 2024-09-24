@@ -47,10 +47,10 @@ end
 CreateThread(function()
     SetupActionPrompt()
     while true do
-        Wait(1)
+        Wait(11)
+        local thorse = GetLedHorseFromPed(cache.ped)
         if cache.ped == nil or thorse == nil then return end
         if IsPedLeadingHorse(cache.ped) and not objectInteract then
-            local thorse = GetLedHorseFromPed(cache.ped)
             if IsEntityInWater(thorse) then
                 if IsPedStill(thorse) and not IsPedSwimming(thorse) then
                     DisableControlAction(0, 0x7914A3DD, true)

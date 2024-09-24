@@ -194,7 +194,6 @@ end)
 RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
-    local GetHorse = {}
     local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND stable=@stableid', { ['@citizenid'] = Player.PlayerData.citizenid, ['@stableid'] = stableid })    
     if horses[1] ~= nil then
         cb(horses)
@@ -219,7 +218,6 @@ end)
 -- get active horse components callback
 RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(source, cb)
     local src = source
-    local encodedSaddle = json.encode(SaddleDataEncoded)
     local Player = RSGCore.Functions.GetPlayer(src)
     local Playercid = Player.PlayerData.citizenid
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
@@ -365,6 +363,16 @@ RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
     local Player = RSGCore.Functions.GetPlayer(src)
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
     MySQL.update('UPDATE player_horses SET dirt = ? WHERE id = ? AND citizenid = ?', { dirt, activehorse, Player.PlayerData.citizenid })
+end)
+
+RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random)
+    if random then
+        local BucketID = RSGCore.Shared.RandomInt(1000, 9999)
+        SetRoutingBucketPopulationEnabled(BucketID, false)
+        SetPlayerRoutingBucket(source, BucketID)
+    else
+        SetPlayerRoutingBucket(source, 0)
+    end
 end)
 
 --------------------------------------------------------------------------------------------------
