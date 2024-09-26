@@ -58,6 +58,7 @@ CreateThread(function()
         end
 
         newpoint.onExit = function(self)
+            exports['rsg-target']:RemoveTargetEntity(self.ped, 'Stable Menu')
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
                     for i = 255, 0, -51 do
@@ -78,6 +79,7 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
+        exports['rsg-target']:RemoveTargetEntity(v.ped, 'Stable Menu')
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)
         end

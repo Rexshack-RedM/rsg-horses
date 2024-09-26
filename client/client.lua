@@ -29,7 +29,6 @@ local BrushPrompt
 local closestStable = nil
 local Customize = false
 local RotatePrompt
-local BuyPrompt
 local CustomizePrompt = GetRandomIntInRange(0, 0xffffff)
 local Components = lib.load('shared.horse_comp')
 local CurrentPrice = 0
@@ -173,9 +172,12 @@ local function PromptCustom()
 end
 
 local DisableCamera = function()
-    RenderScriptCams(false, true, 250, 1, 0)
+    RenderScriptCams(false, true, 1000, 1, 0)
     DestroyCam(Camera, false)
-    SetNuiFocus(false, false)
+    DestroyAllCams(true)
+    DisplayHud(true)
+    DisplayRadar(true)
+    Citizen.InvokeNative(0x4D51E59243281D80, PlayerId(), true, 0, false) -- ENABLE PLAYER CONTROLS
     Customize = false
     for k, v in pairs(entities) do
 
@@ -188,6 +190,32 @@ local DisableCamera = function()
     end
 end
 
+local function CameraPromptHorse(horses)
+    local promptLabel = 'Total Price : $'
+    local lightRange, lightIntensity = 15.0, 50.0
+    local rotateLeft, rotateRight = Config.Prompt.Rotate[1], Config.Prompt.Rotate[2]
+    
+    CreateThread(function()
+        PromptCustom()
+        while Customize do
+            Wait(0)
+            
+            local crds = GetEntityCoords(horses)
+            DrawLightWithRange(crds.x - 5.0, crds.y - 5.0, crds.z + 1.0, 255, 255, 255, lightRange, lightIntensity)
+            
+            local label = VarString(10, 'LITERAL_STRING', promptLabel .. CurrentPrice)
+            PromptSetActiveGroupThisFrame(CustomizePrompt, label)
+            
+            local heading = GetEntityHeading(horses)
+            if IsControlPressed(2, rotateLeft) then
+                SetEntityHeading(horses, heading - 1)
+            elseif IsControlPressed(2, rotateRight) then
+                SetEntityHeading(horses, heading + 1)
+            end
+        end
+    end)
+end
+
 local function createCamera(horses, horsesdata)
     local Coords = GetOffsetFromEntityInWorldCoords(horses, 0, 3.5, 0)
     RenderScriptCams(false, false, 0, 1, 0)
@@ -195,47 +223,16 @@ local function createCamera(horses, horsesdata)
     if not DoesCamExist(Camera) then
         Camera = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
         SetCamActive(Camera, true)
-        RenderScriptCams(true, false, 0, true, true)
+        RenderScriptCams(true, false, 3000, true, true)
         SetCamCoord(Camera, Coords.x, Coords.y, Coords.z + 1.5)
         SetCamRot(Camera, -15.0, 0.0, GetEntityHeading(horses) + 180)
         Customize = true
-        CameraPromptHorse(horses, horsesdata)
+        CameraPromptHorse(horses)
         MainMenu(horses, horsesdata)
+        Citizen.InvokeNative(0x4D51E59243281D80, PlayerId(), false, 0, true) -- DISABLE PLAYER CONTROLS
+        DisplayHud(false)
+        DisplayRadar(false)
     end
-end
-
-local EnableKeys = { 0x4BC9DABB, 0x470DC190, 0x8F9F9E58, Config.Prompt.Rotate[1], Config.Prompt.Rotate[2], Config.Prompt.BuyHorses}
-
-function CameraPromptHorse(horses, horsesdata)
-    CreateThread(function()
-        PromptCustom()
-        while Customize do
-            Wait(0)
-
-            DisableAllControlActions(0)
-            for i = 1, #EnableKeys do
-                EnableControlAction(0, EnableKeys[i], true)
-            end
-
-            local Crds = GetEntityCoords(horses)
-
-            local lightRange = 15.0
-            local lightIntensity = 50.0
-            DrawLightWithRange(Crds.x - 5.0, Crds.y - 5.0, Crds.z + 1.0, 255, 255, 255, lightRange, lightIntensity)
-            local promptlabel = 'Total Price : $' .. CurrentPrice
-
-            local label = VarString(10, 'LITERAL_STRING', promptlabel)
-            PromptSetActiveGroupThisFrame(CustomizePrompt, label)
-
-            if IsControlPressed(0, Config.Prompt.Rotate[1]) then
-                SetEntityHeading(horses, GetEntityHeading(horses) - 1)
-            end
-
-            if IsControlPressed(0, Config.Prompt.Rotate[2]) then
-                SetEntityHeading(horses, GetEntityHeading(horses) + 1)
-            end
-        end
-    end)
 end
 
 RegisterNetEvent('rsg-horses:client:custShop', function(data)
