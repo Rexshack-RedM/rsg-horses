@@ -80,6 +80,7 @@ CreateThread(function()
         end
 
         newpoint.onExit = function(self)
+            exports['rsg-target']:RemoveTargetEntity(self.ped, self.horsename..' $'..self.price)
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
                     for i = 255, 0, -51 do
@@ -100,6 +101,7 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for key, value in pairs(spawnedHorses) do
+        exports['rsg-target']:RemoveTargetEntity(value.ped, value.horsename..' $'..value.price)
         if value.ped and DoesEntityExist(value.ped) then
             DeleteEntity(value.ped)
         end
