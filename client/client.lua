@@ -29,7 +29,16 @@ local BrushPrompt
 local closestStable = nil
 local Customize = false
 local RotatePrompt
+local BuyPrompt
 local CustomizePrompt = GetRandomIntInRange(0, 0xffffff)
+local Components = lib.load('shared.horse_comp')
+local CurrentPrice = 0
+local initialHorseComps = {}
+
+MenuData = {}
+TriggerEvent('rsg-menubase:getData', function(call)
+    MenuData = call
+end)
 -------------------
 
 function SetupHorsePrompts()
@@ -149,8 +158,9 @@ exports('CheckActiveHorse', function()
     return horsePed
 end)
 
-local function CameraClothing()
-    local str = VarString(10, 'LITERAL_STRING', 'Rotate Horses')
+local function PromptCustom()
+    local str
+    str = VarString(10, 'LITERAL_STRING', 'Rotate Horses')
     RotatePrompt = PromptRegisterBegin()
     PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[1])
     PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[2])
@@ -162,11 +172,43 @@ local function CameraClothing()
     PromptRegisterEnd(RotatePrompt)
 end
 
-local EnableKeys = { 0x4BC9DABB, 0x470DC190, 0x8F9F9E58, Config.Prompt.Rotate[1], Config.Prompt.Rotate[2]}
+local DisableCamera = function()
+    RenderScriptCams(false, true, 250, 1, 0)
+    DestroyCam(Camera, false)
+    SetNuiFocus(false, false)
+    Customize = false
+    for k, v in pairs(entities) do
 
-local function CameraPromptHorse(horses)
+        TriggerServerEvent('rsg-horses:server:SetPlayerBucket', false, v.ped)
+
+        if v.ped and DoesEntityExist(v.ped) then
+            DeleteEntity(v.ped)
+        end
+        entities[k] = nil
+    end
+end
+
+local function createCamera(horses, horsesdata)
+    local Coords = GetOffsetFromEntityInWorldCoords(horses, 0, 3.5, 0)
+    RenderScriptCams(false, false, 0, 1, 0)
+    DestroyCam(Camera, false)
+    if not DoesCamExist(Camera) then
+        Camera = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+        SetCamActive(Camera, true)
+        RenderScriptCams(true, false, 0, true, true)
+        SetCamCoord(Camera, Coords.x, Coords.y, Coords.z + 1.5)
+        SetCamRot(Camera, -15.0, 0.0, GetEntityHeading(horses) + 180)
+        Customize = true
+        CameraPromptHorse(horses, horsesdata)
+        MainMenu(horses, horsesdata)
+    end
+end
+
+local EnableKeys = { 0x4BC9DABB, 0x470DC190, 0x8F9F9E58, Config.Prompt.Rotate[1], Config.Prompt.Rotate[2], Config.Prompt.BuyHorses}
+
+function CameraPromptHorse(horses, horsesdata)
     CreateThread(function()
-        CameraClothing()
+        PromptCustom()
         while Customize do
             Wait(0)
 
@@ -180,7 +222,7 @@ local function CameraPromptHorse(horses)
             local lightRange = 15.0
             local lightIntensity = 50.0
             DrawLightWithRange(Crds.x - 5.0, Crds.y - 5.0, Crds.z + 1.0, 255, 255, 255, lightRange, lightIntensity)
-            local promptlabel = 'Customize Horse'
+            local promptlabel = 'Total Price : $' .. CurrentPrice
 
             local label = VarString(10, 'LITERAL_STRING', promptlabel)
             PromptSetActiveGroupThisFrame(CustomizePrompt, label)
@@ -196,37 +238,6 @@ local function CameraPromptHorse(horses)
     end)
 end
 
-local DisableCamera = function()
-    RenderScriptCams(false, true, 250, 1, 0)
-    DestroyCam(Camera, false)
-    SetNuiFocus(false, false)
-    FreezeEntityPosition(horsePed, false)
-    Customize = false
-    for k, v in pairs(entities) do
-        if v.ped and DoesEntityExist(v.ped) then
-            TriggerServerEvent('rsg-horses:server:SetPlayerBucket', false, v.ped)
-            DeleteEntity(v.ped)
-        end
-        entities[k] = nil
-    end
-end
-
-local function createCamera(horses)
-    local Coords = GetOffsetFromEntityInWorldCoords(horses, 0, 3.5, 0)
-    RenderScriptCams(false, false, 0, 1, 0)
-    DestroyCam(Camera, false)
-    if not DoesCamExist(Camera) then
-        Camera = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-        SetCamActive(Camera, true)
-        RenderScriptCams(true, false, 0, true, true)
-        SetCamCoord(Camera, Coords.x, Coords.y, Coords.z + 1.5)
-        SetCamRot(Camera, -15.0, 0.0, GetEntityHeading(horses) + 180)
-        Customize = true
-        CameraPromptHorse(horses)
-        CustomHorse(horses)
-    end
-end
-
 RegisterNetEvent('rsg-horses:client:custShop', function(data)
     local horsesdata = data.player
     local horseped = horsesdata.horse
@@ -236,7 +247,7 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
             repeat Wait(0) until IsScreenFadedOut()
             local ped = SpawnHorses(horseped, v.horsecustom, v.horsecustom.w)
             TriggerServerEvent('rsg-horses:server:SetPlayerBucket', true, ped)
-            createCamera(ped)
+            createCamera(ped, horsesdata)
             DoScreenFadeIn(1000)
             repeat Wait(0) until IsScreenFadedIn()
             entities[k] = { ped = ped }
@@ -362,6 +373,17 @@ local function BondingLevels()
     end
 end
 
+function getComponentHash(category, value)
+    if Components[category] then
+        for _, item in ipairs(Components[category]) do
+            if item.hashid == value then
+                return item.hash
+            end
+        end
+    end
+    return 0
+end
+
 -- spawn horse
 local function SpawnHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
@@ -438,17 +460,21 @@ local function SpawnHorse()
                 -- set horse dirt
                 Citizen.InvokeNative(0x5DA12E025D47D4E5, horsePed, 16, data.dirt)
 
-                -- set horse components
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.blanket),   true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddle),    true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.saddlebag), true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.bedroll),   true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.horn),      true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.stirrup),   true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mane),      true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.tail),      true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mask),      true, true, true) -- ApplyShopItemToPed
-                Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(data.mustache),  true, true, true) -- ApplyShopItemToPed
+                horseComps[data.horseid] = json.decode(data.components)
+
+                if not horseComps[data.horseid] then
+                    horseComps[data.horseid] = {}
+                end
+    
+                for category, value in pairs(horseComps[data.horseid]) do
+                    local hash = getComponentHash(category, value)
+                    if hash ~= 0 then
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(hash), true, true, true)
+                    end
+                end
+
+                UpdatePedVariation(horsePed)
+
                 SetPedConfigFlag(horsePed, 297, true)                                                          -- PCF_ForceInteractionLockonOnTargetPed
                 Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1)                                          -- SetAnimalMood
 
@@ -594,37 +620,109 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-local blanketsHash
-local saddlesHash
-local hornsHash
-local saddlebagsHash
-local stirrupsHash
-local bedrollsHash
-local tailsHash
-local manesHash
-local masksHash
-local mustachesHash
+local function IsPedReadyToRender(...)
+    return Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, ...)
+end
 
-MenuData = {}
-TriggerEvent('rsg-menubase:getData', function(call)
-    MenuData = call
-end)
+function UpdatePedVariation(ped)
+    Citizen.InvokeNative(0x704C908E9C405136, ped)
+    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, false, true, true, true, false)
+    while not IsPedReadyToRender(ped) do
+        Wait(1)
+    end
+end
 
-function CustomHorse(horses)
+function CalculatePrice(comp, initial)
+    local price = 0
+
+    for category, value in pairs(comp) do
+        if Config.PriceComponent[category] and value > 0 and (not initial or initial[category] ~= value) then
+            price = price + Config.PriceComponent[category]
+        end
+    end
+
+    return price
+end
+
+function MainMenu(horses, horsedata)
     MenuData.CloseAll()
-    local elements =
-    {
-        { label = Lang:t('menu.custom_blankets'),    category = 'blankets',   value = horseComps.blankets or 0,   desc = "", type = "slider", min = 0, max = 65 },
-        { label = Lang:t('menu.custom_saddles'),     category = 'saddles',    value = horseComps.saddles or 0,    desc = "", type = "slider", min = 0, max = 136 },
-        { label = Lang:t('menu.custom_horns'),       category = 'horns',      value = horseComps.horns or 0,      desc = "", type = "slider", min = 0, max = 14 },
-        { label = Lang:t('menu.custom_saddle_bags'), category = 'saddlebags', value = horseComps.saddlebags or 0, desc = "", type = "slider", min = 0, max = 20 },
-        { label = Lang:t('menu.custom_stirrups'),    category = 'stirrups',   value = horseComps.stirrups or 0,   desc = "", type = "slider", min = 0, max = 11 },
-        { label = Lang:t('menu.custom_bedrolls'),    category = 'bedrolls',   value = horseComps.bedrolls or 0,   desc = "", type = "slider", min = 0, max = 30 },
-        { label = Lang:t('menu.custom_tails'),       category = 'tails',      value = horseComps.tails or 0,      desc = "", type = "slider", min = 0, max = 85 },
-        { label = Lang:t('menu.custom_manes'),       category = 'manes',      value = horseComps.manes or 0,      desc = "", type = "slider", min = 0, max = 102 },
-        { label = Lang:t('menu.custom_masks'),       category = 'masks',      value = horseComps.masks or 0,      desc = "", type = "slider", min = 0, max = 51 },
-        { label = Lang:t('menu.custom_mustaches'),   category = 'mustaches',  value = horseComps.mustaches or 0,  desc = "", type = "slider", min = 0, max = 16 }
+
+    local horseid = horsedata.horseid
+
+    if not horseComps[horseid] then
+        horseComps[horseid] = {}
+        if horsedata.components and horsedata.components ~= "" then
+            local success, result = pcall(json.decode, horsedata.components)
+            if success then
+                horseComps[horseid] = result
+            else
+                print("Error decoding components: " .. result)
+            end
+        end
+    end
+
+    initialHorseComps = table.copy(horseComps[horseid])  -- Create a deep copy of horseComps for this horse
+
+    -- Terapkan komponen ke kuda
+    for category, value in pairs(horseComps[horseid]) do
+        local hash = getComponentHash(category, value)
+        if hash ~= 0 then
+            Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(hash), true, true, true)
+        end
+    end
+    local elements = {
+        { label = "Horse Component", value = 'component' },
+        { label = "Buy Component",   value = 'buy', },
     }
+    MenuData.Open('default', GetCurrentResourceName(), 'main_character_creator_menu',
+        {
+            title = Lang:t('menu.horse_customization'),
+            subtext = '',
+            align = 'top-left',
+            elements = elements,
+            itemHeight = "4vh"
+        }, function(data, menu)
+            if data.current.value == 'component' then
+                CustomHorse(horses, horsedata)
+            elseif data.current.value == 'buy' then
+                TriggerServerEvent('rsg-horses:server:SaveComponent', horseComps[horsedata.horseid], horsedata, CurrentPrice)
+                DisableCamera()
+                CurrentPrice = 0       -- Reset CurrentPrice when closing the menu
+                initialHorseComps = {} -- Clear initialHorseComps
+                menu.close()
+            end
+        end,
+        function(_, menu)
+            DisableCamera()
+            CurrentPrice = 0       -- Reset CurrentPrice when closing the menu
+            initialHorseComps = {} -- Clear initialHorseComps
+            menu.close()
+        end)
+end
+
+function CustomHorse(horses, data)
+    MenuData.CloseAll()
+    CurrentPrice = 0
+    local horseid = data.horseid
+
+    local elements = {}
+
+    for k, v in pairs(Components) do
+        local categoryHashes = {}
+        for i, item in ipairs(v) do
+            categoryHashes[i] = item.hash
+        end
+        
+        elements[#elements + 1] = {
+            label = k,
+            value = horseComps[horseid][k] or 0,
+            type = 'slider',
+            min = 0,
+            max = #v,
+            category = k,
+            hashes = categoryHashes,
+        }
+    end
 
     MenuData.Open('default', GetCurrentResourceName(), 'horse_menu',
         {
@@ -633,273 +731,40 @@ function CustomHorse(horses)
             align    = 'top-left',
             elements = elements,
         }, function(data, _)
-            if horseComps[data.current.category] ~= data.current.value then
-                horseComps[data.current.category] = data.current.value
-            end
+            if horseComps[horseid][data.current.category] ~= data.current.value then
+                horseComps[horseid][data.current.category] = data.current.value
 
-            TriggerEvent('rsg-horses:client:SaveHorseComponents', horses, data.current.category, data.current.value)
+                if data.current.value > 0 then
+                    local currentHash = data.current.hashes[data.current.value]
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(currentHash), true, true, true)
+                    UpdatePedVariation(horses)
+                else
+                    local hash = Config.ComponentHash[data.current.category]
+                    if hash then
+                        Citizen.InvokeNative(0xD710A5007C2AC539, horses, hash, 0)
+                        Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
+                        UpdatePedVariation(horses)
+                    end
+                end
+            end
+            local newPrice = CalculatePrice(horseComps[horseid], initialHorseComps)
+            if CurrentPrice ~= newPrice then
+                CurrentPrice = newPrice
+            end
         end,
         function(_, menu)
-            DisableCamera()
-            horseComps = {}
-            menu.close()
+            MainMenu(horses, data)
         end)
 end
 
-local RemoveHorseComponents = function(hash)
-    Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, hash, 0)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
-end
-
-AddEventHandler('rsg-horses:client:SaveHorseComponents', function(horses, category, value)
-
-    if category == 'blankets' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0x17CEB41A, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveBlankets', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseBlankets do
-            local comp = Components.HorseBlankets[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                blanketsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(blanketsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveBlankets', blanketsHash)
-    elseif category == 'saddles' then
-        if not value or value == 0 then
-            RemoveHorseComponents(0xBAA7E618)
-
-            TriggerServerEvent('rsg-horses:server:SaveSaddles', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseSaddles do
-            local comp = Components.HorseSaddles[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                saddlesHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(saddlesHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveSaddles', saddlesHash)
-    elseif category == 'horns' then
-        if not value or value == 0 then
-            RemoveHorseComponents(0x05447332)
-
-            TriggerServerEvent('rsg-horses:server:SaveHorns', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseHorns do
-            local comp = Components.HorseHorns[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                hornsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(hornsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveHorns', hornsHash)
-    elseif category == 'saddlebags' then
-        if not value or value == 0 then
-            RemoveHorseComponents(0x80451C25)
-
-            TriggerServerEvent('rsg-horses:server:SaveSaddlebags', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseSaddlebags do
-            local comp = Components.HorseSaddlebags[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                saddlebagsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(saddlebagsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveSaddlebags', saddlebagsHash)
-    elseif category == 'stirrups' then
-        if not value or value == 0 then
-            RemoveHorseComponents(0xDA6DADCA)
-
-            TriggerServerEvent('rsg-horses:server:SaveStirrups', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseStirrups do
-            local comp = Components.HorseStirrups[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                stirrupsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(stirrupsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveStirrups', stirrupsHash)
-    elseif category == 'bedrolls' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xEFB31921, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveBedrolls', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseBedrolls do
-            local comp = Components.HorseBedrolls[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                bedrollsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(bedrollsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveBedrolls', bedrollsHash)
-    elseif category == 'tails' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xA63CAE10, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveTails', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseTails do
-            local comp = Components.HorseTails[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                tailsHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(tailsHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveTails', tailsHash)
-    elseif category == 'manes' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xAA0217AB, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveManes', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseManes do
-            local comp = Components.HorseManes[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                manesHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(manesHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveManes', manesHash)
-    elseif category == 'masks' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0xD3500E5D, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveMasks', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseMasks do
-            local comp = Components.HorseMasks[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                masksHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(masksHash), true, true, true)
-
-        TriggerServerEvent('rsg-horses:server:SaveMasks', masksHash)
-    elseif category == 'mustaches' then
-        if not value or value == 0 then
-            Citizen.InvokeNative(0xD710A5007C2AC539, horses, 0x30DEFDDF, 0)
-            Citizen.InvokeNative(0xCC8CA3E88256E58F, horses, 0, 1, 1, 1, 0)
-
-            TriggerServerEvent('rsg-horses:server:SaveMustaches', 0)
-
-            return
-        end
-
-        for i = 1, #Components.HorseMustaches do
-            local comp = Components.HorseMustaches[i]
-            local hashid = comp.hashid
-            local hash = comp.hash
-
-            if tonumber(value) == tonumber(hashid) then
-                mustachesHash = hash
-
-                break
-            end
-        end
-
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(mustachesHash), true, true, true)
-        TriggerServerEvent('rsg-horses:server:SaveMustaches', mustachesHash)
+-- Helper function to create a deep copy of a table
+function table.copy(t)
+    local u = {}
+    for k, v in pairs(t) do
+        u[k] = type(v) == "table" and table.copy(v) or v
     end
-end)
+    return setmetatable(u, getmetatable(t))
+end
 
 ----------------------------------------------------------------------------------------------------
 
@@ -954,13 +819,8 @@ end)
 AddEventHandler('onResourceStop', function(resource)
     if (resource == GetCurrentResourceName()) then
         DestroyAllCams(true)
-
-        for k, v in pairs(entities) do
-            if v.ped and DoesEntityExist(v.ped) then
-                DeleteEntity(v.ped)
-            end
-            entities[k] = nil
-        end
+        DisableCamera()
+        MenuData.CloseAll()
         if (horsePed ~= 0) then
             DeletePed(horsePed)
             SetEntityAsNoLongerNeeded(horsePed)
@@ -1059,72 +919,67 @@ end
 
 -- horse menu
 RegisterNetEvent('rsg-horses:client:menu', function(data)
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
-        if horses == nil then
-            RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
-            return
-        end
+    local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
-        local options = {}
+    if #horses <= 0 then
+        RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+        return
+    end
 
-        for i = 1, #horses do
-            local horse = horses[i]
-            options[#options + 1] = {
-                title = horse.name,
-                description = Lang:t('menu.my_horse_gender') .. horse.gender .. Lang:t('menu.my_horse_xp') .. horse.horsexp .. Lang:t('menu.my_horse_active') .. horse.active,
-                icon = 'fa-solid fa-horse',
-                onSelect = function ()
-                    HorseOptions(horse)
-                end,
-                arrow = true
-            }
-        end
+    local options = {}
 
-        lib.registerContext({
-            id = 'horses_view',
-            title = Lang:t('menu.horse_view_horses'),
-            position = 'top-right',
-            menu = 'stable_menu',
-            onBack = function() end,
-            options = options
-        })
-        lib.showContext('horses_view')
-    end, data.stableid)
+    for k, v in pairs(horses) do
+        options[#options + 1] = {
+            title = v.name,
+            description = Lang:t('menu.my_horse_gender') .. v.gender .. Lang:t('menu.my_horse_xp') .. v.horsexp .. Lang:t('menu.my_horse_active') .. v.active,
+            icon = 'fa-solid fa-horse',
+            arrow = true,
+            onSelect = function()
+                HorseOptions(v)
+            end
+        }
+    end
+
+    lib.registerContext({
+        id = 'horses_view',
+        title = Lang:t('menu.horse_view_horses'),
+        position = 'top-right',
+        menu = 'stable_menu',
+        onBack = function() end,
+        options = options
+    })
+    lib.showContext('horses_view')
 end)
 
 -- sell horse menu
 RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
+    local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetHorse', function(horses)
+    if #horses <= 0 then
+        RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+        return
+    end
 
-        if horses == nil then
-            RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
-            return
-        end
-
-        local options = {}
-        for i = 1, #horses do
-            local horse = horses[i]
-            options[#options + 1] = {
-                title = horse.name,
-                description = Lang:t('menu.sell_your_horse'),
-                icon = 'fa-solid fa-horse',
-                serverEvent = 'rsg-horses:server:deletehorse',
-                args = { horseid = horse.id },
-                arrow = true
-            }
-        end
-        lib.registerContext({
-            id = 'sellhorse_menu', -- Corrected the context ID here
-            title = Lang:t('menu.sell_horse_menu'),
-            position = 'top-right',
-            menu = 'stable_menu',
-            onBack = function() end,
-            options = options
-        })
-        lib.showContext('sellhorse_menu') -- Use the correct context ID here
-
-    end, data.stableid)
+    local options = {}
+    for k, v in pairs(horses) do
+        options[#options + 1] = {
+            title = v.name,
+            description = Lang:t('menu.sell_your_horse'),
+            icon = 'fa-solid fa-horse',
+            serverEvent = 'rsg-horses:server:deletehorse',
+            args = { horseid = v.id },
+            arrow = true
+        }
+    end
+    lib.registerContext({
+        id = 'sellhorse_menu',     -- Corrected the context ID here
+        title = Lang:t('menu.sell_horse_menu'),
+        position = 'top-right',
+        menu = 'stable_menu',
+        onBack = function() end,
+        options = options
+    })
+    lib.showContext('sellhorse_menu')     -- Use the correct context ID here
 end)
 -------------------------------------------------------------------------------
 

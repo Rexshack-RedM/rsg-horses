@@ -21,6 +21,32 @@ Config.TrickXp = {
     Play = 2000
 }
 
+Config.ComponentHash = {
+    Blankets = 0x17CEB41A,
+    Saddles = 0xBAA7E618,
+    Horns = 0x05447332,
+    Saddlebags = 0x80451C25,
+    Stirrups = 0xDA6DADCA,
+    Bedrolls = 0xEFB31921,
+    Tails = 0xA63CAE10,
+    Manes = 0xAA0217AB,
+    Masks = 0xD3500E5D,
+    Mustaches = 0x30DEFDDF,
+}
+
+Config.PriceComponent = {
+    Blankets = 5,
+    Saddles = 2,
+    Horns = 10,
+    Saddlebags = 3,
+    Stirrups = 4,
+    Bedrolls = 5,
+    Tails = 4,
+    Manes = 3,
+    Masks = 3,
+    Mustaches = 2,
+}
+
 ---------------------------------
 -- general settings
 ---------------------------------

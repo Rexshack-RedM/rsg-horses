@@ -8,24 +8,22 @@ version '1.4.0'
 shared_scripts {
     '@ox_lib/init.lua',
     '@rsg-core/shared/locale.lua',
-    'shared/horse_comp.lua',
-    'locales/en.lua', -- Change this to your preferred language
+    'locales/en.lua',
     'locales/*.lua',
     'shared/config.lua',
 }
 
 client_scripts {
-    '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
-    '@PolyZone/EntityZone.lua',
-    '@PolyZone/CircleZone.lua',
-    '@PolyZone/ComboZone.lua',
     'client/client.lua',
     'client/npcs.lua',
     'client/horses.lua',
     'client/action.lua',
     'client/horseinfo.lua',
     'client/dataview.lua'
+}
+
+files {
+    'shared/horse_comp.lua',
 }
 
 server_scripts {

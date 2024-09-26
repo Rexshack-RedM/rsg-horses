@@ -191,15 +191,15 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     end
 end)
 
-RSGCore.Functions.CreateCallback('rsg-horses:server:GetHorse', function(source, cb, stableid)
+lib.callback.register('rsg-horses:server:GetHorse', function(source, stable)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
-    local horses = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND stable=@stableid', { ['@citizenid'] = Player.PlayerData.citizenid, ['@stableid'] = stableid })    
-    if horses[1] ~= nil then
-        cb(horses)
-    else
-        cb(nil)
+    local horses = {}
+    local Result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND stable=@stable', { ['@citizenid'] = Player.PlayerData.citizenid, ['@stable'] = stable })
+    for i = 1, #Result do
+        horses[#horses + 1] = Result[i]
     end
+    return horses
 end)
 
 RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(source, cb)
@@ -232,93 +232,21 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(s
 end)
 
 -- save saddle
-RegisterNetEvent('rsg-horses:server:SaveSaddles', function(SaddleDataEncoded)
+RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedata, price)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if SaddleDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET saddle = ?  WHERE citizenid = ? AND active = ?', {SaddleDataEncoded ,  Player.PlayerData.citizenid, 1 })
+    local citizenid = Player.PlayerData.citizenid
+    local horseid = horsedata.horseid
+    if (Player.PlayerData.money.cash < price) then
+        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
+        return
     end
-end)
 
-RegisterNetEvent('rsg-horses:server:SaveBlankets', function(BlanketDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if BlanketDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET blanket = ?  WHERE citizenid = ? AND active = ? ' , {BlanketDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
+    if component then
+        MySQL.update('UPDATE player_horses SET components = ? WHERE citizenid = ? AND horseid = ?', {json.encode(component), citizenid, horseid})
 
-RegisterNetEvent('rsg-horses:server:SaveHorns', function(HornDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if HornDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET horn = ?  WHERE citizenid = ? AND active = ?', {HornDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveSaddlebags', function(SaddlebagsDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if SaddlebagsDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET saddlebag = ?  WHERE citizenid = ? AND active = ?', {SaddlebagsDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveBedrolls', function(BedrollDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if BedrollDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET bedroll = ?  WHERE citizenid = ? AND active = ?', {BedrollDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveStirrups', function(StirrupDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if StirrupDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET stirrup = ?  WHERE citizenid = ? AND active = ? ' , {StirrupDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveManes', function(ManeDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if ManeDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET mane = ?  WHERE citizenid = ? AND active = ?', {ManeDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveTails', function(TailDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if TailDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET tail = ?  WHERE citizenid = ? AND active = ?', {TailDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveMasks', function(MaskDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if MaskDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET mask = ?  WHERE citizenid = ? AND active = ?', {MaskDataEncoded ,  Player.PlayerData.citizenid, 1 })
-    end
-end)
-
-RegisterNetEvent('rsg-horses:server:SaveMustaches', function(MaskDataEncoded)
-    local src = source
-    local Player = RSGCore.Functions.GetPlayer(src)
-    local Playercid = Player.PlayerData.citizenid
-    if MaskDataEncoded ~= nil then
-        MySQL.update('UPDATE player_horses SET mustache = ?  WHERE citizenid = ? AND active = ?', {MaskDataEncoded ,  Player.PlayerData.citizenid, 1 })
+        Player.Functions.RemoveMoney('cash', price)
+        TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.component_saved') .. price , 'success')
     end
 end)
 
