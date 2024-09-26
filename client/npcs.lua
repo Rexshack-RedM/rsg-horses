@@ -1,37 +1,7 @@
 local spawnedPeds = {}
 
-CreateThread(function()
-    while true do
-        Wait(500)
-        for k,v in pairs(Config.StableSettings) do
-            local playerCoords = GetEntityCoords(cache.ped)
-            local distance = #(playerCoords - v.npccoords.xyz)
-
-            if distance < Config.DistanceSpawn and not spawnedPeds[k] then
-                local spawnedPed = NearNPC(v.npcmodel, v.npccoords, v.stableid)
-                spawnedPeds[k] = { spawnedPed = spawnedPed }
-            end
-            
-            if distance >= Config.DistanceSpawn and spawnedPeds[k] then
-                if Config.FadeIn then
-                    for i = 255, 0, -51 do
-                        Wait(50)
-                        SetEntityAlpha(spawnedPeds[k].spawnedPed, i, false)
-                    end
-                end
-                DeletePed(spawnedPeds[k].spawnedPed)
-                spawnedPeds[k] = nil
-            end
-        end
-    end
-end)
-
-function NearNPC(npcmodel, npccoords, stableid)
-    RequestModel(npcmodel)
-    while not HasModelLoaded(npcmodel) do
-        Wait(50)
-    end
-    spawnedPed = CreatePed(npcmodel, npccoords.x, npccoords.y, npccoords.z - 1.0, npccoords.w, false, false, 0, 0)
+local function NearNPC(npcmodel, npccoords, heading)
+    local spawnedPed = CreatePed(npcmodel, npccoords.x, npccoords.y, npccoords.z - 1.0, heading, false, false, 0, 0)
     SetEntityAlpha(spawnedPed, 0, false)
     SetRandomOutfitVariation(spawnedPed, true)
     SetEntityCanBeDamaged(spawnedPed, false)
@@ -41,38 +11,77 @@ function NearNPC(npcmodel, npccoords, stableid)
     -- set relationship group between npc and player
     SetPedRelationshipGroupHash(spawnedPed, GetPedRelationshipGroupHash(spawnedPed))
     SetRelationshipBetweenGroups(1, GetPedRelationshipGroupHash(spawnedPed), `PLAYER`)
-    -- end of relationship group
 
     if Config.FadeIn then
         for i = 0, 255, 51 do
-            Citizen.Wait(50)
+            Wait(50)
             SetEntityAlpha(spawnedPed, i, false)
         end
     end
 
-    -- target start
-    exports['rsg-target']:AddTargetEntity(spawnedPed, {
-        options = {
-            {
-                icon = 'fa-solid fa-eye',
-                label = 'Stable Menu',
-                targeticon = 'fa-solid fa-eye',
-                action = function()
-                    TriggerEvent('rsg-horses:client:stablemenu', stableid)
-                end
-            },
-        },
-        distance = 3.0,
-    })
-    -- target end
     return spawnedPed
 end
+
+CreateThread(function()
+    for k,v in pairs(Config.StableSettings) do
+        local coords = v.npccoords
+        local newpoint = lib.points.new({
+            coords = coords,
+            heading = coords.w,
+            distance = Config.DistanceSpawn,
+            model = v.npcmodel,
+            ped = nil,
+            stableid = v.stableid
+        })
+        
+        newpoint.onEnter = function(self)
+            if not self.ped then
+                lib.requestModel(self.model, 10000)
+                self.ped = NearNPC(self.model, self.coords, self.heading)
+
+                pcall(function ()
+                    exports['rsg-target']:AddTargetEntity(self.ped, {
+                        options = {
+                            {
+                                icon = 'fa-solid fa-eye',
+                                label = 'Stable Menu',
+                                targeticon = 'fa-solid fa-eye',
+                                action = function()
+                                    TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
+                                end
+                            },
+                        },
+                        distance = 2.0,
+                    })
+                end)
+            end
+        end
+
+        newpoint.onExit = function(self)
+            if self.ped and DoesEntityExist(self.ped) then
+                if Config.FadeIn then
+                    for i = 255, 0, -51 do
+                        Wait(50)
+                        SetEntityAlpha(self.ped, i, false)
+                    end
+                end
+                DeleteEntity(self.ped)
+                self.ped = nil
+            end
+        end
+
+        spawnedPeds[k] = newpoint
+    end
+end)
 
 -- cleanup
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
-    for k,v in pairs(spawnedPeds) do
-        DeletePed(spawnedPeds[k].spawnedPed)
+    for k, v in pairs(spawnedPeds) do
+        if v.ped and DoesEntityExist(v.ped) then
+            DeleteEntity(v.ped)
+        end
+
         spawnedPeds[k] = nil
     end
 end)

@@ -19,6 +19,7 @@ local Translations = {
         storing_horse = 'Guardando seu cavalo',
         horse_sold = 'O cavalo foi vendido com sucesso',
         horse_owned = 'Agora você é o proprietário deste cavalo',
+        component_saved = 'Componente salvo!',
     },
     primary = {
         lantern_equiped = 'Lanterna do cavalo equipada!',

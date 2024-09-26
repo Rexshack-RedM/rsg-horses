@@ -12,12 +12,39 @@ Config.Prompt = {
     HorseLay = 0xD8CF0C95,
     HorsePlay = 0x620A6C5E,
     HorseSaddleBag = 0xC7B5340A,
-    HorseBrush = 0x63A38F2C
+    HorseBrush = 0x63A38F2C,
+    Rotate = { 0x7065027D, 0xB4E465B4 },
 }
 
 Config.TrickXp = {
     Lay = 1000,
     Play = 2000
+}
+
+Config.ComponentHash = {
+    Blankets = 0x17CEB41A,
+    Saddles = 0xBAA7E618,
+    Horns = 0x05447332,
+    Saddlebags = 0x80451C25,
+    Stirrups = 0xDA6DADCA,
+    Bedrolls = 0xEFB31921,
+    Tails = 0xA63CAE10,
+    Manes = 0xAA0217AB,
+    Masks = 0xD3500E5D,
+    Mustaches = 0x30DEFDDF,
+}
+
+Config.PriceComponent = {
+    Blankets = 5,
+    Saddles = 2,
+    Horns = 10,
+    Saddlebags = 3,
+    Stirrups = 4,
+    Bedrolls = 5,
+    Tails = 4,
+    Manes = 3,
+    Masks = 3,
+    Mustaches = 2,
 }
 
 ---------------------------------
@@ -142,6 +169,7 @@ Config.StableSettings = {
         coords = vector3(-1334.2, 2397.41, 307.21),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(-1334.2, 2397.41, 307.21, 67.43),
+        horsecustom = vec4(-1344.8345, 2392.2900, 306.7908, 153.3136)
     },
 
     {   -- vanhorn
@@ -149,6 +177,7 @@ Config.StableSettings = {
         coords = vector3(2968.86, 792.97, 51.4),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(2968.86, 792.97, 51.4, 357.89),
+        horsecustom = vec4(2970.4155, 785.6143, 51.3995, 137.7870)
     },
 
     {   -- saintdenis
@@ -156,6 +185,7 @@ Config.StableSettings = {
         coords = vector3(2512.28, -1457.33, 46.31),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(2512.28, -1457.33, 46.31, 86.43),
+        horsecustom = vec4(2502.7288, -1439.7654, 46.3141, 176.4436)
     },
 
     {   -- rhodes
@@ -163,6 +193,7 @@ Config.StableSettings = {
         coords = vector3(1211.55, -190.84, 101.39),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(1211.55, -190.84, 101.39, 100.22),
+        horsecustom = vec4(1215.1134, -207.5254, 101.0958, 267.8741)
     },
 
     {   -- valentine
@@ -170,6 +201,7 @@ Config.StableSettings = {
         coords = vector3(-365.2, 791.94, 116.18),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(-365.2, 791.94, 116.18, 180.9),
+        horsecustom = vec4(-388.5212, 784.0562, 115.8154, 150.4135)
     },
 
     {   -- strawberry
@@ -177,6 +209,7 @@ Config.StableSettings = {
         coords = vector3(-1817.1, -568.64, 155.98),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(-1817.1, -568.64, 155.98, 254.85),
+        horsecustom = vec4(-1827.2969, -577.0493, 155.9565, 215.5404)
     },
 
     {   -- blackwater
@@ -184,6 +217,7 @@ Config.StableSettings = {
         coords = vector3(-876.85, -1365.55, 43.53),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(-876.85, -1365.55, 43.53, 275.38),
+        horsecustom = vec4(-865.1928, -1366.3270, 43.5440, 86.8795)
     },
 
     {   -- tumbleweed
@@ -191,6 +225,7 @@ Config.StableSettings = {
         coords = vector3(-5514.81, -3040.25, -2.39),
         npcmodel = `u_m_m_bwmstablehand_01`,
         npccoords = vector4(-5514.81, -3040.25, -2.39, 175.22),
+        horsecustom = vec4(-5526.3452, -3030.7842, -2.0329, 105.3392)
     },
 
 }

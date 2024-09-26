@@ -25,6 +25,7 @@ local Translations = {
         horse_sold = 'Lovad sikeresen elkelt',
         horse_owned = 'Most már a te birtokodban van ez a ló',
         horse_sold_for = 'A lovad eladva: $',
+        component_saved = 'Komponens elmentve!',
     },
     primary = {
         lantern_equiped = 'Lámpás feltéve!',
