@@ -130,10 +130,10 @@ end
 local function Flee()
     TaskAnimalFlee(horsePed, cache.ped, -1)
     Wait(10000)
-	if Config.StoreFleedHorse then
-		SetClosestStableLocation()
-		TriggerServerEvent('rsg-horses:server:fleeStoreHorse', closestStable)
-	end
+    if Config.StoreFleedHorse then
+        SetClosestStableLocation()
+        TriggerServerEvent('rsg-horses:server:fleeStoreHorse', closestStable)
+    end
     DeleteEntity(horsePed)
     horsePed = 0
     HorseCalled = false
@@ -288,7 +288,7 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
                 description = Lang:t('menu.horse_sell_sub'),
                 icon = 'fa-solid fa-coins',
                 event = 'rsg-horses:client:MenuDel',
-		        args = { stableid = stableid },
+                args = { stableid = stableid },
                 arrow = true
             },
             {
@@ -337,11 +337,9 @@ end
 
 -- place on ground properly
 local function PlacePedOnGroundProperly(hPed)
-    local playerPed = PlayerPedId()
     local howfar = math.random(15, 30)
-    local x, y, z = table.unpack(GetEntityCoords(playerPed))
+    local x, y, z = table.unpack(GetEntityCoords(cache.ped))
     local found, groundz, normal = GetGroundZAndNormalFor_3dCoord(x - howfar, y, z)
-
     if found then
         SetEntityCoordsNoOffset(hPed, x - howfar, y, groundz + normal.z, true)
     end
@@ -385,10 +383,9 @@ end
 local function SpawnHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if (data) then
-            local ped = PlayerPedId()
             local player = PlayerId()
             local model = GetHashKey(data.horse)
-            local location = GetEntityCoords(ped)
+            local location = GetEntityCoords(cache.ped)
             local x, y, z = table.unpack(location)
             local _, nodePosition = GetClosestVehicleNode(x - 15, y, z, 0, 3.0, 0.0)
             local distance = math.floor(#(nodePosition - location))
@@ -608,7 +605,7 @@ local function SpawnHorse()
                 HorseCalled = true
 
                 if Config.Automount == true then
-                    TaskMountAnimal(PlayerPedId(), horsePed, 10000, -1, 1.0, 1, 0, 0)
+                    TaskMountAnimal(cache.ped, horsePed, 10000, -1, 1.0, 1, 0, 0)
                 end
             end
         end
@@ -768,9 +765,9 @@ end
 -- move horse to player
 function moveHorseToPlayer()
     Citizen.CreateThread(function()
-        Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, PlayerPedId(), -1, 7.2, 2.0, 0, 0)
+        Citizen.InvokeNative(0x6A071245EB0D1882, horsePed, cache.ped, -1, 7.2, 2.0, 0, 0)
         while horseSpawned == true do
-            local coords = GetEntityCoords(PlayerPedId())
+            local coords = GetEntityCoords(cache.ped)
             local horseCoords = GetEntityCoords(horsePed)
             local distance = #(coords - horseCoords)
             if (distance < 7.0) then
@@ -988,7 +985,7 @@ CreateThread(function()
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
             RSGCore.Functions.GetPlayerData(function(PlayerData)
                 if PlayerData.metadata["injail"] == 0 then
-                    local coords = GetEntityCoords(PlayerPedId())
+                    local coords = GetEntityCoords(cache.ped)
                     local horseCoords = GetEntityCoords(horsePed)
                     local distance = #(coords - horseCoords)
 
@@ -1153,14 +1150,14 @@ end)
 -- player equip horse lantern
 RegisterNetEvent('rsg-horses:client:equipHorseLantern')
 AddEventHandler('rsg-horses:client:equipHorseLantern', function()
-    local hasItem = RSGCore.Functions.HasItem('horselantern', 1)
+    local hasItem = RSGCore.Functions.HasItem('horse_lantern', 1)
 
     if not hasItem then
         RSGCore.Functions.Notify(Lang:t('error.no_lantern'), 'error')
         return
     end
 
-    local pcoords = GetEntityCoords(PlayerPedId())
+    local pcoords = GetEntityCoords(cache.ped)
     local hcoords = GetEntityCoords(horsePed)
     local distance = #(pcoords - hcoords)
 
@@ -1207,7 +1204,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
         return
     end
 
-    local pcoords = GetEntityCoords(PlayerPedId())
+    local pcoords = GetEntityCoords(cache.ped)
     local hcoords = GetEntityCoords(horsePed)
     local distance = #(pcoords - hcoords)
 
@@ -1248,7 +1245,7 @@ end)
 -- player feed horse
 RegisterNetEvent('rsg-horses:client:playerfeedhorse')
 AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
-    local pcoords = GetEntityCoords(PlayerPedId())
+    local pcoords = GetEntityCoords(cache.ped)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
@@ -1260,14 +1257,12 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
         if Config.HorseFeed[itemName]["ismedicine"] ~= nil then
             if Config.HorseFeed[itemName]["ismedicine"] == true then
                 -- is medicine
-                Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -1355254781, 0, 0) -- TaskAnimalInteraction
-
-                Wait(5000)
-
+                Citizen.InvokeNative(0xCD181A959CFDD7F4, cache.ped, horsePed, -1355254781, 0, 0) -- TaskAnimalInteraction
                 local medicineHash = "consumable_horse_stimulant"
-                if Config.HorseFeed[itemName]["medicineHash"] ~= nil then medicineHash = Config.HorseFeed[itemName]
-                    ["medicineHash"] end
-                TaskAnimalInteraction(PlayerPedId(), horsePed, -1355254781, GetHashKey(medicineHash), 0)
+                if Config.HorseFeed[itemName]["medicineHash"] ~= nil then 
+                    medicineHash = Config.HorseFeed[itemName]["medicineHash"] 
+                end
+                TaskAnimalInteraction(cache.ped, horsePed, -1355254781, GetHashKey(medicineHash), 0)
 
                 local valueHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0)
                 local valueStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1)
@@ -1276,9 +1271,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 if not tonumber(valueStamina) then valueStamina = 0 end
                 Citizen.Wait(3500)
                 Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, valueHealth + Config.HorseFeed[itemName]["health"])
-                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1,
-                    valueStamina + Config.HorseFeed[itemName]["stamina"])
-
+                Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, valueStamina + Config.HorseFeed[itemName]["stamina"])
 
                 Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 0, 1000.0)
                 Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, 1000.0)
@@ -1289,7 +1282,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
             elseif Config.HorseFeed[itemName]["ismedicine"] == false then
                 -- is not medicine
-                Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
+                Citizen.InvokeNative(0xCD181A959CFDD7F4, cache.ped, horsePed, -224471938, 0, 0) -- TaskAnimalInteraction
 
                 Wait(5000)
 
@@ -1317,7 +1310,7 @@ end)
 -- player brush horse
 RegisterNetEvent('rsg-horses:client:playerbrushhorse')
 AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
-    local pcoords = GetEntityCoords(PlayerPedId())
+    local pcoords = GetEntityCoords(cache.ped)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
@@ -1325,7 +1318,7 @@ AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
         return
     end
 
-    Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), horsePed, `INTERACTION_BRUSH`, 0, 0)
+    Citizen.InvokeNative(0xCD181A959CFDD7F4, cache.ped, horsePed, `INTERACTION_BRUSH`, 0, 0)
 
     Wait(8000)
 
@@ -1358,8 +1351,7 @@ end
 -- Player revive horse
 RegisterNetEvent("rsg-horses:client:revivehorse")
 AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
-    local playerPed = PlayerPedId()
-    local playercoords = GetEntityCoords(playerPed)
+    local playercoords = GetEntityCoords(cache.ped)
     local horsecoords = GetEntityCoords(horsePed)
     local distance = #(playercoords - horsecoords)
 
@@ -1415,10 +1407,9 @@ local candoaction = false
 Citizen.CreateThread(function()
     while true do
         local sleep = 1000
-        local playerPed = PlayerPedId()
-        local dist = #(GetEntityCoords(playerPed) - GetEntityCoords(horsePed))
+        local dist = #(GetEntityCoords(cache.ped) - GetEntityCoords(horsePed))
         local ZoneTypeId = 1
-        local x, y, z = table.unpack(GetEntityCoords(PlayerPedId()))
+        local x, y, z = table.unpack(GetEntityCoords(cache.ped))
         local town = Citizen.InvokeNative(0x43AD8FC02B429D33, x, y, z, ZoneTypeId)
         if town == false then
             candoaction = true

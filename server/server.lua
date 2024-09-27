@@ -22,7 +22,7 @@ end)
 -----------------------------------------------------------------------
 
 -- player horselantern
-RSGCore.Functions.CreateUseableItem('horselantern', function(source, item)
+RSGCore.Functions.CreateUseableItem('horse_lantern', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:equipHorseLantern', source, item.name)
 end)
@@ -41,8 +41,8 @@ RSGCore.Functions.CreateUseableItem('carrot', function(source, item)
     end
 end)
 
- -- feed Stimulant cheval 
- RSGCore.Functions.CreateUseableItem('stimulantcheval', function(source, item)
+ -- feed horse stimulant
+ RSGCore.Functions.CreateUseableItem('consumable_horse_stimulant', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)

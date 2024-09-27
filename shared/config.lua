@@ -103,10 +103,10 @@ Config.Level10 = 2000
 ---------------------------------
 Config.HorseFeed = {
     -- medicineHash is optional. If u do not set, the default value wil be: consumable_horse_stimulant
-    ["carrot"]          = { health = 10,  stamina = 10,  ismedicine = false },
-    ["apple"]           = { health = 15,  stamina = 15,  ismedicine = false },
-    ["stimulantcheval"] = { health = 100, stamina = 100, ismedicine = true, medicineHash = "consumable_horse_stimulant" },
-    ["sugarcube"]       = { health = 25,  stamina = 25,  ismedicine = false },
+    ['carrot']                     = { health = 10,  stamina = 10,  ismedicine = false },
+    ['apple']                      = { health = 15,  stamina = 15,  ismedicine = false },
+    ['consumable_horse_stimulant'] = { health = 100, stamina = 100, ismedicine = true, medicineHash = 'consumable_horse_stimulant' },
+    ['consumable_sugarcube']       = { health = 25,  stamina = 25,  ismedicine = false },
 }
 
 ---------------------------------
@@ -120,9 +120,9 @@ Config.BoostAction = {
 }
 
 Config.ObjectActionList = {
-    [1] = {`p_watertrough02x`, "drink"},
-    [2] = {`p_watertrough01x`, "drink"},
-    [3] = {`p_haypile01x`, "feed"},
+    [1] = {`p_watertrough02x`, 'drink'},
+    [2] = {`p_watertrough01x`, 'drink'},
+    [3] = {`p_haypile01x`, 'feed'},
 }
 
 Config.Anim = {
@@ -149,8 +149,9 @@ Config.Blip = {
 -- horse shop
 ---------------------------------
 Config.HorseShop = {
-    [1] = { name = 'horse_brush',          price = 5,  amount = 500, info = {}, type = 'item', slot = 1, },
-    [2] = { name = 'consumable_sugarcube', price = 10, amount = 500, info = {}, type = 'item', slot = 2, },
+    [1] = { name = 'horse_brush',          price = 5,  amount = 500,  info = {}, type = 'item', slot = 1, },
+    [2] = { name = 'horse_lantern',        price = 10, amount = 500,  info = {}, type = 'item', slot = 2, },
+    [3] = { name = 'consumable_sugarcube', price = 1,  amount  = 500, info = {}, type = 'item', slot = 3, },
 }
 
 ---------------------------------
