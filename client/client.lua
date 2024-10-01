@@ -1448,12 +1448,7 @@ end)
 
 RegisterNetEvent('rsg-horses:client:OpenHorseShop')
 AddEventHandler('rsg-horses:client:OpenHorseShop', function()
-    local ShopItems = {}
-
-    ShopItems.label = Lang:t('menu.horse_shop')
-    ShopItems.items = Config.HorseShop
-    ShopItems.slots = #Config.HorseShop
-    TriggerServerEvent("inventory:server:OpenInventory", "shop", "HorseShop_" .. math.random(1, 99), ShopItems)
+    TriggerServerEvent('rsg-shops:server:openstore', 'horse', 'horse', 'Horse Shop')
 end)
 
 -------------------------------------------------------------------------------
