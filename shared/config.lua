@@ -146,15 +146,6 @@ Config.Blip = {
 }
 
 ---------------------------------
--- horse shop
----------------------------------
-Config.HorseShop = {
-    [1] = { name = 'horse_brush',          price = 5,  amount = 500,  info = {}, type = 'item', slot = 1, },
-    [2] = { name = 'horse_lantern',        price = 10, amount = 500,  info = {}, type = 'item', slot = 2, },
-    [3] = { name = 'consumable_sugarcube', price = 1,  amount  = 500, info = {}, type = 'item', slot = 3, },
-}
-
----------------------------------
 -- stable npc settings
 ---------------------------------
 Config.DistanceSpawn = 20.0
