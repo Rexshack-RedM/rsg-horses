@@ -1139,9 +1139,8 @@ RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
 
         ::continue::
 
-        TriggerServerEvent("inventory:server:OpenInventory", "stash", horsestash,
-            { maxweight = invWeight, slots = invSlots, })
-        TriggerEvent("inventory:client:SetCurrentStash", horsestash)
+        TriggerServerEvent('rsg-horses:server:openhorseinventory', horsestash, invWeight, invSlots)
+
     end)
 end)
 

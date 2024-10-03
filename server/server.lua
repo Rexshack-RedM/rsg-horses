@@ -99,7 +99,7 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local Player = RSGCore.Functions.GetPlayer(source)
 
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove')
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove')
     end
 end)
 
@@ -303,6 +303,18 @@ RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random, ped)
         SetPlayerRoutingBucket(source, 0)
         SetPlayerRoutingBucket(ped, 0)
     end
+end)
+
+---------------------------------
+-- horse inventory
+---------------------------------
+RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, invWeight, invSlots)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+    local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
+    local stashName = horsestash
+    exports['rsg-inventory']:OpenInventory(src, stashName, data)
 end)
 
 --------------------------------------------------------------------------------------------------
