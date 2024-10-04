@@ -109,7 +109,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable,
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
+        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_cash'), type = 'error', duration = 5000 })
         return
     end
     local horseid = GenerateHorseid()
@@ -124,7 +124,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable,
         ['@born'] = os.time()
     })
     Player.Functions.RemoveMoney('cash', price)
-    TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_owned'), 'success')
+    TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.horse_owned'), type = 'success', duration = 5000 })
 end)
 
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
@@ -159,11 +159,11 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     local newName = MySQL.query.await('UPDATE player_horses SET name = ? WHERE citizenid = ? AND active = ?' , {name, Player.PlayerData.citizenid, 1})
 
     if newName == nil then
-        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.name_change_failed'), 'error')
+        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.name_change_failed'), type = 'error', duration = 5000 })
         return
     end
 
-    TriggerClientEvent('RSGCore:Notify', src, 'Horse name changed to \''..name..'\' successfully!', 'success')
+    TriggerClientEvent('ox_lib:notify', src, {title = 'Horse name changed to \''..name..'\' successfully!', type = 'success', duration = 5000 })
 end)
 
 -- sell horse
@@ -186,7 +186,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
         if v.horsemodel == modelHorse then
             local sellprice = v.horseprice * 0.5
             Player.Functions.AddMoney('cash', sellprice)
-            TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.horse_sold_for')..sellprice, 'success')
+            TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.horse_sold_for')..sellprice, type = 'success', duration = 5000 })
         end
     end
 end)
@@ -238,7 +238,7 @@ RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedat
     local citizenid = Player.PlayerData.citizenid
     local horseid = horsedata.horseid
     if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('RSGCore:Notify', src, Lang:t('error.no_cash'), 'error')
+        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_cash'), type = 'error', duration = 5000 })
         return
     end
 
@@ -246,7 +246,7 @@ RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedat
         MySQL.update('UPDATE player_horses SET components = ? WHERE citizenid = ? AND horseid = ?', {json.encode(component), citizenid, horseid})
 
         Player.Functions.RemoveMoney('cash', price)
-        TriggerClientEvent('RSGCore:Notify', src, Lang:t('success.component_saved') .. price , 'success')
+        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.component_saved') .. price, type = 'success', duration = 5000 })
     end
 end)
 
@@ -256,7 +256,7 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, sou
     local Playercid2 = Player2.PlayerData.citizenid
     MySQL.update('UPDATE player_horses SET citizenid = ? WHERE horseid = ? AND active = ?', {Playercid2, horseId, 1})
     MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Playercid2, 1})
-    TriggerClientEvent('RSGCore:Notify', playerId, Lang:t('success.horse_owned'), 'success')
+    TriggerClientEvent('ox_lib:notify', playerId, {title = Lang:t('success.horse_owned'), type = 'success', duration = 5000 })
 end)
 
 -- generate horseid
@@ -280,7 +280,7 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     if Player.Functions.GetItemByName(item) then
         TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item)
     else
-        TriggerClientEvent('RSGCore:Notify', src, 'You don\'t have '..item, 'error')
+        TriggerClientEvent('ox_lib:notify', src, {title = 'You don\'t have '..item, type = 'error', duration = 5000 })
     end
 end)
 -- end
