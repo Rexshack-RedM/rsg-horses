@@ -327,9 +327,9 @@ local function TradeHorse()
                 local playerId = GetPlayerServerId(player)
                 local horseId = data.horseid
                 TriggerServerEvent('rsg-horses:server:TradeHorse', playerId, horseId)
-                RSGCore.Functions.Notify(Lang:t('success.horse_traded'), 'success', 7500)
+                lib.notify({ title = Lang:t('success.horse_traded'), type = 'success', duration = 7000 })
             else
-                RSGCore.Functions.Notify(Lang:t('error.no_nearby_player'), 'success', 7500)
+                lib.notify({ title = Lang:t('error.no_nearby_player'), type = 'success', duration = 7000 })
             end
         end
     end)
@@ -396,7 +396,7 @@ local function SpawnHorse()
             end
 
             if Config.SpawnOnRoadOnly and not onRoad then
-                RSGCore.Functions.Notify(Lang:t('error.near_road'), 'error')
+                lib.notify({ title = Lang:t('error.near_road'), type = 'error', duration = 7000 })
                 return
             end
 
@@ -836,7 +836,7 @@ local HorseId = nil
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     HorseId = data.player.id
     TriggerServerEvent("rsg-horses:server:SetHoresActive", data.player.id)
-    RSGCore.Functions.Notify(Lang:t('success.horse_active'), 'success', 7500)
+    lib.notify({ title = 'Title', description = Lang:t('success.horse_active'), type = 'success', duration = 7000 })
 end)
 
 AddEventHandler('rsg-horses:client:FleeHorse', function()
@@ -860,11 +860,11 @@ end)
 RegisterNetEvent('rsg-horses:client:storehorse', function(data)
     if (horsePed ~= 0) then
         TriggerServerEvent('rsg-horses:server:SetHoresUnActive', HorseId, data.stableid)
-        RSGCore.Functions.Notify(Lang:t('success.storing_horse'), 'success', 7500)
+        lib.notify({ title = Lang:t('success.storing_horse'), type = 'error', duration = 7000 })
         Flee()
         HorseCalled = false
     else
-        RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
+        lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
     end
 end)
 
@@ -875,7 +875,7 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
             Flee()
             HorseCalled = false
         else
-            RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
+            lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
         end
     end)
 end)
@@ -916,7 +916,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
     if #horses <= 0 then
-        RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+        lib.notify({ title = Lang:t('error.no_horses'), type = 'error', duration = 7000 })
         return
     end
 
@@ -950,7 +950,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
     if #horses <= 0 then
-        RSGCore.Functions.Notify(Lang:t('error.no_horses'), 'error')
+        lib.notify({ title = Lang:t('error.no_horses'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1079,7 +1079,7 @@ end)
 RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if horsePed == 0 then
-            RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error', 7500)
+            lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
             return
         end
 
@@ -1152,7 +1152,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local hasItem = RSGCore.Functions.HasItem('horse_lantern', 1)
 
     if not hasItem then
-        RSGCore.Functions.Notify(Lang:t('error.no_lantern'), 'error')
+        lib.notify({ title = Lang:t('error.no_lantern'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1161,7 +1161,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local distance = #(pcoords - hcoords)
 
     if distance > 2.0 then
-        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1176,7 +1176,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
         lanternequiped = true
         lanternUsed = true
 
-        RSGCore.Functions.Notify(Lang:t('primary.lantern_equiped'), 'horse', 3000)
+        lib.notify({ title = Lang:t('primary.lantern_equiped'), type = 'info', duration = 7000 })
         return
     end
 
@@ -1187,7 +1187,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
         lanternequiped = false
         lanternUsed = true
 
-        RSGCore.Functions.Notify(Lang:t('primary.lantern_removed'), 'horse', 3000)
+        lib.notify({ title = Lang:t('primary.lantern_removed'), type = 'info', duration = 7000 })
         return
     end
 end)
@@ -1199,7 +1199,7 @@ RegisterNetEvent('rsg-horses:client:equipHorseHolster')
 AddEventHandler('rsg-horses:client:equipHorseHolster', function()
     local hasItem = RSGCore.Functions.HasItem('horseholster', 1)
     if not hasItem then
-        RSGCore.Functions.Notify(Lang:t('error.no_holster'), 'error')
+        lib.notify({ title = Lang:t('error.no_holster'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1208,7 +1208,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
     local distance = #(pcoords - hcoords)
 
     if distance > 2.0 then
-        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1223,7 +1223,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
         holsterequiped = true
         holsterUsed = true
 
-        RSGCore.Functions.Notify(Lang:t('primary.holster_equiped'), 'horse', 3000)
+        lib.notify({ title = Lang:t('primary.holster_equiped'), type = 'info', duration = 7000 })
         return
     end
 
@@ -1234,7 +1234,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
         holsterequiped = false
         holsterUsed = true
 
-        RSGCore.Functions.Notify(Lang:t('primary.holster_removed'), 'horse', 3000)
+        lib.notify({ title = Lang:t('primary.holster_removed'), type = 'info', duration = 7000 })
         return
     end
 end)
@@ -1248,7 +1248,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
-        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1296,13 +1296,13 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
             else
                 -- have invalid config
-                RSGCore.Functions.Notify("[FEED] Feed: " .. itemName .. " have INVALID ismedicine config!", 'error')
+                lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' have INVALID ismedicine config!', type = 'error', duration = 7000 })
             end
         else
-            RSGCore.Functions.Notify("[FEED] Feed: " .. itemName .. " do not have ismedicine config!", 'error')
+            lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' do not have ismedicine config!', type = 'error', duration = 7000 })
         end
     else
-        RSGCore.Functions.Notify("[FEED] Feed: " .. itemName .. " do not exits!", 'error')
+        lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' do not exits!', type = 'error', duration = 7000 })
     end
 end)
 
@@ -1313,7 +1313,7 @@ AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
-        RSGCore.Functions.Notify(Lang:t('error.need_to_be_closer'), 'error')
+        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1355,15 +1355,13 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
     local distance = #(playercoords - horsecoords)
 
     if horsePed == 0 then
-        RSGCore.Functions.Notify(Lang:t('error.no_horse_out'), 'error')
-
+        lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
         return
     end
 
     if IsEntityDead(horsePed) then
         if distance > 1.5 then
-            RSGCore.Functions.Notify(Lang:t('error.horse_too_far'), 'error')
-
+            lib.notify({ title = Lang:t('error.horse_too_far'), type = 'error', duration = 7000 })
             return
         end
 
@@ -1394,7 +1392,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
                 SpawnHorse()
             end)
     else
-        RSGCore.Functions.Notify(Lang:t('error.horse_not_injured_dead'), 'error')
+        lib.notify({ title = Lang:t('error.horse_not_injured_dead'), type = 'error', duration = 7000 })
     end
 end)
 
@@ -1474,7 +1472,7 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
             })
             lib.showContext('showhorse_menu')
         else
-            RSGCore.Functions.Notify('no horses', 'error')
+            lib.notify({ title = 'no horses', type = 'error', duration = 7000 })
         end
 
     end)

@@ -86,8 +86,7 @@ RSGCore.Functions.CreateUseableItem('horsereviver', function(source, item)
     })
 
     if not result[1] then
-        RSGCore.Functions.Notify(src, Lang:t('error.no_active_horse'), 'error', 3000)
-
+        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_active_horse'), type = 'error', duration = 5000 })
         return
     end
 
