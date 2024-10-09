@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `player_horses` (
   `horse` varchar(50) DEFAULT NULL,
   `dirt` int(11) DEFAULT 0,
   `horsexp` int(11) DEFAULT 0,
-  `components` LONGTEXT NOT NULL,
+  `components` LONGTEXT NOT NULL DEFAULT '{}',
   `gender` varchar(11) NOT NULL,
   `wild` varchar(11) DEFAULT NULL,
   `active` tinyint(4) DEFAULT 0,
