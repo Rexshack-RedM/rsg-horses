@@ -1378,19 +1378,11 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
         FreezeEntityPosition(playerPed, false)
         SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
         TaskPlayAnim(playerPed, healAnim1Dict1, healAnim1, 1.0, 1.0, -1, 0, false, false, false)
-
-        RSGCore.Functions.Progressbar("reviving-horse", Lang:t('menu.reviving_horse'), 3000, false, true,
-            {
-                disableMovement = true,
-                disableCarMovement = false,
-                disableMouse = false,
-                disableCombat = true,
-            }, {}, {}, {}, function() -- Done
-                ClearPedTasks(playerPed)
-                FreezeEntityPosition(playerPed, false)
-                TriggerServerEvent('rsg-horses:server:revivehorse', item)
-                SpawnHorse()
-            end)
+        Wait(3000)
+        ClearPedTasks(playerPed)
+        FreezeEntityPosition(playerPed, false)
+        TriggerServerEvent('rsg-horses:server:revivehorse', item)
+        SpawnHorse()
     else
         lib.notify({ title = Lang:t('error.horse_not_injured_dead'), type = 'error', duration = 7000 })
     end
