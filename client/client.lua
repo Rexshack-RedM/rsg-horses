@@ -1197,7 +1197,7 @@ end)
 -- player equip horse holster
 RegisterNetEvent('rsg-horses:client:equipHorseHolster')
 AddEventHandler('rsg-horses:client:equipHorseHolster', function()
-    local hasItem = RSGCore.Functions.HasItem('horseholster', 1)
+    local hasItem = RSGCore.Functions.HasItem('horse_holster', 1)
     if not hasItem then
         lib.notify({ title = Lang:t('error.no_holster'), type = 'error', duration = 7000 })
         return

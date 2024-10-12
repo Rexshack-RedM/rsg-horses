@@ -21,6 +21,12 @@ end)
 
 -----------------------------------------------------------------------
 
+-- brush horse
+RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item.name)
+end)
+
 -- player horselantern
 RSGCore.Functions.CreateUseableItem('horse_lantern', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
@@ -28,21 +34,21 @@ RSGCore.Functions.CreateUseableItem('horse_lantern', function(source, item)
 end)
 
 -- player horseholster
-RSGCore.Functions.CreateUseableItem('horseholster', function(source, item)
+RSGCore.Functions.CreateUseableItem('horse_holster', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:equipHorseHolster', source, item.name)
 end)
 
--- feed horse carrot
-RSGCore.Functions.CreateUseableItem('carrot', function(source, item)
+ -- horse stimulant
+ RSGCore.Functions.CreateUseableItem('horse_stimulant', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
- -- feed horse stimulant
- RSGCore.Functions.CreateUseableItem('consumable_horse_stimulant', function(source, item)
+-- feed horse carrot
+RSGCore.Functions.CreateUseableItem('carrot', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
@@ -57,33 +63,23 @@ end)
     end
 end)
 
--- feed horse consumable_sugarcube
-RSGCore.Functions.CreateUseableItem('consumable_sugarcube', function(source, item)
+-- feed horse sugarcube
+RSGCore.Functions.CreateUseableItem('sugarcube', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
     end
 end)
 
--- brush horse
-RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
-    local Player = RSGCore.Functions.GetPlayer(source)
-    TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item.name)
-end)
-
 -- horse reviver
-RSGCore.Functions.CreateUseableItem('horsereviver', function(source, item)
+RSGCore.Functions.CreateUseableItem('horse_reviver', function(source, item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
 
     if not Player then return end
 
     local cid = Player.PlayerData.citizenid
-    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active',
-    {
-        ['@citizenid'] = cid,
-        ['@active'] = 1
-    })
+    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', { ['@citizenid'] = cid, ['@active'] = 1 })
 
     if not result[1] then
         TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_active_horse'), type = 'error', duration = 5000 })
@@ -98,7 +94,7 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local Player = RSGCore.Functions.GetPlayer(source)
 
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove')
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove', 1)
     end
 end)
 

@@ -103,10 +103,10 @@ Config.Level10 = 2000
 ---------------------------------
 Config.HorseFeed = {
     -- medicineHash is optional. If u do not set, the default value wil be: consumable_horse_stimulant
-    ['carrot']                     = { health = 10,  stamina = 10,  ismedicine = false },
-    ['apple']                      = { health = 15,  stamina = 15,  ismedicine = false },
-    ['consumable_horse_stimulant'] = { health = 100, stamina = 100, ismedicine = true, medicineHash = 'consumable_horse_stimulant' },
-    ['consumable_sugarcube']       = { health = 25,  stamina = 25,  ismedicine = false },
+    ['carrot']          = { health = 10,  stamina = 10,  ismedicine = false },
+    ['apple']           = { health = 15,  stamina = 15,  ismedicine = false },
+    ['sugarcube']       = { health = 25,  stamina = 25,  ismedicine = false },
+    ['horse_stimulant'] = { health = 100, stamina = 100, ismedicine = true, medicineHash = 'consumable_horse_stimulant' },
 }
 
 ---------------------------------
