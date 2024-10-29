@@ -1,7 +1,7 @@
 local spawnedHorses = {}
 lib.locale()
 
-local function SpawnHorses(horsemodel, horsecoords, heading)
+function SpawnHorses(horsemodel, horsecoords, heading)
     
     local spawnedHorse = CreatePed(horsemodel, horsecoords.x, horsecoords.y, horsecoords.z - 1.0, heading, false, false, 0, 0)
     SetEntityAlpha(spawnedHorse, 0, false)
