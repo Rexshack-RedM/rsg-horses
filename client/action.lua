@@ -1,4 +1,5 @@
 local objectInteract = false
+lib.locale()
 
 local ActionHorseDrink
 local DrinkPrompt = GetRandomIntInRange(0, 0xffffff)
@@ -19,7 +20,7 @@ local function IsPedLeadingHorse(ped)
 end
 
 local function SetupActionPrompt()
-    local str1 = Lang:t('action.drink')
+    local str1 = locale('cl_action_drink')
     ActionHorseDrink = PromptRegisterBegin()
     PromptSetControlAction(ActionHorseDrink,Config.Prompt.HorseDrink)
     str1 = CreateVarString(10, 'LITERAL_STRING', str1)
@@ -31,7 +32,7 @@ local function SetupActionPrompt()
     Citizen.InvokeNative(0xC5F428EE08FA7F2C,ActionHorseDrink,true)
     PromptRegisterEnd(ActionHorseDrink)
 
-    local str2 = Lang:t('action.graze')
+    local str2 = locale('cl_action_graze')
     ActionHorseGraze = PromptRegisterBegin()
     PromptSetControlAction(ActionHorseGraze,Config.Prompt.HorseGraze)
     str2 = CreateVarString(10, 'LITERAL_STRING', str2)
@@ -43,7 +44,6 @@ local function SetupActionPrompt()
     Citizen.InvokeNative(0xC5F428EE08FA7F2C,ActionHorseGraze,true)
     PromptRegisterEnd(ActionHorseGraze)
 end
-
 
 CreateThread(function()
     SetupActionPrompt()
@@ -71,7 +71,7 @@ function HandleWaterInteraction(thorse)
     if not IsPedStill(thorse) or IsPedSwimming(thorse) then return end
     
     DisableControlAction(0, 0x7914A3DD, true)
-    local label = CreateVarString(10, 'LITERAL_STRING', Lang:t('action.horses'))
+    local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(DrinkPrompt, label) 
     
     if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseDrink) then
@@ -96,7 +96,7 @@ function HandleObjectInteraction(thorse)
         return
     end
 
-    local label = CreateVarString(10, 'LITERAL_STRING', Lang:t('action.horses'))
+    local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(promptGroup, label) 
     
     if Citizen.InvokeNative(0xC92AC953F0A982AE, action) then

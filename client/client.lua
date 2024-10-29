@@ -33,6 +33,7 @@ local CustomizePrompt = GetRandomIntInRange(0, 0xffffff)
 local Components = lib.load('shared.horse_comp')
 local CurrentPrice = 0
 local initialHorseComps = {}
+lib.locale()
 
 MenuData = {}
 TriggerEvent('rsg-menubase:getData', function(call)
@@ -43,7 +44,7 @@ end)
 function SetupHorsePrompts()
 
     if horsexp >= Config.TrickXp.Lay then
-        local string = Lang:t('action.lay')
+        local string = locale('cl_action_lay')
         HorseLayPrompts = PromptRegisterBegin()
         PromptSetControlAction(HorseLayPrompts, Config.Prompt.HorseLay)
         string = CreateVarString(10, 'LITERAL_STRING', string)
@@ -57,7 +58,7 @@ function SetupHorsePrompts()
     end
 
     if horsexp >= Config.TrickXp.Play then
-        local string2 = Lang:t('action.play')
+        local string2 = locale('cl_action_play')
         HorsePLayPrompts = PromptRegisterBegin()
         PromptSetControlAction(HorsePLayPrompts, Config.Prompt.HorsePlay)
         string2 = CreateVarString(10, 'LITERAL_STRING', string2)
@@ -70,7 +71,7 @@ function SetupHorsePrompts()
         PromptRegisterEnd(HorsePLayPrompts)
     end
 
-    local str2 = Lang:t('action.saddlebag')
+    local str2 = locale('cl_action_saddlebag')
     SaddleBagPrompt = PromptRegisterBegin()
     PromptSetControlAction(SaddleBagPrompt, Config.Prompt.HorseSaddleBag)
     str2 = CreateVarString(10, 'LITERAL_STRING', str2)
@@ -82,7 +83,7 @@ function SetupHorsePrompts()
     Citizen.InvokeNative(0xC5F428EE08FA7F2C, SaddleBagPrompt,true)
     PromptRegisterEnd(SaddleBagPrompt)
 
-    local str3 = Lang:t('action.horsebrush')
+    local str3 = locale('cl_action_horsebrush')
     BrushPrompt = PromptRegisterBegin()
     PromptSetControlAction(BrushPrompt, Config.Prompt.HorseBrush)
     str3 = CreateVarString(10, 'LITERAL_STRING', str3)
@@ -159,7 +160,7 @@ end)
 
 local function PromptCustom()
     local str
-    str = VarString(10, 'LITERAL_STRING', 'Rotate Horses')
+    str = VarString(10, 'LITERAL_STRING', locale('cl_custom_rotate_horse'))
     RotatePrompt = PromptRegisterBegin()
     PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[1])
     PromptSetControlAction(RotatePrompt, Config.Prompt.Rotate[2])
@@ -191,7 +192,7 @@ local DisableCamera = function()
 end
 
 local function CameraPromptHorse(horses)
-    local promptLabel = 'Total Price : $'
+    local promptLabel = locale('cl_custom_price') .. ' : $'
     local lightRange, lightIntensity = 15.0, 50.0
     local rotateLeft, rotateRight = Config.Prompt.Rotate[1], Config.Prompt.Rotate[2]
     
@@ -254,11 +255,11 @@ end)
 
 -- rename horse name command
 RegisterCommand('sethorsename', function()
-    local input = lib.inputDialog(Lang:t('menu.horse_rename'), {
+    local input = lib.inputDialog(locale('cl_menu_horse_rename'), {
         {
             type = 'input',
             isRequired = true,
-            label = Lang:t('menu.horse_setname'),
+            label = locale('cl_menu_horse_setname'),
             icon = 'fas fa-horse-head'
         },
     })
@@ -273,41 +274,41 @@ end, false)
 RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
     lib.registerContext({
         id = 'stable_menu',
-        title = Lang:t('menu.stable_menu'),
+        title = locale('cl_menu_stable_menu'),
         options = {
             {
-                title = Lang:t('menu.horse_view_horses'),
-                description = Lang:t('menu.horse_view_horses_sub'),
+                title = locale('cl_menu_horse_view_horses'),
+                description = locale('cl_menu_horse_view_horses_sub'),
                 icon = 'fa-solid fa-eye',
                 event = 'rsg-horses:client:menu',
                 args = { stableid = stableid },
                 arrow = true
             },
             {
-                title = Lang:t('menu.horse_sell'),
-                description = Lang:t('menu.horse_sell_sub'),
+                title = locale('cl_menu_horse_sell'),
+                description = locale('cl_menu_horse_sell_sub'),
                 icon = 'fa-solid fa-coins',
                 event = 'rsg-horses:client:MenuDel',
                 args = { stableid = stableid },
                 arrow = true
             },
             {
-                title = Lang:t('menu.horse_trade'),
-                description = Lang:t('menu.horse_trade_sub'),
+                title = locale('cl_menu_horse_trade'),
+                description = locale('cl_menu_horse_trade_sub'),
                 icon = 'fa-solid fa-handshake',
                 event = 'rsg-horses:client:tradehorse',
                 arrow = true
             },
             {
-                title = Lang:t('menu.horse_shop'),
-                description = Lang:t('menu.horse_shop_sub'),
+                title = locale('cl_menu_horse_shop'),
+                description = locale('cl_menu_horse_shop_sub'),
                 event = 'rsg-horses:client:OpenHorseShop',
                 icon = 'fa-solid fa-shop',
                 arrow = true
             },
             {
-                title = Lang:t('menu.horse_store_horse'),
-                description = Lang:t('menu.horse_store_horse_sub'),
+                title = locale('cl_menu_horse_store_horse'),
+                description = locale('cl_menu_horse_store_horse_sub'),
                 icon = 'fa-solid fa-warehouse',
                 event = 'rsg-horses:client:storehorse',
                 args = { stableid = stableid },
@@ -327,9 +328,9 @@ local function TradeHorse()
                 local playerId = GetPlayerServerId(player)
                 local horseId = data.horseid
                 TriggerServerEvent('rsg-horses:server:TradeHorse', playerId, horseId)
-                lib.notify({ title = Lang:t('success.horse_traded'), type = 'success', duration = 7000 })
+                lib.notify({ title = locale('cl_success_horse_traded'), type = 'success', duration = 7000 })
             else
-                lib.notify({ title = Lang:t('error.no_nearby_player'), type = 'success', duration = 7000 })
+                lib.notify({ title = locale('cl_error_no_nearby_player'), type = 'error', duration = 7000 })
             end
         end
     end)
@@ -396,7 +397,7 @@ local function SpawnHorse()
             end
 
             if Config.SpawnOnRoadOnly and not onRoad then
-                lib.notify({ title = Lang:t('error.near_road'), type = 'error', duration = 7000 })
+                lib.notify({ title = locale('cl_error_near_road'), type = 'error', duration = 7000 })
                 return
             end
 
@@ -665,12 +666,12 @@ function MainMenu(horses, horsedata)
         end
     end
     local elements = {
-        { label = "Horse Component", value = 'component' },
-        { label = "Buy Component",   value = 'buy', },
+        { label = locale('cl_menu_horse_customization_component'), value = 'component' },
+        { label = locale('cl_menu_horse_customization_buy'),   value = 'buy', },
     }
     MenuData.Open('default', GetCurrentResourceName(), 'main_character_creator_menu',
         {
-            title = Lang:t('menu.horse_customization'),
+            title = locale('cl_menu_horse_customization'),
             subtext = '',
             align = 'top-left',
             elements = elements,
@@ -718,9 +719,10 @@ function CustomHorse(horses, data)
         }
     end
 
-    MenuData.Open('default', GetCurrentResourceName(), 'horse_menu',
+    local resource = GetCurrentResourceName()
+    MenuData.Open('default', resource, 'horse_menu',
         {
-            title    = Lang:t('menu.horse_customization'),
+            title    = locale('cl_menu_horse_customization'),
             subtext  = '',
             align    = 'top-left',
             elements = elements,
@@ -836,7 +838,7 @@ local HorseId = nil
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     HorseId = data.player.id
     TriggerServerEvent("rsg-horses:server:SetHoresActive", data.player.id)
-    lib.notify({ title = 'Title', description = Lang:t('success.horse_active'), type = 'success', duration = 7000 })
+    lib.notify({ title = locale('cl_success_title'), description = locale('cl_success_horse_active'), type = 'success', duration = 7000 })
 end)
 
 AddEventHandler('rsg-horses:client:FleeHorse', function()
@@ -860,11 +862,11 @@ end)
 RegisterNetEvent('rsg-horses:client:storehorse', function(data)
     if (horsePed ~= 0) then
         TriggerServerEvent('rsg-horses:server:SetHoresUnActive', HorseId, data.stableid)
-        lib.notify({ title = Lang:t('success.storing_horse'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_success_storing_horse'), type = 'success', duration = 7000 })
         Flee()
         HorseCalled = false
     else
-        lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
     end
 end)
 
@@ -875,7 +877,7 @@ RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
             Flee()
             HorseCalled = false
         else
-            lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
+            lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
         end
     end)
 end)
@@ -883,16 +885,16 @@ end)
 local function HorseOptions(data)
     local menu = {
         {
-            title = 'Ride Horse',
-            description = 'Ride This Horse',
+            title = locale('cl_menu_horse_ride'),
+            description = locale('cl_menu_horse_ride_sub'),
             icon = 'horse',
             event = 'rsg-horses:client:SpawnHorse',
             args = { player = data },
             arrow = true
         },
         {
-            title = Lang:t('menu.horse_customize'),
-            description = Lang:t('menu.horse_customize_sub'),
+            title = locale('cl_menu_horse_customize'),
+            description = locale('cl_menu_horse_customize_sub'),
             icon = 'fa-solid fa-screwdriver-wrench',
             event = 'rsg-horses:client:custShop',
             args = { player = data },
@@ -902,7 +904,7 @@ local function HorseOptions(data)
 
     lib.registerContext({
         id = 'horses_options',
-        title = Lang:t('menu.horse_view_horses'),
+        title = locale('cl_menu_horse_view_horses'),
         position = 'top-right',
         menu = 'horses_view',
         onBack = function() end,
@@ -916,7 +918,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
     if #horses <= 0 then
-        lib.notify({ title = Lang:t('error.no_horses'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_horses'), type = 'error', duration = 7000 })
         return
     end
 
@@ -925,7 +927,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
     for k, v in pairs(horses) do
         options[#options + 1] = {
             title = v.name,
-            description = Lang:t('menu.my_horse_gender') .. v.gender .. Lang:t('menu.my_horse_xp') .. v.horsexp .. Lang:t('menu.my_horse_active') .. v.active,
+            description = locale('cl_menu_my_horse_gender') .. v.gender .. locale('cl_menu_my_horse_xp') .. v.horsexp .. locale('cl_menu_my_horse_active') .. v.active,
             icon = 'fa-solid fa-horse',
             arrow = true,
             onSelect = function()
@@ -936,7 +938,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
 
     lib.registerContext({
         id = 'horses_view',
-        title = Lang:t('menu.horse_view_horses'),
+        title = locale('menu_my_horses'),
         position = 'top-right',
         menu = 'stable_menu',
         onBack = function() end,
@@ -950,7 +952,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
     if #horses <= 0 then
-        lib.notify({ title = Lang:t('error.no_horses'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_horses'), type = 'error', duration = 7000 })
         return
     end
 
@@ -958,7 +960,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     for k, v in pairs(horses) do
         options[#options + 1] = {
             title = v.name,
-            description = Lang:t('menu.sell_your_horse'),
+            description = locale('cl_menu_sell_your_horse'),
             icon = 'fa-solid fa-horse',
             serverEvent = 'rsg-horses:server:deletehorse',
             args = { horseid = v.id },
@@ -967,7 +969,7 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     end
     lib.registerContext({
         id = 'sellhorse_menu',     -- Corrected the context ID here
-        title = Lang:t('menu.sell_horse_menu'),
+        title = locale('cl_menu_sell_horse_menu'),
         position = 'top-right',
         menu = 'stable_menu',
         onBack = function() end,
@@ -1079,7 +1081,7 @@ end)
 RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if horsePed == 0 then
-            lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
+            lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
             return
         end
 
@@ -1152,7 +1154,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local hasItem = RSGCore.Functions.HasItem('horse_lantern', 1)
 
     if not hasItem then
-        lib.notify({ title = Lang:t('error.no_lantern'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_lantern'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1161,7 +1163,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     local distance = #(pcoords - hcoords)
 
     if distance > 2.0 then
-        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1176,7 +1178,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
         lanternequiped = true
         lanternUsed = true
 
-        lib.notify({ title = Lang:t('primary.lantern_equiped'), type = 'info', duration = 7000 })
+        lib.notify({ title = locale('cl_primary_lantern_equiped'), type = 'info', duration = 7000 })
         return
     end
 
@@ -1187,7 +1189,7 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
         lanternequiped = false
         lanternUsed = true
 
-        lib.notify({ title = Lang:t('primary.lantern_removed'), type = 'info', duration = 7000 })
+        lib.notify({ title = locale('cl_primary_lantern_removed'), type = 'info', duration = 7000 })
         return
     end
 end)
@@ -1199,7 +1201,7 @@ RegisterNetEvent('rsg-horses:client:equipHorseHolster')
 AddEventHandler('rsg-horses:client:equipHorseHolster', function()
     local hasItem = RSGCore.Functions.HasItem('horse_holster', 1)
     if not hasItem then
-        lib.notify({ title = Lang:t('error.no_holster'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_holster'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1208,7 +1210,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
     local distance = #(pcoords - hcoords)
 
     if distance > 2.0 then
-        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1223,7 +1225,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
         holsterequiped = true
         holsterUsed = true
 
-        lib.notify({ title = Lang:t('primary.holster_equiped'), type = 'info', duration = 7000 })
+        lib.notify({ title = locale('cl_primary_holster_equiped'), type = 'info', duration = 7000 })
         return
     end
 
@@ -1234,7 +1236,7 @@ AddEventHandler('rsg-horses:client:equipHorseHolster', function()
         holsterequiped = false
         holsterUsed = true
 
-        lib.notify({ title = Lang:t('primary.holster_removed'), type = 'info', duration = 7000 })
+        lib.notify({ title = locale('cl_primary_holster_removed'), type = 'info', duration = 7000 })
         return
     end
 end)
@@ -1248,7 +1250,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
-        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1296,13 +1298,13 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
             else
                 -- have invalid config
-                lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' have INVALID ismedicine config!', type = 'error', duration = 7000 })
+                lib.notify({ title = locale('cl_error_feed')..' ' .. itemName .. ' '..locale('cl_error_feed_invalid'), type = 'error', duration = 7000 })
             end
         else
-            lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' do not have ismedicine config!', type = 'error', duration = 7000 })
+            lib.notify({ title = locale('cl_error_feed')..' ' .. itemName .. ' '..locale('cl_error_feed_no_med'), type = 'error', duration = 7000 })
         end
     else
-        lib.notify({ title = '[FEED] Feed: ' .. itemName .. ' do not exits!', type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_feed')..' ' .. itemName .. ' '.. locale('cl_error_feed_no_exist'), type = 'error', duration = 7000 })
     end
 end)
 
@@ -1313,7 +1315,7 @@ AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
     local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
-        lib.notify({ title = Lang:t('error.need_to_be_closer'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
         return
     end
 
@@ -1355,13 +1357,13 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
     local distance = #(playercoords - horsecoords)
 
     if horsePed == 0 then
-        lib.notify({ title = Lang:t('error.no_horse_out'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
         return
     end
 
     if IsEntityDead(horsePed) then
         if distance > 1.5 then
-            lib.notify({ title = Lang:t('error.horse_too_far'), type = 'error', duration = 7000 })
+            lib.notify({ title = locale('cl_error_horse_too_far'), type = 'error', duration = 7000 })
             return
         end
 
@@ -1384,7 +1386,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
         TriggerServerEvent('rsg-horses:server:revivehorse', item)
         SpawnHorse()
     else
-        lib.notify({ title = Lang:t('error.horse_not_injured_dead'), type = 'error', duration = 7000 })
+        lib.notify({ title = locale('cl_error_horse_not_injured_dead'), type = 'error', duration = 7000 })
     end
 end)
 
@@ -1437,7 +1439,7 @@ end)
 
 RegisterNetEvent('rsg-horses:client:OpenHorseShop')
 AddEventHandler('rsg-horses:client:OpenHorseShop', function()
-    TriggerServerEvent('rsg-shops:server:openstore', 'horse', 'horse', 'Horse Shop')
+    TriggerServerEvent('rsg-shops:server:openstore', 'horse', 'horse', locale('cl_horse_shop') )
 end)
 
 -------------------------------------------------------------------------------
@@ -1451,20 +1453,20 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
             for i = 1, #results do
                 local results = results[i]
                 options[#options + 1] = {
-                    title = 'Horse: '..results.name,
-                    description = 'is stabled in '..results.stable..' active: '..results.active,
+                    title = locale('cl_horse')..': '..results.name,
+                    description = locale('cl_horse_is_stabled')..' '..results.stable..' '..locale('cl_horse_active')..': '..results.active,
                     icon = 'fa-solid fa-horse',
                 }
             end
             lib.registerContext({
                 id = 'showhorse_menu',
-                title = 'Find Your Horse',
+                title = locale('cl_horse_find'),
                 position = 'top-right',
                 options = options
             })
             lib.showContext('showhorse_menu')
         else
-            lib.notify({ title = 'no horses', type = 'error', duration = 7000 })
+            lib.notify({ title = locale('cl_error_horse_no'), type = 'error', duration = 7000 })
         end
 
     end)

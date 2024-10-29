@@ -1,6 +1,7 @@
 local spawnedHorses = {}
+lib.locale()
 
-function SpawnHorses(horsemodel, horsecoords, heading)
+local function SpawnHorses(horsemodel, horsecoords, heading)
     
     local spawnedHorse = CreatePed(horsemodel, horsecoords.x, horsecoords.y, horsecoords.z - 1.0, heading, false, false, 0, 0)
     SetEntityAlpha(spawnedHorse, 0, false)
@@ -48,14 +49,14 @@ CreateThread(function()
                                 label = self.horsename..' $'..self.price,
                                 targeticon = "fas fa-eye",
                                 action = function()
-                                    local dialog = lib.inputDialog('Horse Setup', {
-                                        { type = 'input', label = 'Horse Name', required = true },
+                                    local dialog = lib.inputDialog(locale('cl_setup'), {
+                                        { type = 'input', label = locale('cl_setup_name'), required = true },
                                         {
                                             type = 'select',
-                                            label = 'Horse Gender',
+                                            label = locale('cl_setup_gender'),
                                             options = {
-                                                { value = 'male',   label = 'Gelding' },
-                                                { value = 'female', label = 'Mare' }
+                                                { value = 'male',   label = locale('cl_setup_gender_a') },
+                                                { value = 'female', label = locale('cl_setup_gender_b') }
                                             }
                                         }
                                     })
