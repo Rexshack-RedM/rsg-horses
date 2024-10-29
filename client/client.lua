@@ -443,7 +443,7 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)                    -- SetRandomOutfitVariation
                 horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                 Citizen.InvokeNative(0x9CB1A1623062F402, horseBlip, data.name)              -- SetBlipName
-                Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true)               -- SetPedOwnsAnimal
+                Citizen.InvokeNative(0x931B241409216C1F, cache.ped, horsePed, true)         -- SetPedOwnsAnimal
 
                 SetModelAsNoLongerNeeded(model)
                 SetEntityAsNoLongerNeeded(horsePed)
