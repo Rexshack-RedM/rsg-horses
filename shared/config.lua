@@ -1,4 +1,5 @@
 Config = {}
+lib.locale()
 
 -- debug
 Config.Debug = false
@@ -140,7 +141,7 @@ Config.MaxBondingLevel = 5000
 -- config blips
 ---------------------------------
 Config.Blip = {
-    blipName = Lang:t('menu.horse_blip_name'), -- Config.Blip.blipName
+    blipName = locale('cf_menu_horse_blip_name'), -- Config.Blip.blipName
     blipSprite = 'blip_shop_horse', -- Config.Blip.blipSprite
     blipScale = 0.1 -- Config.Blip.blipScale
 }
