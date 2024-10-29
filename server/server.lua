@@ -1,9 +1,10 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
+lib.locale()
 
------------------------------------------------------------------------
-
+----------------------------------
 -- find horse command
-RSGCore.Commands.Add('findhorse', 'find where your horses are stored', {}, false, function(source)
+----------------------------------
+RSGCore.Commands.Add('findhorse', locale('sv_command_find'), {}, false, function(source)
     local src = source
     TriggerClientEvent('rsg-horses:client:gethorselocation', src)
 end)
@@ -19,8 +20,9 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetAllHorses', function(sour
     end
 end)
 
------------------------------------------------------------------------
-
+----------------------------------
+-- Items
+----------------------------------
 -- brush horse
 RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
@@ -82,13 +84,16 @@ RSGCore.Functions.CreateUseableItem('horse_reviver', function(source, item)
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', { ['@citizenid'] = cid, ['@active'] = 1 })
 
     if not result[1] then
-        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_active_horse'), type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_active_horse'), type = 'error', duration = 5000 })
         return
     end
 
     TriggerClientEvent('rsg-horses:client:revivehorse', src, item, result[1])
 end)
 
+----------------------------------
+-- Revive
+----------------------------------
 RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(source)
@@ -98,13 +103,14 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     end
 end)
 
--------------------------------------------------------------------------------
-
+----------------------------------
+-- Buy & active
+----------------------------------
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_cash'), type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
     end
     local horseid = GenerateHorseid()
@@ -119,7 +125,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable,
         ['@born'] = os.time()
     })
     Player.Functions.RemoveMoney('cash', price)
-    TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.horse_owned'), type = 'success', duration = 5000 })
+    TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
@@ -154,14 +160,16 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     local newName = MySQL.query.await('UPDATE player_horses SET name = ? WHERE citizenid = ? AND active = ?' , {name, Player.PlayerData.citizenid, 1})
 
     if newName == nil then
-        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.name_change_failed'), type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_name_change_failed'), type = 'error', duration = 5000 })
         return
     end
 
-    TriggerClientEvent('ox_lib:notify', src, {title = 'Horse name changed to \''..name..'\' successfully!', type = 'success', duration = 5000 })
+    TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_name_change').. ' \''..name..'\' '..locale('sv_success_successfully'), type = 'success', duration = 5000 })
 end)
 
+----------------------------------
 -- sell horse
+----------------------------------
 RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -181,7 +189,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
         if v.horsemodel == modelHorse then
             local sellprice = v.horseprice * 0.5
             Player.Functions.AddMoney('cash', sellprice)
-            TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.horse_sold_for')..sellprice, type = 'success', duration = 5000 })
+            TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_sold_for')..sellprice, type = 'success', duration = 5000 })
         end
     end
 end)
@@ -208,8 +216,10 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(so
         return
     end
 end)
-------------------------------------- Horse Customization  -------------------------------------
 
+-----------------------------------
+-- Horse Customization
+----------------------------------
 -- get active horse components callback
 RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(source, cb)
     local src = source
@@ -233,7 +243,7 @@ RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedat
     local citizenid = Player.PlayerData.citizenid
     local horseid = horsedata.horseid
     if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('error.no_cash'), type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
     end
 
@@ -241,7 +251,7 @@ RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedat
         MySQL.update('UPDATE player_horses SET components = ? WHERE citizenid = ? AND horseid = ?', {json.encode(component), citizenid, horseid})
 
         Player.Functions.RemoveMoney('cash', price)
-        TriggerClientEvent('ox_lib:notify', src, {title = Lang:t('success.component_saved') .. price, type = 'success', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_component_saved') .. price, type = 'success', duration = 5000 })
     end
 end)
 
@@ -251,7 +261,7 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, sou
     local Playercid2 = Player2.PlayerData.citizenid
     MySQL.update('UPDATE player_horses SET citizenid = ? WHERE horseid = ? AND active = ?', {Playercid2, horseId, 1})
     MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Playercid2, 1})
-    TriggerClientEvent('ox_lib:notify', playerId, {title = Lang:t('success.horse_owned'), type = 'success', duration = 5000 })
+    TriggerClientEvent('ox_lib:notify', playerId, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
 -- generate horseid
@@ -268,6 +278,9 @@ function GenerateHorseid()
     return horseid
 end
 
+----------------------------------
+-- others
+----------------------------------
 -- Check if Player has horsebrush before brush the horse
 RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     local src = source
@@ -275,7 +288,7 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     if Player.Functions.GetItemByName(item) then
         TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item)
     else
-        TriggerClientEvent('ox_lib:notify', src, {title = 'You don\'t have '..item, type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_brush')..' '..item, type = 'error', duration = 5000 })
     end
 end)
 -- end
@@ -307,14 +320,14 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
+    local data = { label = locale('sv_horse_inventory'), maxweight = invWeight, slots = invSlots }
     local stashName = horsestash
     exports['rsg-inventory']:OpenInventory(src, stashName, data)
 end)
 
---------------------------------------------------------------------------------------------------
+----------------------------------
 -- horse check system
---------------------------------------------------------------------------------------------------
+----------------------------------
 UpkeepInterval = function()
 
     local result = MySQL.query.await('SELECT * FROM player_horses')
@@ -335,17 +348,17 @@ UpkeepInterval = function()
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
-            TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', 'Horse Died', 'red', horsename..' belonging to '..ownercid..' died of old age!')
+            TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename..' '..locale('sv_log_horse_belong')..' '..ownercid..' '..locale('sv_log_horse_dead'))
 
             -- telegram message to the horse owner
             MySQL.insert('INSERT INTO telegrams (citizenid, recipient, sender, sendername, subject, sentDate, message) VALUES (?, ?, ?, ?, ?, ?, ?)',
             {   ownercid,
-                'Horse Owner',
+                locale('sv_telegram_owner'),
                 '22222222',
-                'Horse Stables',
-                horsename..' passed away',
+                locale('sv_telegram_stables'),
+                horsename..' '..locale('sv_telegram_away'),
                 os.date('%x'),
-                'I am sorry to inform you that your horse '..horsename..' has passed away, please visit your friendly horse trainer to discuss a replacement!',
+                locale('sv_telegram_inform')..' '..horsename..' '..locale('sv_telegram_has_passed'),
             })
 
             goto continue
@@ -356,7 +369,7 @@ UpkeepInterval = function()
     ::continue::
     
     if Config.EnableServerNotify then
-        print('horse check cycle complete')
+        print(locale('sv_print'))
     end
 
     SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
