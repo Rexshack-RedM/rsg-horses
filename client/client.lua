@@ -938,7 +938,7 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
 
     lib.registerContext({
         id = 'horses_view',
-        title = locale('menu_my_horses'),
+        title = locale('cl_menu_my_horses'),
         position = 'top-right',
         menu = 'stable_menu',
         onBack = function() end,
