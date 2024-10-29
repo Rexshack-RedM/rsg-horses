@@ -1451,10 +1451,10 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
         if results ~= nil then
             local options = {}
             for i = 1, #results do
-                local results = results[i]
+                local result = results[i]
                 options[#options + 1] = {
-                    title = locale('cl_horse')..': '..results.name,
-                    description = locale('cl_horse_is_stabled')..' '..results.stable..' '..locale('cl_horse_active')..': '..results.active,
+                    title = locale('cl_horse')..': '..result.name,
+                    description = locale('cl_horse_is_stabled')..' '..result.stable..' '..locale('cl_horse_active')..': '..result.active,
                     icon = 'fa-solid fa-horse',
                 }
             end
