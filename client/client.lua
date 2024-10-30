@@ -443,7 +443,7 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)                    -- SetRandomOutfitVariation
                 horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                 Citizen.InvokeNative(0x9CB1A1623062F402, horseBlip, data.name)              -- SetBlipName
-                Citizen.InvokeNative(0x931B241409216C1F, ped, horsePed, true)               -- SetPedOwnsAnimal
+                Citizen.InvokeNative(0x931B241409216C1F, cache.ped, horsePed, true)         -- SetPedOwnsAnimal
 
                 SetModelAsNoLongerNeeded(model)
                 SetEntityAsNoLongerNeeded(horsePed)
@@ -1374,15 +1374,15 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
 
         loadAnimDict(healAnim1Dict1)
 
-        ClearPedTasks(playerPed)
-        ClearPedSecondaryTask(playerPed)
-        ClearPedTasksImmediately(playerPed)
-        FreezeEntityPosition(playerPed, false)
-        SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
-        TaskPlayAnim(playerPed, healAnim1Dict1, healAnim1, 1.0, 1.0, -1, 0, false, false, false)
+        ClearPedTasks(cache.ped)
+        ClearPedSecondaryTask(cache.ped)
+        ClearPedTasksImmediately(cache.ped)
+        FreezeEntityPosition(cache.ped, false)
+        SetCurrentPedWeapon(cache.ped, `WEAPON_UNARMED`, true)
+        TaskPlayAnim(cache.ped, healAnim1Dict1, healAnim1, 1.0, 1.0, -1, 0, false, false, false)
         Wait(3000)
-        ClearPedTasks(playerPed)
-        FreezeEntityPosition(playerPed, false)
+        ClearPedTasks(cache.ped)
+        FreezeEntityPosition(cache.ped, false)
         TriggerServerEvent('rsg-horses:server:revivehorse', item)
         SpawnHorse()
     else
@@ -1451,10 +1451,10 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
         if results ~= nil then
             local options = {}
             for i = 1, #results do
-                local results = results[i]
+                local result = results[i]
                 options[#options + 1] = {
-                    title = locale('cl_horse')..': '..results.name,
-                    description = locale('cl_horse_is_stabled')..' '..results.stable..' '..locale('cl_horse_active')..': '..results.active,
+                    title = locale('cl_horse')..': '..result.name,
+                    description = locale('cl_horse_is_stabled')..' '..result.stable..' '..locale('cl_horse_active')..': '..result.active,
                     icon = 'fa-solid fa-horse',
                 }
             end
