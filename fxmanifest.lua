@@ -3,10 +3,13 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 game 'rdr3'
 
 description 'rsg-horses'
-version '2.0.0'
+version '1.4.8'
 
 shared_scripts {
     '@ox_lib/init.lua',
+    '@rsg-core/shared/locale.lua',
+    'locales/en.lua',
+    'locales/*.lua',
     'shared/config.lua',
 }
 
@@ -21,7 +24,6 @@ client_scripts {
 
 files {
     'shared/horse_comp.lua',
-    'locales/*.json',
 }
 
 server_scripts {

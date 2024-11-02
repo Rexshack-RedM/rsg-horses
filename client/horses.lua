@@ -1,7 +1,10 @@
 local spawnedHorses = {}
-lib.locale()
 
-function SpawnHorses(horsemodel, horsecoords, heading)
+local function SpawnHorses(horsemodel, horsecoords, heading, deleteHorseForChange, oldhorsemodel)
+
+    if deleteHorseForChange then
+        DeleteEntity(oldhorsemodel)
+    end
     
     local spawnedHorse = CreatePed(horsemodel, horsecoords.x, horsecoords.y, horsecoords.z - 1.0, heading, false, false, 0, 0)
     SetEntityAlpha(spawnedHorse, 0, false)
@@ -24,6 +27,162 @@ function SpawnHorses(horsemodel, horsecoords, heading)
     return spawnedHorse
 end
 
+
+-- Horse Handler
+-- horsecoords , horsemodel , horseprice , horsename, oldkey, oldmodel
+
+local function OpenHorseMenu(data)
+    local menus = {}
+    --print(data.horsesmenu)
+    if not data.horsesmenu then
+        for k, v in pairs (Config.HorsesCFG) do
+            menus[#menus+1] = {
+                title = k,
+                onSelect = function()
+                    local dbs = {}
+                    dbs.horsesmenu = true
+                    dbs.horsemenuid = k
+                    dbs.horsecoords = data.horsecoords
+                    dbs.oldmodel = data.oldmodel
+                    dbs.oldkey = data.oldkey
+                    dbs.pedd = data.pedd
+                    dbs.stableid = data.stableid
+                    dbs.head = data.head
+                    print(json.encode(dbs))
+                    OpenHorseMenu(dbs)
+                end
+            }
+        end
+    else
+        for k, v in pairs (Config.HorsesCFG[data.horsemenuid]) do
+            menus[#menus+1] = {
+                title = v.horsename,
+                description = '$'..tonumber(v.horseprice),
+                onSelect = function()
+                    print(data.oldmodel)
+                    local dbss = {
+                        horsecoords = data.horsecoords,
+                        oldmodel =  data.oldmodel,
+                        oldkey = data.oldkey,
+                        horsemodel = v.horsemodel,
+                        horsename = v.horsename,
+                        stableid = data.stableid,
+                        head = data.head,
+                        horseprice = tonumber(v.horseprice),
+                    }
+                    --print(json.encode(dbss))
+                    TriggerServerEvent('rsg-horses:server:changehorse', dbss)
+
+                end
+            }
+        end
+
+    end
+
+    lib.registerContext({
+        id = 'stable_menu_horses_menu',
+        title = Lang:t('menu.stable_menu_horses'),
+        options = menus,
+    })
+    lib.showContext("stable_menu_horses_menu")
+
+end
+
+local function HorsesHandler(data)
+    local coords = data.horsecoords
+    print(json.encode(data))
+    local newpointCreated = lib.points.new({
+        coords = coords,
+        distance = Config.DistanceSpawn,
+        model = data.horsemodel,
+        ped = nil,
+        price = data.horseprice,
+        heading = data.head,
+        oldmodel = data.oldmodel,
+        horsename = data.horsename,
+        stableid = data.stableid
+    })
+    
+    newpointCreated.onEnter = function(self)
+        if not self.ped then
+            lib.requestModel(self.model, 10000)
+            self.ped = SpawnHorses(self.model, self.coords, self.heading, true, self.oldmodel) -- spawn horse
+            print(self.ped)
+            pcall(function ()
+                exports['rsg-target']:AddTargetEntity(self.ped, {
+                    options = {
+                        {
+                            icon = "fas fa-horse-head",
+                            label = self.horsename..' $'..self.price,
+                            targeticon = "fas fa-eye",
+                            action = function()
+                                local dialog = lib.inputDialog('Horse Setup', {
+                                    { type = 'input', label = 'Horse Name', required = true },
+                                    {
+                                        type = 'select',
+                                        label = 'Horse Gender',
+                                        options = {
+                                            { value = 'male',   label = 'Gelding' },
+                                            { value = 'female', label = 'Mare' }
+                                        }
+                                    }
+                                })
+            
+                                if not dialog then return end
+            
+                                local setHorseName = dialog[1]
+                                local setHorseGender = dialog[2]
+                                
+                                if setHorseName and setHorseGender then
+                                    TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, self.stableid, setHorseName, setHorseGender)
+                                else
+                                    return
+                                end
+                            end
+                        },
+                        {
+                            icon = "fas fa-horse-head",
+                            label = "Change Horse",
+                            targeticon = "fas fa-eye",
+                            action = function()
+                                local db = {}
+                                db.horsesmenu = false
+                                db.horsecoords = self.coords
+                                db.head = self.heading
+                                db.oldmodel = self.ped
+                                --db.oldkey = key
+                                db.pedd = self.ped
+                                db.stableid =  self.stableid
+                                OpenHorseMenu(db)
+                            end
+                        }
+                    },
+                    distance = 2.5,
+                })
+            end)
+        end
+    end
+
+    newpointCreated.onExit = function(self)
+        exports['rsg-target']:RemoveTargetEntity(self.ped, self.horsename..' $'..self.price)
+        if self.ped and DoesEntityExist(self.ped) then
+            if Config.FadeIn then
+                for i = 255, 0, -51 do
+                    Wait(50)
+                    SetEntityAlpha(self.ped, i, false)
+                end
+            end
+            DeleteEntity(self.ped)
+            self.ped = nil
+        end
+    end
+    
+    
+    spawnedHorses[#spawnedHorses + 1] = newpointCreated
+
+end
+
+
 CreateThread(function()
     for key, value in pairs(Config.HorseSettings) do
         local coords = value.horsecoords
@@ -34,7 +193,8 @@ CreateThread(function()
             ped = nil,
             price = value.horseprice,
             heading = coords.w,
-            horsename = value.horsename
+            horsename = value.horsename,
+            stableid = value.stableid
         })
         
         newpoint.onEnter = function(self)
@@ -49,14 +209,14 @@ CreateThread(function()
                                 label = self.horsename..' $'..self.price,
                                 targeticon = "fas fa-eye",
                                 action = function()
-                                    local dialog = lib.inputDialog(locale('cl_setup'), {
-                                        { type = 'input', label = locale('cl_setup_name'), required = true },
+                                    local dialog = lib.inputDialog('Horse Setup', {
+                                        { type = 'input', label = 'Horse Name', required = true },
                                         {
                                             type = 'select',
-                                            label = locale('cl_setup_gender'),
+                                            label = 'Horse Gender',
                                             options = {
-                                                { value = 'male',   label = locale('cl_setup_gender_a') },
-                                                { value = 'female', label = locale('cl_setup_gender_b') }
+                                                { value = 'male',   label = 'Gelding' },
+                                                { value = 'female', label = 'Mare' }
                                             }
                                         }
                                     })
@@ -67,10 +227,27 @@ CreateThread(function()
                                     local setHorseGender = dialog[2]
                                     
                                     if setHorseName and setHorseGender then
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, value.stableid, setHorseName, setHorseGender)
+                                        TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, self.stableid, setHorseName, setHorseGender)
                                     else
                                         return
                                     end
+                                end
+                            },
+                            {
+                                icon = "fas fa-horse-head",
+                                label = "Change Horse",
+                                targeticon = "fas fa-eye",
+                                action = function()
+
+                                    local db = {}
+                                    db.horsesmenu = false
+                                    db.horsecoords = self.coords
+                                    db.head = self.heading
+                                    db.oldmodel = self.ped
+                                    db.oldkey = key
+                                    db.pedd = self.ped
+                                    db.stableid =  self.stableid
+                                    OpenHorseMenu(db)
                                 end
                             }
                         },
@@ -98,6 +275,16 @@ CreateThread(function()
     end
 end)
 
+
+
+---------------------------------------------------
+----- Horse Change Event
+---------------------------------------------------
+RegisterNetEvent('rsg-horses:client:changeHorses', function(data)
+    HorsesHandler(data)
+end)
+
+
 -- cleanup
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
@@ -110,3 +297,5 @@ AddEventHandler("onResourceStop", function(resourceName)
         spawnedHorses[key] = nil
     end
 end)
+
+

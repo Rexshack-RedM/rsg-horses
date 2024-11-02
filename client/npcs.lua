@@ -1,5 +1,4 @@
 local spawnedPeds = {}
-lib.locale()
 
 local function NearNPC(npcmodel, npccoords, heading)
     local spawnedPed = CreatePed(npcmodel, npccoords.x, npccoords.y, npccoords.z - 1.0, heading, false, false, 0, 0)
@@ -45,7 +44,7 @@ CreateThread(function()
                         options = {
                             {
                                 icon = 'fa-solid fa-eye',
-                                label = locale('cl_menu'),
+                                label = 'Stable Menu',
                                 targeticon = 'fa-solid fa-eye',
                                 action = function()
                                     TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
@@ -59,7 +58,7 @@ CreateThread(function()
         end
 
         newpoint.onExit = function(self)
-            exports['rsg-target']:RemoveTargetEntity(self.ped, locale('cl_menu'))
+            exports['rsg-target']:RemoveTargetEntity(self.ped, 'Stable Menu')
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
                     for i = 255, 0, -51 do
@@ -80,7 +79,7 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
-        exports['rsg-target']:RemoveTargetEntity(v.ped, locale('cl_menu'))
+        exports['rsg-target']:RemoveTargetEntity(v.ped, 'Stable Menu')
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)
         end
