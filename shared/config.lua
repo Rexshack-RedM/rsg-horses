@@ -303,18 +303,183 @@ Config.HorseSettings = {
 
 
 Config.HorsesCFG = {
+    ["American Paint horse"] = {
+        {
+            horsemodel = 'A_C_Horse_AmericanPaint_Greyovero',
+            horseprice = 150,
+            horsename = 'Greyovero',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanPaint_Tobiano1',
+            horseprice = 150,
+            horsename = 'Tobiano White',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanPaint_Tobiano',
+            horseprice = 150,
+            horsename = 'Tobiano',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanPaint_Overo',
+            horseprice = 150,
+            horsename = 'Overo',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanPaint_SplashedWhite',
+            horseprice = 150,
+            horsename = 'Splash White',
+        },
+    },
+    ["Gypsy cob"] = {
+        {
+            horsemodel = 'a_c_horse_gypsycob_palominoblagdon',
+            horseprice = 200,
+            horsename = 'Palomino Blagdon',
+        },
+        {
+            horsemodel = 'a_c_horse_gypsycob_piebald',
+            horseprice = 200,
+            horsename = 'Piebald',
+        },
+        {
+            horsemodel = 'a_c_horse_gypsycob_splashedbay',
+            horseprice = 200,
+            horsename = 'Splashed Bay',
+        },
+        {
+            horsemodel = 'a_c_horse_gypsycob_splashedpiebald',
+            horseprice = 200,
+            horsename = 'Splashed Piebald',
+        },
+        {
+            horsemodel = 'a_c_horse_gypsycob_skewbald',
+            horseprice = 200,
+            horsename = 'Skewbald',
+        },
+        {
+            horsemodel = 'a_c_horse_gypsycob_whiteblagdon',
+            horseprice = 200,
+            horsename = 'White Blagdon',
+        },
+    },
+    ["American standard"] = {
+        {
+            horsemodel = 'A_C_Horse_AmericanStandardbred_Black',
+            horseprice = 200,
+            horsename = 'Black',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanStandardbred_Buckskin',
+            horseprice = 200,
+            horsename = 'Buck Skin',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanStandardbred_PalominoDapple',
+            horseprice = 200,
+            horsename = 'Palomino Dapple',
+        },
+        {
+            horsemodel = 'A_C_Horse_AmericanStandardbred_SilverTailBuckskin',
+            horseprice = 200,
+            horsename = 'Silver Tail Buck Skin',
+        },
+        {
+            horsemodel = 'a_c_horse_americanstandardbred_lightbuckskin',
+            horseprice = 200,
+            horsename = 'Light buck skin',
+        },
+    },
+    ["Andalusian"] = {
+        {
+            horsemodel = 'A_C_Horse_Andalusian_DarkBay',
+            horseprice = 200,
+            horsename = 'Dark Bay',
+        },
+        {
+            horsemodel = 'A_C_Horse_Andalusian_Perlino',
+            horseprice = 200,
+            horsename = 'Perlino',
+        },
+        {
+            horsemodel = 'A_C_Horse_Andalusian_RoseGray',
+            horseprice = 200,
+            horsename = 'Rose Gray',
+        },
+
+    },
+    ["Appaloosa"] = {
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_BlackSnowflake',
+            horseprice = 200,
+            horsename = 'Black Snow flake',
+        },
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_Blanket',
+            horseprice = 200,
+            horsename = 'Blanket',
+        },
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_BrownLeopard',
+            horseprice = 200,
+            horsename = 'Brown Leopard',
+        },
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_FewSpotted_PC',
+            horseprice = 200,
+            horsename = 'FewSpotted',
+        },
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_Leopard',
+            horseprice = 200,
+            horsename = 'Leopard',
+        },
+        {
+            horsemodel = 'A_C_Horse_Appaloosa_LeopardBlanket',
+            horseprice = 200,
+            horsename = 'Leopard Blanket',
+        },
+
+    },
     ["Arabian"] = {
         {
-            horsemodel = 'a_c_horse_criollo_dun',
-            horseprice = 150,
-            horsename = 'Criollo Dunn',
-        }
-    },
-    ["Arabiann"] = {
-        {
-            horsemodel = 'a_c_horse_breton_grullodun',
+            horsemodel = 'A_C_Horse_Arabian_Black',
             horseprice = 200,
-            horsename = 'Breton Grullo Dun',
-        }
-    }
+            horsename = 'Black',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_White2',
+            horseprice = 200,
+            horsename = 'Bay Arab',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_Grey',
+            horseprice = 200,
+            horsename = 'Grey',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_RedChestnut',
+            horseprice = 200,
+            horsename = 'Red White Chestnut',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_RedChestnut_PC',
+            horseprice = 200,
+            horsename = 'Red Chestnut',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_RoseGreyBay',
+            horseprice = 200,
+            horsename = 'Rose Grey Bay',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_WarpedBrindle_PC',
+            horseprice = 200,
+            horsename = 'Warped Brindle',
+        },
+        {
+            horsemodel = 'A_C_Horse_Arabian_White',
+            horseprice = 200,
+            horsename = 'White',
+        },
+    },
 }
