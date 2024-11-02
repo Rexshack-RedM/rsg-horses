@@ -1,6 +1,6 @@
 # rsg-horses
 
-# FzzY
+# Muhammad Abdullah Shurjeel
 - discord : https://discord.gg/fPjSxEHFMt
 - github : https://github.com/MuhammadAbdullahShurjeel
 
