@@ -109,6 +109,7 @@ end)
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+
     if (Player.PlayerData.money.cash < price) then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
@@ -125,6 +126,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable,
         ['@born'] = os.time()
     })
     Player.Functions.RemoveMoney('cash', price)
+    
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
@@ -320,11 +322,9 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    local data = { label = locale('sv_horse_inventory'), maxweight = invWeight, slots = invSlots }
-    local stashName = horsestash
-    exports['rsg-inventory']:OpenInventory(src, stashName, data)
+    local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
+    exports['rsg-inventory']:OpenInventory(src, horsestash, data)
 end)
-
 ----------------------------------
 -- horse check system
 ----------------------------------
