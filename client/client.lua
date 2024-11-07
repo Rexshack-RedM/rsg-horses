@@ -1118,30 +1118,10 @@ RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
             invSlots = Config.Level9InvSlots
         elseif horsexp >= 4000 then
             invWeight = Config.Level10InvWeight
-            invSlots = Config.Level10InvSlots
-            
+            invSlots = Config.Level10InvSlots   
         end
 
-        
-
         TriggerServerEvent('rsg-horses:server:openhorseinventory', horsestash, invWeight, invSlots)
-
-        RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, invWeight, invSlots)
-            local src = source
-            local Player = RSGCore.Functions.GetPlayer(src)
-        
-            if not Player then
-                print("Player not found!")
-                return
-            end
-        
-            print("Opening inventory for horse:", horsestash)
-            print("Weight:", invWeight, "Slots:", invSlots) 
-        
-            local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
-            local stashName = horsestash
-            exports['rsg-inventory']:OpenInventory(src, stashName, data)
-        end)
 
     end)
 end)
