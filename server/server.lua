@@ -325,6 +325,7 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
     exports['rsg-inventory']:OpenInventory(src, horsestash, data)
 end)
+
 ----------------------------------
 -- horse check system
 ----------------------------------

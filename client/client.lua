@@ -1092,56 +1092,56 @@ RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
         if horsexp <= 99 then
             invWeight = Config.Level1InvWeight
             invSlots = Config.Level1InvSlots
-        elseif horsexp <= 199 then
+            goto continue
+        end
+        if horsexp >= 100 and horsexp <= 199 then
             invWeight = Config.Level2InvWeight
             invSlots = Config.Level2InvSlots
-        elseif horsexp <= 299 then
+            goto continue
+        end
+        if horsexp >= 200 and horsexp <= 299 then
             invWeight = Config.Level3InvWeight
             invSlots = Config.Level3InvSlots
-        elseif horsexp <= 399 then
+            goto continue
+        end
+        if horsexp >= 300 and horsexp <= 399 then
             invWeight = Config.Level4InvWeight
             invSlots = Config.Level4InvSlots
-        elseif horsexp <= 499 then
+            goto continue
+        end
+        if horsexp >= 400 and horsexp <= 499 then
             invWeight = Config.Level5InvWeight
             invSlots = Config.Level5InvSlots
-        elseif horsexp <= 999 then
+            goto continue
+        end
+        if horsexp >= 500 and horsexp <= 999 then
             invWeight = Config.Level6InvWeight
             invSlots = Config.Level6InvSlots
-        elseif horsexp <= 1999 then
+            goto continue
+        end
+        if horsexp >= 1000 and horsexp <= 1999 then
             invWeight = Config.Level7InvWeight
             invSlots = Config.Level7InvSlots
-        elseif horsexp <= 2999 then
+            goto continue
+        end
+        if horsexp >= 2000 and horsexp <= 2999 then
             invWeight = Config.Level8InvWeight
             invSlots = Config.Level8InvSlots
-        elseif horsexp <= 3999 then
+            goto continue
+        end
+        if horsexp >= 3000 and horsexp <= 3999 then
             invWeight = Config.Level9InvWeight
             invSlots = Config.Level9InvSlots
-        elseif horsexp >= 4000 then
+            goto continue
+        end
+        if horsexp > 4000 then
             invWeight = Config.Level10InvWeight
             invSlots = Config.Level10InvSlots
-            
         end
 
-        
+        ::continue::
 
         TriggerServerEvent('rsg-horses:server:openhorseinventory', horsestash, invWeight, invSlots)
-
-        RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, invWeight, invSlots)
-            local src = source
-            local Player = RSGCore.Functions.GetPlayer(src)
-        
-            if not Player then
-                print("Player not found!")
-                return
-            end
-        
-            print("Opening inventory for horse:", horsestash)
-            print("Weight:", invWeight, "Slots:", invSlots) 
-        
-            local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
-            local stashName = horsestash
-            exports['rsg-inventory']:OpenInventory(src, stashName, data)
-        end)
 
     end)
 end)
