@@ -322,9 +322,14 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
+    local data = { 
+        label = locale('sv_horse_inventory'),
+        maxweight = invWeight,
+        slots = invSlots
+    }
     exports['rsg-inventory']:OpenInventory(src, horsestash, data)
 end)
+
 ----------------------------------
 -- horse check system
 ----------------------------------
