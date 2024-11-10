@@ -109,6 +109,7 @@ end)
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
 
     if (Player.PlayerData.money.cash < price) then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
@@ -199,6 +200,7 @@ end)
 lib.callback.register('rsg-horses:server:GetHorse', function(source, stable)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     local horses = {}
     local Result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND stable=@stable', { ['@citizenid'] = Player.PlayerData.citizenid, ['@stable'] = stable })
     for i = 1, #Result do
@@ -210,6 +212,7 @@ end)
 RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(source, cb)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     local cid = Player.PlayerData.citizenid
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', { ['@citizenid'] = cid, ['@active'] = 1 })
     if (result[1] ~= nil) then
@@ -226,6 +229,7 @@ end)
 RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(source, cb)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     local Playercid = Player.PlayerData.citizenid
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND active=@active', {
         ['@citizenid'] = Playercid,
@@ -242,6 +246,7 @@ end)
 RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedata, price)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     local citizenid = Player.PlayerData.citizenid
     local horseid = horsedata.horseid
     if (Player.PlayerData.money.cash < price) then
@@ -299,11 +304,15 @@ end)
 RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
     MySQL.update('UPDATE player_horses SET dirt = ? WHERE id = ? AND citizenid = ?', { dirt, activehorse, Player.PlayerData.citizenid })
 end)
 
 RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random, ped)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
     if random then
         local BucketID = RSGCore.Shared.RandomInt(1000, 9999)
         SetRoutingBucketPopulationEnabled(BucketID, false)
