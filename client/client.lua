@@ -237,6 +237,10 @@ local function createCamera(horses, horsesdata)
 end
 
 RegisterNetEvent('rsg-horses:client:custShop', function(data)
+    if (horsePed == 0) then
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
+        return
+    end
     local horsesdata = data.player
     local horseped = horsesdata.horse
     for k, v in pairs(Config.StableSettings) do
