@@ -10,7 +10,6 @@ function SpawnHorses(horsemodel, horsecoords, heading)
     SetEntityInvincible(spawnedHorse, true)
     FreezeEntityPosition(spawnedHorse, true)
     SetBlockingOfNonTemporaryEvents(spawnedHorse, true)
-    -- set relationship group between horse and player
     SetPedCanBeTargetted(spawnedPed, false)
 
     if Config.FadeIn then
