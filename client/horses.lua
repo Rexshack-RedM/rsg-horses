@@ -10,7 +10,7 @@ function SpawnHorses(horsemodel, horsecoords, heading)
     SetEntityInvincible(spawnedHorse, true)
     FreezeEntityPosition(spawnedHorse, true)
     SetBlockingOfNonTemporaryEvents(spawnedHorse, true)
-    SetPedCanBeTargetted(spawnedPed, false)
+    SetPedCanBeTargetted(spawnedHorse, false)
 
     if Config.FadeIn then
         for i = 0, 255, 51 do
