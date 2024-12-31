@@ -9,9 +9,7 @@ local function NearNPC(npcmodel, npccoords, heading)
     SetEntityInvincible(spawnedPed, true)
     FreezeEntityPosition(spawnedPed, true)
     SetBlockingOfNonTemporaryEvents(spawnedPed, true)
-    -- set relationship group between npc and player
-    SetPedRelationshipGroupHash(spawnedPed, GetPedRelationshipGroupHash(spawnedPed))
-    SetRelationshipBetweenGroups(1, GetPedRelationshipGroupHash(spawnedPed), `PLAYER`)
+    SetPedCanBeTargetted(spawnedPed, false)
 
     if Config.FadeIn then
         for i = 0, 255, 51 do
