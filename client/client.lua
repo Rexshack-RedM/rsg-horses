@@ -24,7 +24,6 @@ local HorsePrompts
 local HorseLayPrompts
 local SaddleBagPrompt
 local HorsePLayPrompts
-local BrushPrompt
 -------------------
 local closestStable = nil
 local Customize = false
@@ -82,18 +81,6 @@ function SetupHorsePrompts()
     PromptSetGroup(SaddleBagPrompt, HorsePrompts)
     Citizen.InvokeNative(0xC5F428EE08FA7F2C, SaddleBagPrompt,true)
     PromptRegisterEnd(SaddleBagPrompt)
-
-    local str3 = locale('cl_action_horsebrush')
-    BrushPrompt = PromptRegisterBegin()
-    PromptSetControlAction(BrushPrompt, Config.Prompt.HorseBrush)
-    str3 = CreateVarString(10, 'LITERAL_STRING', str3)
-    PromptSetText(BrushPrompt, str3)
-    PromptSetEnabled(BrushPrompt, 1)
-    PromptSetVisible(BrushPrompt, 1)
-    PromptSetStandardMode(BrushPrompt,1)
-    PromptSetGroup(BrushPrompt, HorsePrompts)
-    Citizen.InvokeNative(0xC5F428EE08FA7F2C, BrushPrompt,true)
-    PromptRegisterEnd(BrushPrompt)
 
 end
 
@@ -444,20 +431,59 @@ local function SpawnHorse()
 
                 getControlOfEntity(horsePed)
 
-                Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true)                    -- SetRandomOutfitVariation
+                local horseFlags = {
+                    [6] = true,
+                    [113] = false,
+                    [136] = false,
+                    [208] = true,
+                    [209] = true,
+                    [211] = true,
+                    [277] = true,
+                    [297] = true,
+                    [300] = false,
+                    [301] = false,
+                    [312] = false,
+                    [319] = true,
+                    [400] = true,
+                    [412] = false,
+                    [419] = false,
+                    [438] = false,
+                    [439] = false,
+                    [440] = false,
+                    [561] = true
+                }
+                for flag, val in pairs(horseFlags) do
+                    Citizen.InvokeNative(0x1913FE4CBF41C463, horsePed, flag, val); -- SetPedConfigFlag (kind of sets defaultbehavior)
+                end
+
+                local horseTunings = { 24, 25, 48 }
+                for _, flag in ipairs(horseTunings) do
+                    Citizen.InvokeNative(0x1913FE4CBF41C463, horsePed, flag, false); -- SetHorseTuning
+                end
+
                 horseBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, horsePed) -- BlipAddForEntity
                 Citizen.InvokeNative(0x9CB1A1623062F402, horseBlip, data.name)              -- SetBlipName
-                Citizen.InvokeNative(0x931B241409216C1F, cache.ped, horsePed, true)         -- SetPedOwnsAnimal
-
+                Citizen.InvokeNative(0x283978A15512B2FE, horsePed, true) -- SetRandomOutfitVariation
+                Citizen.InvokeNative(0xFE26E4609B1C3772, horsePed, "HorseCompanion", true) -- DecorSetBool
+                Citizen.InvokeNative(0xA691C10054275290, cache.ped, horsePed, 0) -- unknown
+                Citizen.InvokeNative(0x931B241409216C1F, cache.ped, horsePed, false) -- SetPedOwnsAnimal
+                Citizen.InvokeNative(0xED1C764997A86D5A, cache.ped, horsePed) -- unknown
+                Citizen.InvokeNative(0xB8B6430EAD2D2437, horsePed, GetHashKey('PLAYER_HORSE')) -- SetPedPersonality
+                Citizen.InvokeNative(0xDF93973251FB2CA5, player, true) -- SetPlayerMountStateActive
+                Citizen.InvokeNative(0xe6d4e435b56d5bd0, player, horsePed) -- SetPlayerOwnsMount
+                Citizen.InvokeNative(0xAEB97D84CDF3C00B, horsePed, false) -- SetAnimalIsWild
+                Citizen.InvokeNative(0xA691C10054275290, horsePed, player, 431)
+                Citizen.InvokeNative(0x6734F0A6A52C371C, player, 431)
+                Citizen.InvokeNative(0x024EC9B649111915, horsePed, true)
+                Citizen.InvokeNative(0xEB8886E1065654CD, horsePed, 10, "ALL", 0)
                 SetModelAsNoLongerNeeded(model)
                 SetEntityAsNoLongerNeeded(horsePed)
                 SetEntityAsMissionEntity(horsePed, true)
                 SetEntityCanBeDamaged(horsePed, true)
                 SetPedNameDebug(horsePed, data.name)
                 SetPedPromptName(horsePed, data.name)
-
-                -- set horse dirt
-                Citizen.InvokeNative(0x5DA12E025D47D4E5, horsePed, 16, data.dirt)
+                Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1) -- SetAnimalMood
+                Citizen.InvokeNative(0x5DA12E025D47D4E5, horsePed, 16, data.dirt) -- set horse dirt
 
                 horseComps[data.horseid] = json.decode(data.components)
 
@@ -468,14 +494,12 @@ local function SpawnHorse()
                 for category, value in pairs(horseComps[data.horseid]) do
                     local hash = getComponentHash(category, value)
                     if hash ~= 0 then
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(hash), true, true, true)
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(hash), true, true, true) -- ApplyShopItemToPed
+                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0xF772CED6, true, true, true) -- ApplyShopItemToPed (holster)
                     end
                 end
 
                 UpdatePedVariation(horsePed)
-
-                SetPedConfigFlag(horsePed, 297, true)                                                          -- PCF_ForceInteractionLockonOnTargetPed
-                Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1)                                          -- SetAnimalMood
 
                 -- set horse xp and gender
                 horsexp = data.horsexp
@@ -577,7 +601,7 @@ local function SpawnHorse()
                     horseBonding = 2450
                 end
 
-                Citizen.InvokeNative(0x09A59688C26D88DF, horsePed, 7, horseBonding)
+                Citizen.InvokeNative(0x09A59688C26D88DF, horsePed, 7, horseBonding) -- SetAttributePoints
 
                 BondingLevels()
                 -- horse bonding level: end
@@ -589,14 +613,16 @@ local function SpawnHorse()
                     faceFeature = 1.0
                 end
 
-                Citizen.InvokeNative(0xB8B6430EAD2D2437, horsePed, joaat('PLAYER_HORSE')) -- SetPedPersonality
-                Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, faceFeature)
+                Citizen.InvokeNative(0x5653AB26C82938CF, horsePed, 41611, faceFeature) -- SetCharExpression
                 Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
 
                 -- ModifyPlayerUiPromptForPed / Horse Target Prompts / (Block = 0, Hide = 1, Grey Out = 2)
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 28, 1, true) -- HORSE_ITEMS / Horse Cargo
                 --Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 35, 1, true) -- TARGET_INFO
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 45, 1, true) -- HORSE_WEAPONS_HOLD / Horse Weapons
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 49, 1, true) -- HORSE_BRUSH
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 50, 1, true) -- HORSE_FEED
+                Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 28, 1, true) -- HORSE_ITEMS
 
                 HorsePrompts = PromptGetGroupIdForTargetEntity(horsePed)
 
@@ -1072,9 +1098,6 @@ Citizen.CreateThread(function()
             if Citizen.InvokeNative(0xC92AC953F0A982AE, SaddleBagPrompt) then
                 TriggerEvent('rsg-horses:client:inventoryHorse')
             end
-            if Citizen.InvokeNative(0xC92AC953F0A982AE, BrushPrompt) then
-                TriggerServerEvent("rsg-horses:server:brushhorse", "horsebrush")
-            end
         end
     end
 end)
@@ -1194,53 +1217,6 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
         lanternUsed = true
 
         lib.notify({ title = locale('cl_primary_lantern_removed'), type = 'info', duration = 7000 })
-        return
-    end
-end)
-
--------------------------------------------------------------------------------
-
--- player equip horse holster
-RegisterNetEvent('rsg-horses:client:equipHorseHolster')
-AddEventHandler('rsg-horses:client:equipHorseHolster', function()
-    local hasItem = RSGCore.Functions.HasItem('horse_holster', 1)
-    if not hasItem then
-        lib.notify({ title = locale('cl_error_no_holster'), type = 'error', duration = 7000 })
-        return
-    end
-
-    local pcoords = GetEntityCoords(cache.ped)
-    local hcoords = GetEntityCoords(horsePed)
-    local distance = #(pcoords - hcoords)
-
-    if distance > 2.0 then
-        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
-        return
-    end
-
-    if holsterUsed then
-        holsterUsed = false
-        Wait(5000)
-    end
-
-    if holsterequiped == false then
-        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0xF772CED6, true, true, true)
-
-        holsterequiped = true
-        holsterUsed = true
-
-        lib.notify({ title = locale('cl_primary_holster_equiped'), type = 'info', duration = 7000 })
-        return
-    end
-
-    if holsterequiped == true then
-        Citizen.InvokeNative(0xD710A5007C2AC539, horsePed, -1408210128, 0)
-        Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, 0, 1, 1, 1, 0)
-
-        holsterequiped = false
-        holsterUsed = true
-
-        lib.notify({ title = locale('cl_primary_holster_removed'), type = 'info', duration = 7000 })
         return
     end
 end)
