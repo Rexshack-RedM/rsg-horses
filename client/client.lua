@@ -384,7 +384,6 @@ function getComponentHash(category, value)
     return 0
 end
 
--- spawn horse
 local function SpawnHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if (data) then
@@ -608,6 +607,14 @@ local function SpawnHorse()
 
                 horseSpawned = true
                 HorseCalled = true
+
+                -- Automatically equip holster if player has the item
+                local hasItem = RSGCore.Functions.HasItem('horse_holster', 1)
+                if hasItem and not holsterequiped then
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0xF772CED6, true, true, true)
+                    holsterequiped = true
+                    lib.notify({ title = locale('cl_primary_holster_equiped'), type = 'info', duration = 7000 })
+                end
 
                 if Config.Automount == true then
                     TaskMountAnimal(cache.ped, horsePed, 10000, -1, 1.0, 1, 0, 0)
