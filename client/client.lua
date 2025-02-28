@@ -34,6 +34,18 @@ local CurrentPrice = 0
 local initialHorseComps = {}
 lib.locale()
 
+CreateThread(function()
+    for _, v in pairs(Config.StableSettings) do
+        local uniqueName = v.stableid .. "horseshop"
+        
+        exports['rsg-core']:createPrompt(uniqueName, v.coords, RSGCore.Shared.Keybinds[Config.KeyBind], ('open horse shop'), {
+            type = 'client',
+            event = 'rsg-horses:client:stablemenu'
+        })
+       
+    end
+end)
+
 MenuData = {}
 TriggerEvent('rsg-menubase:getData', function(call)
     MenuData = call
