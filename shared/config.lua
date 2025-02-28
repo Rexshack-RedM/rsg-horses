@@ -6,7 +6,7 @@ Config.Debug = false
 
 -- horse inventory hotkey, please refer to '[framework]/rsg-core/shared/keybinds.lua' for complete list of hotkeys
 Config.HorseInvKey = 0x760A9C6F -- G
-
+Config.KeyBind = 'J'
 Config.Prompt = {
     HorseDrink = 0xD8CF0C95,
     HorseGraze = 0xD8CF0C95,
