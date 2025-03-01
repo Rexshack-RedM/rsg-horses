@@ -235,6 +235,9 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
             DoScreenFadeOut(0)
             repeat Wait(0) until IsScreenFadedOut()
             local ped = SpawnHorses(horseped, v.horsecustom, v.horsecustom.w)
+            DeleteEntity(horsePed)
+            horsePed = 0
+            HorseCalled = false
             TriggerServerEvent('rsg-horses:server:SetPlayerBucket', true, ped)
             createCamera(ped, horsesdata)
             DoScreenFadeIn(1000)
