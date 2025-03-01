@@ -1,5 +1,22 @@
+local RSGCore = exports['rsg-core']:GetCoreObject()
 local spawnedPeds = {}
 lib.locale()
+
+CreateThread(function()
+    for k,v in pairs(Config.StableSettings) do
+        exports['rsg-core']:createPrompt(v.stableid, v.coords, RSGCore.Shared.Keybinds[Config.KeyBind], locale('cl_menu'), {
+            type = 'client',
+            event = 'rsg-horses:client:stablemenu',
+            args = {v.stableid}
+        })
+        if v.showblip == true then
+            local StablesBlip = BlipAddForCoords(1664425300, v.coords)
+            SetBlipSprite(StablesBlip, joaat(Config.Blip.blipSprite), true)
+            SetBlipScale(StablesBlip, Config.Blip.blipScale)
+            SetBlipName(StablesBlip, Config.Blip.blipName)
+        end
+    end
+end)
 
 local function NearNPC(npcmodel, npccoords, heading)
     local spawnedPed = CreatePed(npcmodel, npccoords.x, npccoords.y, npccoords.z - 1.0, heading, false, false, 0, 0)
@@ -10,14 +27,12 @@ local function NearNPC(npcmodel, npccoords, heading)
     FreezeEntityPosition(spawnedPed, true)
     SetBlockingOfNonTemporaryEvents(spawnedPed, true)
     SetPedCanBeTargetted(spawnedPed, false)
-
     if Config.FadeIn then
         for i = 0, 255, 51 do
             Wait(50)
             SetEntityAlpha(spawnedPed, i, false)
         end
     end
-
     return spawnedPed
 end
 
@@ -39,25 +54,23 @@ CreateThread(function()
                 self.ped = NearNPC(self.model, self.coords, self.heading)
 
                 pcall(function ()
-                    exports['rsg-target']:AddTargetEntity(self.ped, {
-                        options = {
-                            {
-                                icon = 'fa-solid fa-eye',
-                                label = locale('cl_menu'),
-                                targeticon = 'fa-solid fa-eye',
-                                action = function()
-                                    TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
-                                end
-                            },
-                        },
-                        distance = 2.0,
+                    exports.ox_target:addLocalEntity(self.ped, {
+                        {
+                            name = 'npc_stablehand',
+                            icon = 'far fa-eye',
+                            label = locale('cl_menu'),
+                            onSelect = function()
+                                TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
+                            end,
+                            distance = 2.0
+                        }
                     })
                 end)
             end
         end
 
         newpoint.onExit = function(self)
-            exports['rsg-target']:RemoveTargetEntity(self.ped, locale('cl_menu'))
+            exports.ox_target:removeEntity(self.ped, 'npc_stablehand')
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
                     for i = 255, 0, -51 do
@@ -78,11 +91,10 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
-        exports['rsg-target']:RemoveTargetEntity(v.ped, locale('cl_menu'))
+        exports.ox_target:removeEntity(spawnedPed, 'npc_stablehand')
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)
         end
-
         spawnedPeds[k] = nil
     end
 end)

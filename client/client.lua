@@ -854,15 +854,6 @@ AddEventHandler('onResourceStop', function(resource)
     end
 end)
 
-CreateThread(function()
-    for key, value in pairs(Config.StableSettings) do
-        local StablesBlip = BlipAddForCoords(1664425300, value.coords)
-        SetBlipSprite(StablesBlip, joaat(Config.Blip.blipSprite), true)
-        SetBlipScale(StablesBlip, Config.Blip.blipScale)
-        SetBlipName(StablesBlip, Config.Blip.blipName)
-    end
-end)
-
 local HorseId = nil
 
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
