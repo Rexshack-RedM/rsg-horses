@@ -1010,7 +1010,7 @@ CreateThread(function()
 
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then -- call horse
             RSGCore.Functions.GetPlayerData(function(PlayerData)
-                if PlayerData.metadata["injail"] == 0 then
+                if PlayerData.metadata["injail"] == 0 and not PlayerData.metadata["isdead"] then
                     local coords = GetEntityCoords(cache.ped)
                     local horseCoords = GetEntityCoords(horsePed)
                     local distance = #(coords - horseCoords)
