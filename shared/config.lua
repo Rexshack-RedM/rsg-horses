@@ -51,6 +51,7 @@ Config.PriceComponent = {
 ---------------------------------
 -- general settings
 ---------------------------------
+Config.EnableTarget       = true -- toggle between target and prompt
 Config.TargetHelp         = false -- target help to use [L-ALT]
 Config.Automount          = false -- horse automount
 Config.SpawnOnRoadOnly    = false -- always spawn on road

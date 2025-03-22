@@ -4,11 +4,13 @@ lib.locale()
 
 CreateThread(function()
     for k,v in pairs(Config.StableSettings) do
-        exports['rsg-core']:createPrompt(v.stableid, v.coords, RSGCore.Shared.Keybinds[Config.KeyBind], locale('cl_menu'), {
-            type = 'client',
-            event = 'rsg-horses:client:stablemenu',
-            args = {v.stableid}
-        })
+        if not Config.EnableTarget then
+            exports['rsg-core']:createPrompt(v.stableid, v.coords, RSGCore.Shared.Keybinds[Config.KeyBind], locale('cl_menu'), {
+                type = 'client',
+                event = 'rsg-horses:client:stablemenu',
+                args = {v.stableid}
+            })
+        end
         if v.showblip == true then
             local StablesBlip = BlipAddForCoords(1664425300, v.coords)
             SetBlipSprite(StablesBlip, joaat(Config.Blip.blipSprite), true)
@@ -54,17 +56,19 @@ CreateThread(function()
                 self.ped = NearNPC(self.model, self.coords, self.heading)
 
                 pcall(function ()
-                    exports.ox_target:addLocalEntity(self.ped, {
-                        {
-                            name = 'npc_stablehand',
-                            icon = 'far fa-eye',
-                            label = locale('cl_menu'),
-                            onSelect = function()
-                                TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
-                            end,
-                            distance = 2.0
-                        }
-                    })
+                    if Config.EnableTarget then
+                        exports.ox_target:addLocalEntity(self.ped, {
+                            {
+                                name = 'npc_stablehand',
+                                icon = 'far fa-eye',
+                                label = locale('cl_menu'),
+                                onSelect = function()
+                                    TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
+                                end,
+                                distance = 2.0
+                            }
+                        })
+                    end
                 end)
             end
         end
