@@ -1413,7 +1413,7 @@ end)
 
 RegisterNetEvent('rsg-horses:client:OpenHorseShop')
 AddEventHandler('rsg-horses:client:OpenHorseShop', function()
-    TriggerServerEvent('rsg-shops:server:openstore', 'horse', 'horse', locale('cl_horse_shop') )
+    TriggerServerEvent('rsg-horses:server:openShop')
 end)
 
 -------------------------------------------------------------------------------
