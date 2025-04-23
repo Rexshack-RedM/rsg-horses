@@ -335,6 +335,29 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     exports['rsg-inventory']:OpenInventory(src, horsestash, data)
 end)
 
+--------------------------------------
+-- register shop
+--------------------------------------
+CreateThread(function()
+    exports['rsg-inventory']:CreateShop({
+        name = 'horse',
+        label = locale('cl_horse_shop'),
+        slots = #Config.horsesShopItems,
+        items = Config.horsesShopItems,
+        persistentStock = Config.PersistStock,
+    })
+end)
+
+--------------------------------------
+-- open shop
+--------------------------------------
+RegisterNetEvent('rsg-horses:server:openShop', function()
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+    exports['rsg-inventory']:OpenShop(src, 'horse')
+end)
+
 ----------------------------------
 -- horse check system
 ----------------------------------
