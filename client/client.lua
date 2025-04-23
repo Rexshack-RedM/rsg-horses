@@ -122,9 +122,12 @@ local function Flee()
         SetClosestStableLocation()
         TriggerServerEvent('rsg-horses:server:fleeStoreHorse', closestStable)
     end
+    SetEntityAsMissionEntity(horsePed, true, true)
     DeleteEntity(horsePed)
+    SetEntityAsNoLongerNeeded(horsePed)
     horsePed = 0
     HorseCalled = false
+    if horseBlip then RemoveBlip(horseBlip) horseBlip = nil end
 end
 
 ------------------------------------
@@ -182,18 +185,18 @@ local function CameraPromptHorse(horses)
     local promptLabel = locale('cl_custom_price') .. ' : $'
     local lightRange, lightIntensity = 15.0, 50.0
     local rotateLeft, rotateRight = Config.Prompt.Rotate[1], Config.Prompt.Rotate[2]
-    
+
     CreateThread(function()
         PromptCustom()
         while Customize do
             Wait(0)
-            
+
             local crds = GetEntityCoords(horses)
             DrawLightWithRange(crds.x - 5.0, crds.y - 5.0, crds.z + 1.0, 255, 255, 255, lightRange, lightIntensity)
-            
+
             local label = VarString(10, 'LITERAL_STRING', promptLabel .. CurrentPrice)
             PromptSetActiveGroupThisFrame(CustomizePrompt, label)
-            
+
             local heading = GetEntityHeading(horses)
             if IsControlPressed(2, rotateLeft) then
                 SetEntityHeading(horses, heading - 1)
@@ -403,18 +406,17 @@ local function SpawnHorse()
 
                 local heading = 300
 
-                getControlOfEntity(horsePed)
+                local prevhorse = horsePed
+                if prevhorse then
+                    getControlOfEntity(prevhorse)
+                    if horseBlip then RemoveBlip(horseBlip) horseBlip = nil end
 
-                if horseBlip then
-                    RemoveBlip(horseBlip)
+                    SetEntityAsMissionEntity(prevhorse, true, true)
+                    DeleteEntity(prevhorse)
+                    DeletePed(prevhorse)
+                    SetEntityAsNoLongerNeeded(prevhorse)
+                    prevhorse = 0
                 end
-
-                SetEntityAsMissionEntity(horsePed, true, true)
-                DeleteEntity(horsePed)
-                DeletePed(horsePed)
-                SetEntityAsNoLongerNeeded(horsePed)
-
-                horsePed = 0
 
                 if onRoad then
                     horsePed = CreatePed(model, nodePosition, heading, true, true, 0, 0)
@@ -846,14 +848,13 @@ CreateThread(function()
 end)
 
 AddEventHandler('onResourceStop', function(resource)
-    if (resource == GetCurrentResourceName()) then
-        DestroyAllCams(true)
-        DisableCamera()
-        MenuData.CloseAll()
-        if (horsePed ~= 0) then
-            DeletePed(horsePed)
-            SetEntityAsNoLongerNeeded(horsePed)
-        end
+    if resource ~= GetCurrentResourceName() then return end
+    DestroyAllCams(true)
+    DisableCamera()
+    MenuData.CloseAll()
+    if (horsePed ~= 0) then
+        DeletePed(horsePed)
+        SetEntityAsNoLongerNeeded(horsePed)
     end
 end)
 
@@ -861,6 +862,11 @@ local HorseId = nil
 
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     HorseId = data.player.id
+    if horsePed ~= 0 then
+        DeletePed(horse)
+        SetEntityAsNoLongerNeeded(horsePed)
+        horsePed = 0
+    end
     TriggerServerEvent("rsg-horses:server:SetHoresActive", data.player.id)
     lib.notify({ title = locale('cl_success_title'), description = locale('cl_success_horse_active'), type = 'success', duration = 7000 })
 end)
