@@ -863,7 +863,7 @@ local HorseId = nil
 RegisterNetEvent('rsg-horses:client:SpawnHorse', function(data)
     HorseId = data.player.id
     if horsePed ~= 0 then
-        DeletePed(horse)
+        DeletePed(horsePed)
         SetEntityAsNoLongerNeeded(horsePed)
         horsePed = 0
     end
