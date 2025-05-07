@@ -69,11 +69,11 @@ end)
 
 function HandleWaterInteraction(thorse)
     if not IsPedStill(thorse) or IsPedSwimming(thorse) then return end
-    
+
     DisableControlAction(0, 0x7914A3DD, true)
     local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(DrinkPrompt, label) 
-    
+
     if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseDrink) then
         PerformHorseAction(thorse, Config.Anim.Drink)
     end
@@ -82,7 +82,7 @@ end
 function HandleObjectInteraction(thorse)
     local forward = GetOffsetFromEntityInWorldCoords(thorse, 0.0, 0.8, -0.5)
     local obj, type = GetNearestInteractableObject(forward)
-    
+
     if obj == nil then return end
 
     local promptGroup, action, anim
@@ -98,7 +98,7 @@ function HandleObjectInteraction(thorse)
 
     local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(promptGroup, label) 
-    
+
     if Citizen.InvokeNative(0xC92AC953F0A982AE, action) then
         PerformHorseAction(thorse, anim, obj, forward)
     end

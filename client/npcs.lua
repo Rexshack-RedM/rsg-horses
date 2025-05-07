@@ -49,7 +49,7 @@ CreateThread(function()
             ped = nil,
             stableid = v.stableid
         })
-        
+
         newpoint.onEnter = function(self)
             if not self.ped then
                 lib.requestModel(self.model, 10000)
@@ -95,7 +95,7 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
-        exports.ox_target:removeEntity(spawnedPed, 'npc_stablehand')
+        exports.ox_target:removeEntity(v.ped, 'npc_stablehand')
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)
         end

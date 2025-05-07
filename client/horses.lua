@@ -1,8 +1,9 @@
 local spawnedHorses = {}
+local HorseSettings = lib.load('shared.horse_settings')
 lib.locale()
 
 function SpawnHorses(horsemodel, horsecoords, heading)
-    
+
     local spawnedHorse = CreatePed(horsemodel, horsecoords.x, horsecoords.y, horsecoords.z - 1.0, heading, false, false, 0, 0)
     SetEntityAlpha(spawnedHorse, 0, false)
     SetRandomOutfitVariation(spawnedHorse, true)
@@ -23,63 +24,61 @@ function SpawnHorses(horsemodel, horsecoords, heading)
 end
 
 CreateThread(function()
-    for key, value in pairs(Config.HorseSettings) do
-        local coords = value.horsecoords
+    for k, v in pairs(HorseSettings) do
+        local coords = v.horsecoords
         local newpoint = lib.points.new({
             coords = coords,
             distance = Config.DistanceSpawn,
-            model = value.horsemodel,
+            model = v.horsemodel,
             ped = nil,
-            price = value.horseprice,
+            price = v.horseprice,
             heading = coords.w,
-            horsename = value.horsename
+            horsename = v.horsename
         })
-        
+
         newpoint.onEnter = function(self)
             if not self.ped then
                 lib.requestModel(self.model, 10000)
                 self.ped = SpawnHorses(self.model, self.coords, self.heading) -- spawn horse
                 pcall(function ()
-                    exports['rsg-target']:AddTargetEntity(self.ped, {
-                        options = {
-                            {
-                                icon = "fas fa-horse-head",
-                                label = self.horsename..' $'..self.price,
-                                targeticon = "fas fa-eye",
-                                action = function()
-                                    local dialog = lib.inputDialog(locale('cl_setup'), {
-                                        { type = 'input', label = locale('cl_setup_name'), required = true },
-                                        {
-                                            type = 'select',
-                                            label = locale('cl_setup_gender'),
-                                            options = {
-                                                { value = 'male',   label = locale('cl_setup_gender_a') },
-                                                { value = 'female', label = locale('cl_setup_gender_b') }
-                                            }
+                    exports.ox_target:addLocalEntity(self.ped, {
+                        {
+                            name = 'npc_stablehorses',
+                            icon = "fas fa-horse-head",
+                            label = self.horsename..' $'..self.price,
+                            onSelect = function()
+                                local dialog = lib.inputDialog(locale('cl_setup'), {
+                                    { type = 'input', label = locale('cl_setup_name'), required = true },
+                                    {
+                                        type = 'select',
+                                        label = locale('cl_setup_gender'),
+                                        options = {
+                                            { value = 'male',   label = locale('cl_setup_gender_a') },
+                                            { value = 'female', label = locale('cl_setup_gender_b') }
                                         }
-                                    })
-                
-                                    if not dialog then return end
-                
-                                    local setHorseName = dialog[1]
-                                    local setHorseGender = dialog[2]
-                                    
-                                    if setHorseName and setHorseGender then
-                                        TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, value.stableid, setHorseName, setHorseGender)
-                                    else
-                                        return
-                                    end
+                                    }
+                                })
+
+                                if not dialog then return end
+
+                                local setHorseName = dialog[1]
+                                local setHorseGender = dialog[2]
+
+                                if setHorseName and setHorseGender then
+                                    TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, v.stableid, setHorseName, setHorseGender)
+                                else
+                                    return
                                 end
-                            }
-                        },
-                        distance = 2.5,
+                            end,
+                            distance = 2.5,
+                        }
                     })
                 end)
             end
         end
 
         newpoint.onExit = function(self)
-            exports['rsg-target']:RemoveTargetEntity(self.ped, self.horsename..' $'..self.price)
+            exports.ox_target:removeEntity(self.ped, 'npc_stablehorses')
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
                     for i = 255, 0, -51 do
@@ -91,20 +90,20 @@ CreateThread(function()
                 self.ped = nil
             end
         end
-        
-        spawnedHorses[key] = newpoint
+
+        spawnedHorses[k] = newpoint
     end
 end)
 
 -- cleanup
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
-    for key, value in pairs(spawnedHorses) do
-        exports['rsg-target']:RemoveTargetEntity(value.ped, value.horsename..' $'..value.price)
-        if value.ped and DoesEntityExist(value.ped) then
-            DeleteEntity(value.ped)
+    for k, v in pairs(spawnedHorses) do
+        exports.ox_target:removeEntity(v.ped, 'npc_stablehorses')
+        if v.ped and DoesEntityExist(v.ped) then
+            DeleteEntity(v.ped)
         end
 
-        spawnedHorses[key] = nil
+        spawnedHorses[k] = nil
     end
 end)

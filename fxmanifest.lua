@@ -20,6 +20,7 @@ client_scripts {
 }
 
 files {
+    'shared/horse_settings.lua',
     'shared/horse_comp.lua',
     'locales/*.json',
 }

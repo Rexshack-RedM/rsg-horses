@@ -387,7 +387,6 @@ CreateThread(function()
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == GetCurrentResourceName() then
-        CleanupAnimalInfoHud()
-    end
+    if resourceName ~= GetCurrentResourceName() then return end
+    CleanupAnimalInfoHud()
 end)
