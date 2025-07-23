@@ -369,13 +369,34 @@ UpkeepInterval = function()
 
     for i = 1, #result do
         local id = result[i].id
+        local horsetype = result[i].horse
         local horsename = result[i].name
         local ownercid = result[i].citizenid
         local currentTime = os.time()
         local timeDifference = currentTime - result[i].born
         local daysPassed = math.floor(timeDifference / (24 * 60 * 60))
 
-        --print(id, horsename, ownercid, daysPassed)
+        --print(id, horsetype, horsename, ownercid, daysPassed)
+
+        if horsetype == 'a_c_horse_mp_mangy_backup' and daysPassed == Config.StarterHorseDieAge then
+
+            -- delete horse
+            MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
+            TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename..' '..locale('sv_log_horse_belong')..' '..ownercid..' '..locale('sv_log_horse_dead'))
+
+            -- telegram message to the horse owner
+            MySQL.insert('INSERT INTO telegrams (citizenid, recipient, sender, sendername, subject, sentDate, message) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            {   ownercid,
+                locale('sv_telegram_owner'),
+                '22222222',
+                locale('sv_telegram_stables'),
+                horsename..' '..locale('sv_telegram_away'),
+                os.date('%x'),
+                locale('sv_telegram_inform')..' '..horsename..' '..locale('sv_telegram_has_passed'),
+            })
+
+            goto continue
+        end
 
         if daysPassed == Config.HorseDieAge then
 
