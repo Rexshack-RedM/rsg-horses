@@ -489,7 +489,7 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0xED1C764997A86D5A, cache.ped, horsePed) -- unknown
                 Citizen.InvokeNative(0xB8B6430EAD2D2437, horsePed, GetHashKey('PLAYER_HORSE')) -- SetPedPersonality
                 Citizen.InvokeNative(0xDF93973251FB2CA5, player, true) -- SetPlayerMountStateActive
-                if not Config.AllowTwoPlayerRide then
+                if not Config.AllowTwoPlayersRide then
                     Citizen.InvokeNative(0xe6d4e435b56d5bd0, player, horsePed) -- SetPlayerOwnsMount
                 end
                 Citizen.InvokeNative(0xAEB97D84CDF3C00B, horsePed, false) -- SetAnimalIsWild
