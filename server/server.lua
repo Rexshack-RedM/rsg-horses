@@ -378,7 +378,7 @@ UpkeepInterval = function()
 
         --print(id, horsetype, horsename, ownercid, daysPassed)
 
-        if horsetype == 'a_c_horse_mp_mangy_backup' and daysPassed == Config.StarterHorseDieAge then
+        if horsetype == 'a_c_horse_mp_mangy_backup' and daysPassed >= Config.StarterHorseDieAge then
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
@@ -398,7 +398,7 @@ UpkeepInterval = function()
             goto continue
         end
 
-        if daysPassed == Config.HorseDieAge then
+        if daysPassed >= Config.HorseDieAge then
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
