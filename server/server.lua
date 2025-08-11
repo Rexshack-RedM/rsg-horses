@@ -170,6 +170,7 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_name_change').. ' \''..name..'\' '..locale('sv_success_successfully'), type = 'success', duration = 5000 })
 end)
 
+local HorseSettings = lib.load('shared.horse_settings')
 ----------------------------------
 -- sell horse
 ----------------------------------
@@ -188,7 +189,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
             MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { data.horseid, Player.PlayerData.citizenid })
         end
     end
-    for k, v in pairs(Config.HorseSettings) do
+    for k, v in pairs(HorseSettings) do
         if v.horsemodel == modelHorse then
             local sellprice = v.horseprice * 0.5
             Player.Functions.AddMoney('cash', sellprice)
