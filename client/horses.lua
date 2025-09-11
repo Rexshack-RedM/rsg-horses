@@ -65,7 +65,7 @@ CreateThread(function()
                                 local setHorseGender = dialog[2]
 
                                 if setHorseName and setHorseGender then
-                                    TriggerServerEvent('rsg-horses:server:BuyHorse', self.price, self.model, v.stableid, setHorseName, setHorseGender)
+                                    TriggerServerEvent('rsg-horses:server:BuyHorse', self.model, v.stableid, setHorseName, setHorseGender)
                                 else
                                     return
                                 end

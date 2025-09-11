@@ -1,6 +1,8 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 lib.locale()
 
+local HorseSettings = lib.load('shared.horse_settings')
+
 ----------------------------------
 -- find horse command
 ----------------------------------
@@ -106,11 +108,25 @@ end)
 ----------------------------------
 -- Buy & active
 ----------------------------------
-RegisterServerEvent('rsg-horses:server:BuyHorse', function(price, model, stable, horsename, gender)
+RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
 
+    local horseInfo = nil
+    for k,v in pairs(HorseSettings) do
+        if v.horsemodel == model then
+            horseInfo = v
+            break
+        end
+    end
+
+    if not horseInfo then
+        warn(('rsg-horses: Buy Horse. Unexpected horse model %s'):format(model))
+        return
+    end
+
+    local price = horseInfo.horseprice
     if (Player.PlayerData.money.cash < price) then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
@@ -170,7 +186,6 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_name_change').. ' \''..name..'\' '..locale('sv_success_successfully'), type = 'success', duration = 5000 })
 end)
 
-local HorseSettings = lib.load('shared.horse_settings')
 ----------------------------------
 -- sell horse
 ----------------------------------
@@ -194,6 +209,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
             local sellprice = v.horseprice * 0.5
             Player.Functions.AddMoney('cash', sellprice)
             TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_sold_for')..sellprice, type = 'success', duration = 5000 })
+            break
         end
     end
 end)
