@@ -677,18 +677,6 @@ function UpdatePedVariation(ped)
     end
 end
 
-function CalculatePrice(comp, initial)
-    local price = 0
-
-    for category, value in pairs(comp) do
-        if Config.PriceComponent[category] and value > 0 and (not initial or initial[category] ~= value) then
-            price = price + Config.PriceComponent[category]
-        end
-    end
-
-    return price
-end
-
 ------------------------------------
 -- menu components rsg-menubase
 ------------------------------------
@@ -733,7 +721,7 @@ function MainMenu(horses, horsedata)
             if data.current.value == 'component' then
                 CustomHorse(horses, horsedata)
             elseif data.current.value == 'buy' then
-                TriggerServerEvent('rsg-horses:server:SaveComponent', horseComps[horsedata.horseid], horsedata, CurrentPrice)
+                TriggerServerEvent('rsg-horses:server:SaveComponents', horseComps[horsedata.horseid], horsedata.horseid)
                 DisableCamera()
                 CurrentPrice = 0       -- Reset CurrentPrice when closing the menu
                 initialHorseComps = {} -- Clear initialHorseComps

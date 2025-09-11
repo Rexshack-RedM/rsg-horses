@@ -51,6 +51,11 @@ CreateThread(function()
     while true do
         ::continue::
         Wait(1)
+        
+        if not DoesEntityExist(cache.ped) then
+            goto continue
+        end
+
         local thorse = GetLedHorseFromPed(cache.ped)
         if cache.ped == nil or thorse == nil then goto continue end
 
