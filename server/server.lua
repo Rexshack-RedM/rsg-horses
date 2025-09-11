@@ -260,22 +260,28 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(s
 end)
 
 -- save saddle
-RegisterNetEvent('rsg-horses:server:SaveComponent', function(component, horsedata, price)
+RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, horseid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
+
     local citizenid = Player.PlayerData.citizenid
-    local horseid = horsedata.horseid
-    if (Player.PlayerData.money.cash < price) then
-        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
+    local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND horseid=@horseid', { ['@citizenid'] = citizenid, ['@horseid'] = horseid })
+    local horseData = result[1]
+    if not horseData then
+        TriggerClientEvent('ox_lib:notify', src, {title = 'Unknown horse', type = 'error', duration = 5000 })
         return
     end
+    
+    local newComponents = newComponents or {}
+    local currentComponents = json.decode(horseData.components) or {}
+    local price = CalculatePrice(newComponents, currentComponents)
 
-    if component then
-        MySQL.update('UPDATE player_horses SET components = ? WHERE citizenid = ? AND horseid = ?', {json.encode(component), citizenid, horseid})
-
-        Player.Functions.RemoveMoney('cash', price)
+    if Player.Functions.RemoveMoney('cash', price) then
+        MySQL.update('UPDATE player_horses SET components = @components WHERE id = @id', {['@components'] = json.encode(newComponents), ['@id'] = horseData.id})
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_component_saved') .. price, type = 'success', duration = 5000 })
+    else
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
     end
 end)
 
