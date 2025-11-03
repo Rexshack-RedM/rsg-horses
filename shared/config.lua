@@ -73,6 +73,7 @@ Config.StoreFleedHorse     = false -- store horse if flee is used
 Config.EnableServerNotify  = false
 Config.KeyBind             = 'J'
 Config.AllowTwoPlayersRide = false -- if true two players can ride but may have some impact on other features
+Config.DeathGracePeriod    = 60000 -- grace period to let player attempt to revive the horse
 
 ---------------------------------
 -- horse inventory weight by level

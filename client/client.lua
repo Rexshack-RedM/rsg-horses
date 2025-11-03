@@ -9,6 +9,7 @@ local horsePed = 0
 local horseBlip = nil
 local horseSpawned = false
 local HorseCalled = false
+local IsBeingRevived = false
 local horsexp = 0
 local horsegender = nil
 local horseBonding = 0
@@ -1020,7 +1021,41 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     lib.showContext('sellhorse_menu')     -- Use the correct context ID here
 end)
 
---------------------------------------
+------------------------------------
+-- horse death detection
+------------------------------------
+CreateThread(function()
+    while true do
+        Wait(1000)
+        if horsePed ~= 0 and DoesEntityExist(horsePed) then
+            if IsEntityDead(horsePed) and not IsBeingRevived then
+                -- Wait a moment to allow player chance to revive
+                Wait(Config.DeathGracePeriod) -- grace period
+                
+                if IsEntityDead(horsePed) then
+                    -- horse is permanently dead
+                    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
+                        if data then
+                            lib.notify({ title = locale('cl_error_horse_died'), type = 'error', duration = 7000 })
+                            TriggerServerEvent('rsg-horses:server:HorseDied', data.horseid, data.name)
+                            
+                            -- Clean up client-side
+                            if horseBlip then RemoveBlip(horseBlip) horseBlip = nil end
+                            SetEntityAsMissionEntity(horsePed, true, true)
+                            DeleteEntity(horsePed)
+                            SetEntityAsNoLongerNeeded(horsePed)
+                            horsePed = 0
+                            HorseCalled = false
+                            horseSpawned = false
+                        end
+                    end)
+                end
+            end
+        end
+    end
+end)
+
+------------------------------------
 -- loop call / flee horse
 ------------------------------------
 CreateThread(function()
@@ -1358,6 +1393,7 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
             return
         end
 
+        IsBeingRevived = true
         RequestControl(horsePed)
 
         local healAnim1Dict1 = "mech_skin@sample@base"
@@ -1375,8 +1411,10 @@ AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
         ClearPedTasks(cache.ped)
         FreezeEntityPosition(cache.ped, false)
         TriggerServerEvent('rsg-horses:server:revivehorse', item)
+        IsBeingRevived = false
         SpawnHorse()
     else
+        IsBeingRevived = false
         lib.notify({ title = locale('cl_error_horse_not_injured_dead'), type = 'error', duration = 7000 })
     end
 end)

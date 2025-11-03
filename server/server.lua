@@ -1,7 +1,6 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
-lib.locale()
-
 local HorseSettings = lib.load('shared.horse_settings')
+lib.locale()
 
 ----------------------------------
 -- find horse command
@@ -11,6 +10,9 @@ RSGCore.Commands.Add('findhorse', locale('sv_command_find'), {}, false, function
     TriggerClientEvent('rsg-horses:client:gethorselocation', src)
 end)
 
+----------------------------------
+-- get all horses
+----------------------------------
 RSGCore.Functions.CreateCallback('rsg-horses:server:GetAllHorses', function(source, cb)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -23,7 +25,7 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetAllHorses', function(sour
 end)
 
 ----------------------------------
--- Items
+-- horse use items
 ----------------------------------
 -- brush horse
 RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
@@ -75,7 +77,9 @@ RSGCore.Functions.CreateUseableItem('sugarcube', function(source, item)
     end
 end)
 
+----------------------------------
 -- horse reviver
+----------------------------------
 RSGCore.Functions.CreateUseableItem('horse_reviver', function(source, item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -94,7 +98,7 @@ RSGCore.Functions.CreateUseableItem('horse_reviver', function(source, item)
 end)
 
 ----------------------------------
--- Revive
+-- revive horse
 ----------------------------------
 RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local src = source
@@ -106,7 +110,7 @@ RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
 end)
 
 ----------------------------------
--- Buy & active
+-- buy & active
 ----------------------------------
 RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsename, gender)
     local src = source
@@ -147,6 +151,9 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
+-----------------------------------
+-- set horse active
+-----------------------------------
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -155,6 +162,9 @@ RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { true, id, Player.PlayerData.citizenid })
 end)
 
+-----------------------------------
+-- set horse unactive
+-----------------------------------
 RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -164,7 +174,9 @@ RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, id, Player.PlayerData.citizenid })
 end)
 
+-----------------------------------
 -- store horse when flee is used
+-----------------------------------
 RegisterServerEvent('rsg-horses:server:fleeStoreHorse', function(stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -173,6 +185,9 @@ RegisterServerEvent('rsg-horses:server:fleeStoreHorse', function(stableid)
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, activehorse, Player.PlayerData.citizenid })
 end)
 
+-----------------------------------
+-- rename horse
+-----------------------------------
 RegisterServerEvent('rsg-horses:renameHorse', function(name)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -184,6 +199,39 @@ RegisterServerEvent('rsg-horses:renameHorse', function(name)
     end
 
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_name_change').. ' \''..name..'\' '..locale('sv_success_successfully'), type = 'success', duration = 5000 })
+end)
+
+----------------------------------
+-- horse death handler
+----------------------------------
+RegisterServerEvent('rsg-horses:server:HorseDied', function(horseid, horsename)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    local cid = Player.PlayerData.citizenid
+    
+    -- Get horse data
+    local horse = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid = @citizenid AND horseid = @horseid', {
+        ['@citizenid'] = cid,
+        ['@horseid'] = horseid
+    })
+    
+    if horse[1] then
+        local horsestash = horse[1].name .. ' ' .. horseid
+        
+        -- Clear horse inventory stash from database
+        -- Horse stashes are stored as identifiers in the inventories table
+        MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
+        
+        -- Remove horse from database
+        MySQL.update('DELETE FROM player_horses WHERE citizenid = ? AND horseid = ?', {cid, horseid})
+        
+        -- Log the death
+        TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename .. ' ' .. locale('sv_log_horse_belong') .. ' ' .. cid .. ' ' .. locale('sv_log_horse_dead'))
+        
+        lib.notify(src, {title = locale('sv_error_horse_died'), type = 'error', duration = 7000})
+    end
 end)
 
 ----------------------------------
@@ -214,6 +262,9 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     end
 end)
 
+-----------------------------------
+-- get horses
+-----------------------------------
 lib.callback.register('rsg-horses:server:GetHorse', function(source, stable)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -226,6 +277,9 @@ lib.callback.register('rsg-horses:server:GetHorse', function(source, stable)
     return horses
 end)
 
+-----------------------------------
+-- get active horse
+-----------------------------------
 RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(source, cb)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -240,7 +294,7 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:GetActiveHorse', function(so
 end)
 
 -----------------------------------
--- Horse Customization
+-- horse customization
 ----------------------------------
 -- get active horse components callback
 RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(source, cb)
@@ -259,7 +313,9 @@ RSGCore.Functions.CreateCallback('rsg-horses:server:CheckComponents', function(s
     end
 end)
 
+-----------------------------------
 -- save saddle
+-----------------------------------
 RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, horseid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -285,6 +341,9 @@ RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, hor
     end
 end)
 
+-----------------------------------
+-- trade horse
+-----------------------------------
 RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, source)
     local src = source
     local Player2 = RSGCore.Functions.GetPlayer(playerId)
@@ -294,7 +353,9 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, sou
     TriggerClientEvent('ox_lib:notify', playerId, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
+-----------------------------------
 -- generate horseid
+-----------------------------------
 function GenerateHorseid()
     local UniqueFound = false
     local horseid = nil
@@ -321,9 +382,10 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_brush')..' '..item, type = 'error', duration = 5000 })
     end
 end)
--- end
 
+-----------------------------------
 -- horse attributes to database
+-----------------------------------
 RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -402,6 +464,15 @@ UpkeepInterval = function()
         --print(id, horsetype, horsename, ownercid, daysPassed)
 
         if horsetype == 'a_c_horse_mp_mangy_backup' and daysPassed >= Config.StarterHorseDieAge then
+            
+            -- Get horseid for inventory cleanup
+            local horsedata = MySQL.query.await('SELECT horseid FROM player_horses WHERE id = ?', {id})
+            if horsedata[1] then
+                local horsestash = horsename .. ' ' .. horsedata[1].horseid
+                
+                -- Clear horse inventory stash from database
+                MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
+            end
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
@@ -422,6 +493,21 @@ UpkeepInterval = function()
         end
 
         if daysPassed >= Config.HorseDieAge then
+            
+            -- Get horseid for inventory cleanup
+            local horsedata = MySQL.query.await('SELECT horseid FROM player_horses WHERE id = ?', {id})
+            if horsedata[1] then
+                local horsestash = horsename .. ' ' .. horsedata[1].horseid
+                
+                -- Clear horse inventory
+                local success = pcall(function()
+                    exports['rsg-inventory']:ClearInventory(horsestash)
+                end)
+                
+                if not success then
+                    MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
+                end
+            end
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
