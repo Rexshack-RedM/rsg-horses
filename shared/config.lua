@@ -3,9 +3,14 @@ lib.locale()
 
 Config = {
     horsesShopItems ={
-        { name = 'horse_brush',   amount = 50, price = 5 },
-        { name = 'horse_lantern', amount = 50, price = 10 },
-        { name = 'sugarcube',     amount = 50, price = 1 },
+        { name = 'horse_brush',     amount = 10, price = 5 },
+        { name = 'horse_lantern',   amount = 10, price = 10 },
+        { name = 'sugarcube',       amount = 50, price = 0.05 },
+        { name = 'horse_carrot',    amount = 50, price = 0.10 },
+        { name = 'horse_apple',     amount = 50, price = 0.10 },
+        { name = 'haysnack',        amount = 50, price = 0.25 },
+        { name = 'horsemeal',       amount = 50, price = 0.50 },
+        { name = 'horse_stimulant', amount = 25, price = 2 },
     },
     PersistStock = false, --should stock save in database and load it after restart, to 'remember' stock value before restart
 }
@@ -64,40 +69,40 @@ Config.EnableTarget        = true -- toggle between target and prompt
 Config.TargetHelp          = false -- target help to use [L-ALT]
 Config.Automount           = false -- horse automount
 Config.SpawnOnRoadOnly     = false -- always spawn on road
-Config.HorseInvWeight      = 15000 -- horse inventory weight
-Config.HorseInvSlots       = 20 -- horse inventory slots
-Config.CheckCycle          = 60 -- horse check system (mins)
+Config.HorseInvWeight      = 16000 -- horse inventory weight
+Config.HorseInvSlots       = 25 -- horse inventory slots
+Config.CheckCycle          = 30 -- horse check system (mins) -- default 60
 Config.StarterHorseDieAge  = 7 -- starter horse age in days till it dies (days)
-Config.HorseDieAge         = 90 -- horse age in days till it dies (days)
+Config.HorseDieAge         = 365 -- horse age in days till it dies (days)
 Config.StoreFleedHorse     = false -- store horse if flee is used
 Config.EnableServerNotify  = false
 Config.KeyBind             = 'J'
-Config.AllowTwoPlayersRide = false -- if true two players can ride but may have some impact on other features
+Config.AllowTwoPlayersRide = true -- if true two players can ride but may have some impact on other features
 Config.DeathGracePeriod    = 60000 -- grace period to let player attempt to revive the horse
 
 ---------------------------------
 -- horse inventory weight by level
 ---------------------------------
-Config.Level1InvWeight = 2000
-Config.Level1InvSlots = 2
-Config.Level2InvWeight = 4000
-Config.Level2InvSlots = 4
-Config.Level3InvWeight = 6000
-Config.Level3InvSlots = 6
-Config.Level4InvWeight = 8000
-Config.Level4InvSlots = 8
-Config.Level5InvWeight = 9000
-Config.Level5InvSlots = 10
-Config.Level6InvWeight = 10000
-Config.Level6InvSlots = 12
-Config.Level7InvWeight = 12000
-Config.Level7InvSlots = 14
-Config.Level8InvWeight = 13000
-Config.Level8InvSlots = 16
-Config.Level9InvWeight = 14000
-Config.Level9InvSlots = 18
-Config.Level10InvWeight = 15000
-Config.Level10InvSlots = 20
+Config.Level1InvWeight = 4000
+Config.Level1InvSlots = 4
+Config.Level2InvWeight = 6000
+Config.Level2InvSlots = 6
+Config.Level3InvWeight = 8000
+Config.Level3InvSlots = 8
+Config.Level4InvWeight = 9000
+Config.Level4InvSlots = 10
+Config.Level5InvWeight = 10000
+Config.Level5InvSlots = 12
+Config.Level6InvWeight = 12000
+Config.Level6InvSlots = 14
+Config.Level7InvWeight = 13000
+Config.Level7InvSlots = 16
+Config.Level8InvWeight = 14000
+Config.Level8InvSlots = 18
+Config.Level9InvWeight = 15000
+Config.Level9InvSlots = 20
+Config.Level10InvWeight = 16000
+Config.Level10InvSlots = 25
 
 ---------------------------------
 -- horse health/stamina/ability/speed/acceleration levels
@@ -118,9 +123,11 @@ Config.Level10 = 2000
 ---------------------------------
 Config.HorseFeed = {
     -- medicineHash is optional. If u do not set, the default value wil be: consumable_horse_stimulant
-    ['carrot']          = { health = 10,  stamina = 10,  ismedicine = false },
-    ['apple']           = { health = 15,  stamina = 15,  ismedicine = false },
+    ['horse_carrot']    = { health = 10,  stamina = 10,  ismedicine = false },
+    ['horse_apple']     = { health = 15,  stamina = 15,  ismedicine = false },
     ['sugarcube']       = { health = 25,  stamina = 25,  ismedicine = false },
+    ['haysnack']        = { health = 50,  stamina = 25,  ismedicine = false },
+    ['horsemeal']       = { health = 75,  stamina = 75,  ismedicine = false },
     ['horse_stimulant'] = { health = 100, stamina = 100, ismedicine = true, medicineHash = 'consumable_horse_stimulant' },
 }
 
@@ -241,6 +248,15 @@ Config.StableSettings = {
         npccoords = vector4(-5514.81, -3040.25, -2.39, 175.22),
         horsecustom = vec4(-5526.3452, -3030.7842, -2.0329, 105.3392),
         showblip = true
+    },
+    
+    {   -- emerald ranch
+    stableid = 'emeraldranch',
+    coords = vector3(1393.46, 353.09, 87.63),
+    npcmodel = `mp_de_u_f_m_doverhill_01`,
+    npccoords = vector4(1393.90, 354.29, 87.66, 151.53),
+    horsecustom = vec4(1396.73, 345.73, 87.58, 58.91),
+    showblip = true
     },
 
 }
