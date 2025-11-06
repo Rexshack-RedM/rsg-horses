@@ -517,7 +517,10 @@ local function SpawnHorse()
                     local hash = getComponentHash(category, value)
                     if hash ~= 0 then
                         Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, tonumber(hash), true, true, true) -- ApplyShopItemToPed
-                        Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0xF772CED6, true, true, true) -- ApplyShopItemToPed (holster)
+                        -- only apply hoster if it can be used
+                        if not Config.AllowTwoPlayersRide then
+                            Citizen.InvokeNative(0xD3A7B003ED343FD9, horsePed, 0xF772CED6, true, true, true) -- ApplyShopItemToPed (holster)
+                        end
                     end
                 end
 
@@ -1314,8 +1317,12 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 Wait(5000)
 
                 local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 0)  -- GetAttributeCoreValue (Health)
-                local newHealth = horseHealth + Config.HorseFeed[itemName]["health"]
                 local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, horsePed, 1) -- GetAttributeCoreValue (Stamina)
+
+                if not tonumber(horseHealth) then horseHealth = 0 end
+                if not tonumber(horseStamina) then horseStamina = 0 end
+
+                local newHealth = horseHealth + Config.HorseFeed[itemName]["health"]
                 local newStamina = horseStamina + Config.HorseFeed[itemName]["stamina"]
 
                 Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, newHealth)  -- SetAttributeCoreValue (Health)
