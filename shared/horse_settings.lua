@@ -431,42 +431,6 @@ local HorseSettings = {
         horsename = 'Criollo Dun',
         stableid = 'tumbleweed'
     },
-    --- Emerald Ranch
-    {
-        horsecoords = vector4(1385.74, 360.36, 87.90, 244.38),
-        horsemodel = 'a_c_donkey_01',
-        horseprice = 50,
-        horsename = 'Donkey',
-        stableid = 'emeraldranch'
-    },
-    {
-        horsecoords = vector4(1384.43, 357.72, 87.78, 243.47),
-        horsemodel = 'a_c_horsemule_01',
-        horseprice = 75,
-        horsename = 'Mula',
-        stableid = 'emeraldranch'
-    },
-    {
-        horsecoords = vector4(1398.74, 361.41, 87.84, 179.37),
-        horsemodel = 'a_c_horse_arabian_black',
-        horseprice = 1200,
-        horsename = 'Arabian Black',
-        stableid = 'emeraldranch'
-    },
-    {
-        horsecoords = vector4(1376.86, 356.55, 87.78, 198.13),
-        horsemodel = 'a_c_horse_hungarianhalfbred_flaxenchestnut',
-        horseprice = 300,
-        horsename = 'Hungarian Half-bred Flaxen Chestnut',
-        stableid = 'emeraldranch'
-    },
-    {
-        horsecoords = vector4(1392.95, 359.45, 87.84, 136.60),
-        horsemodel = 'a_c_horse_thoroughbred_reversedappleblack',
-        horseprice = 450,
-        horsename = 'Thoroughbred Reverse Dapple Black',
-        stableid = 'emeraldranch'
-    },
 }
 
 return HorseSettings

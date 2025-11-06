@@ -31,21 +31,18 @@ end)
 RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item.name)
-    LogHorseBrush(source)
 end)
 
 -- player horselantern
 RSGCore.Functions.CreateUseableItem('horse_lantern', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:equipHorseLantern', source, item.name)
-    LogHorseEquipment(source, item.name)
 end)
 
 -- player horseholster
 RSGCore.Functions.CreateUseableItem('horse_holster', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:equipHorseHolster', source, item.name)
-    LogHorseEquipment(source, item.name)
 end)
 
  -- horse stimulant
@@ -53,25 +50,22 @@ end)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
     end
 end)
 
 -- feed horse carrot
-RSGCore.Functions.CreateUseableItem('horse_carrot', function(source, item)
+RSGCore.Functions.CreateUseableItem('carrot', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
     end
 end)
 
  -- feed apple
- RSGCore.Functions.CreateUseableItem('horse_apple', function(source, item)
+ RSGCore.Functions.CreateUseableItem('apple', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
     end
 end)
 
@@ -80,25 +74,6 @@ RSGCore.Functions.CreateUseableItem('sugarcube', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
-    end
-end)
-
--- feed horse haysnack
-RSGCore.Functions.CreateUseableItem('haysnack', function(source, item)
-    local Player = RSGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
-    end
-end)
-
--- feed horse horsemeal
-RSGCore.Functions.CreateUseableItem('horsemeal', function(source, item)
-    local Player = RSGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-        LogHorseFeed(source, item.name)
     end
 end)
 
@@ -125,19 +100,12 @@ end)
 ----------------------------------
 -- revive horse
 ----------------------------------
-RegisterServerEvent('rsg-horses:server:revivehorse', function(item, horseData)
+RegisterServerEvent('rsg-horses:server:revivehorse', function(item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(source)
 
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove', 1)
-        
-        -- Log horse revive
-        if horseData then
-            LogHorseRevive(src, {
-                name = horseData.name or 'Unknown'
-            })
-        end
     end
 end)
 
@@ -180,15 +148,6 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
     })
     Player.Functions.RemoveMoney('cash', price)
     
-    -- Log to Discord
-    LogHorsePurchase(src, {
-        name = horsename,
-        model = model,
-        gender = gender,
-        price = price,
-        stable = stable
-    })
-    
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
 
@@ -201,15 +160,6 @@ RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { true, id, Player.PlayerData.citizenid })
-    
-    -- Get horse data for logging
-    local horseData = MySQL.query.await('SELECT * FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
-    if horseData[1] then
-        LogHorseActivation(src, {
-            name = horseData[1].name,
-            model = horseData[1].horse
-        })
-    end
 end)
 
 -----------------------------------
@@ -219,20 +169,9 @@ RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, false})
-    
-    -- Get horse data for logging before updating
-    local horseData = MySQL.query.await('SELECT * FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
-    
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, id, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, id, Player.PlayerData.citizenid })
-    
-    if horseData[1] then
-        LogHorseDeactivation(src, {
-            name = horseData[1].name,
-            stable = stableid
-        })
-    end
 end)
 
 -----------------------------------
@@ -290,16 +229,6 @@ RegisterServerEvent('rsg-horses:server:HorseDied', function(horseid, horsename)
         
         -- Log the death
         TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename .. ' ' .. locale('sv_log_horse_belong') .. ' ' .. cid .. ' ' .. locale('sv_log_horse_dead'))
-        
-        -- Calculate horse age
-        local born = horse[1].born or os.time()
-        local age = math.floor((os.time() - born) / 86400) -- Days
-        
-        -- Log to Discord
-        LogHorseDeath(src, {
-            name = horsename,
-            age = age
-        }, 'Natural causes')
         
         lib.notify(src, {title = locale('sv_error_horse_died'), type = 'error', duration = 7000})
     end
