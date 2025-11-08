@@ -93,5 +93,34 @@
     "sv_telegram_has_passed" : "έχει πεθάνει, παρακαλώ επισκεφθείτε τον προπονητή αλόγων για να συζητήσετε μια αντικατάσταση!",
 
     "sv_print" : "ο κύκλος ελέγχου του αλόγου ολοκληρώθηκε",
-    "cf_menu_horse_blip_name" : "Στάβλοι Αλόγων"
+    "cf_menu_horse_blip_name" : "Στάβλοι Αλόγων",
+
+    "cl_status_active" : "✓ Ενεργό",
+    "cl_status_inactive" : "✗ Ανενεργό",
+    "cl_horse_stats_desc" : "Επίπεδο %d | Φύλο: %s | XP: %d | %s | Καθαριότητα: %d%%",
+    "cl_sell_horse_desc" : "Πώληση για $%d (Επίπεδο %d, %d XP)",
+    "cl_sell_horse_header" : "Πώληση Αλόγου",
+    "cl_sell_horse_confirm" : "Είσαι σίγουρος ότι θέλεις να πουλήσεις %s για $%d; Αυτό δεν μπορεί να αναιρεθεί.",
+    "cl_warning_title" : "⚠️ Προειδοποίηση",
+    "cl_warning_horse_critical" : "Το άλογό σου είναι σοβαρά τραυματισμένο! Χρησιμοποίησε γρήγορα ένα αναζωογονητή αλόγων!",
+    "cl_horse_fed_title" : "Άλογο Ταΐστηκε",
+    "cl_horse_fed_desc" : "%s κέρδισε +%d υγεία και +%d αντοχή",
+
+    "sv_command_accept_trade" : "Αποδοχή εκκρεμούς αίτησης ανταλλαγής αλόγου",
+    "sv_error_no_trade_request" : "Δεν υπάρχει εκκρεμής αίτηση ανταλλαγής",
+    "sv_error_invalid_horse_name" : "Μη έγκυρο όνομα αλόγου",
+    "sv_error_horse_name_length" : "Το όνομα του αλόγου πρέπει να είναι 1-50 χαρακτήρες",
+    "sv_error_not_own_horse" : "Δεν ποσσέδεις αυτό το άλογο",
+    "sv_error_invalid_components" : "Μη έγκυρα συστατικά: ",
+    "sv_error_not_own_or_active" : "Δεν ποσσέδεις αυτό το άλογο ή δεν είναι ενεργό",
+    "sv_error_player_too_far" : "Ο στόχος παίκτης είναι πολύ μακριά",
+    "sv_trade_request_title" : "Αίτηση Ανταλλαγής Αλόγου",
+    "sv_trade_request_desc" : "%s θέλει να ανταλλάξει το άλογό του μαζί σου: %s. Πληκτρολόγησε /accepttrade για να αποδεχτείς.",
+    "sv_trade_request_sent" : "Αίτηση ανταλλαγής στάλθηκε στον %s",
+    "sv_error_invalid_trade_request" : "Μη έγκυρη αίτηση ανταλλαγής",
+    "sv_error_trade_expired" : "Η αίτηση ανταλλαγής έχει λήξει",
+    "sv_error_horse_unavailable" : "Το άλογο δεν είναι πλέον διαθέσιμο",
+    "sv_error_trade_failed" : "Ανταλλαγή απέτυχε - άλογο δεν βρέθηκε",
+    "sv_trade_received" : "Έλαβες ένα άλογο: %s",
+    "sv_trade_success" : "Άλογο ανταλλάχθηκε επιτυχώς με %s"
 }

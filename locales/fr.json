@@ -93,5 +93,34 @@
     "sv_telegram_has_passed" : "est décédé, veuillez visiter votre entraîneur de chevaux pour discuter d'un remplacement !",
 
     "sv_print" : "cycle de vérification des chevaux terminé",
-    "cf_menu_horse_blip_name" : "Écurie"
+    "cf_menu_horse_blip_name" : "Écurie",
+
+    "cl_status_active" : "✓ Actif",
+    "cl_status_inactive" : "✗ Inactif",
+    "cl_horse_stats_desc" : "Niveau %d | Genre: %s | XP: %d | %s | Propreté: %d%%",
+    "cl_sell_horse_desc" : "Vendre pour $%d (Niveau %d, %d XP)",
+    "cl_sell_horse_header" : "Vendre Cheval",
+    "cl_sell_horse_confirm" : "Êtes-vous sûr de vouloir vendre %s pour $%d? Cela ne peut pas être annulé.",
+    "cl_warning_title" : "⚠️ Avertissement",
+    "cl_warning_horse_critical" : "Votre cheval est gravement blessé! Utilisez rapidement un réanimateur de cheval!",
+    "cl_horse_fed_title" : "Cheval Nourri",
+    "cl_horse_fed_desc" : "%s a gagné +%d de santé et +%d d'endurance",
+
+    "sv_command_accept_trade" : "Accepter une demande d'échange de cheval en attente",
+    "sv_error_no_trade_request" : "Aucune demande d'échange en attente",
+    "sv_error_invalid_horse_name" : "Nom de cheval invalide",
+    "sv_error_horse_name_length" : "Le nom du cheval doit contenir entre 1 et 50 caractères",
+    "sv_error_not_own_horse" : "Vous ne possédez pas ce cheval",
+    "sv_error_invalid_components" : "Composants invalides: ",
+    "sv_error_not_own_or_active" : "Vous ne possédez pas ce cheval ou il n'est pas actif",
+    "sv_error_player_too_far" : "Le joueur cible est trop loin",
+    "sv_trade_request_title" : "Demande d'Échange de Cheval",
+    "sv_trade_request_desc" : "%s veut échanger son cheval avec vous: %s. Tapez /accepttrade pour accepter.",
+    "sv_trade_request_sent" : "Demande d'échange envoyée à %s",
+    "sv_error_invalid_trade_request" : "Demande d'échange invalide",
+    "sv_error_trade_expired" : "Demande d'échange expirée",
+    "sv_error_horse_unavailable" : "Cheval non disponible",
+    "sv_error_trade_failed" : "Échange échoué - cheval non trouvé",
+    "sv_trade_received" : "Vous avez reçu un cheval: %s",
+    "sv_trade_success" : "Cheval échangé avec succès avec %s"
 }

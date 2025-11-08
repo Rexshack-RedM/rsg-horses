@@ -3,11 +3,53 @@ local HorseSettings = lib.load('shared.horse_settings')
 lib.locale()
 
 ----------------------------------
--- find horse command
+-- security helpers
+----------------------------------
+local tradeRequests = {} -- Store pending trade requests
+
+local function VerifyHorseOwnership(citizenid, horseid)
+    local result = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE citizenid = ? AND horseid = ?', {citizenid, horseid})
+    return result and result > 0
+end
+
+local function ValidateComponents(components)
+    local HorseComp = lib.load('shared.horse_comp')
+    
+    if type(components) ~= "table" then
+        return false, "Invalid component type"
+    end
+    
+    for category, value in pairs(components) do
+        if not HorseComp[category] then
+            return false, "Invalid category: " .. tostring(category)
+        end
+        
+        if type(value) ~= "number" or value < 0 or value > #HorseComp[category] then
+            return false, "Invalid component value for " .. category
+        end
+    end
+    
+    return true
+end
+
+----------------------------------
+-- commands
 ----------------------------------
 RSGCore.Commands.Add('findhorse', locale('sv_command_find'), {}, false, function(source)
     local src = source
     TriggerClientEvent('rsg-horses:client:gethorselocation', src)
+end)
+
+RSGCore.Commands.Add('accepttrade', locale('sv_command_accept_trade'), {}, false, function(source)
+    local src = source
+    local trade = tradeRequests[src]
+    
+    if not trade then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_trade_request'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    TriggerServerEvent('rsg-horses:server:AcceptTrade', trade.from)
 end)
 
 ----------------------------------
@@ -127,6 +169,17 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
 
+    -- SECURITY: Validate horse name
+    if not horsename or type(horsename) ~= "string" then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_horse_name'), type = 'error', duration = 5000 })
+        return
+    end
+    horsename = string.gsub(horsename, "[^%w%s%-_]", "")
+    if #horsename < 1 or #horsename > 50 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_horse_name_length'), type = 'error', duration = 5000 })
+        return
+    end
+
     local horseInfo = nil
     for k,v in pairs(HorseSettings) do
         if v.horsemodel == model then
@@ -141,10 +194,14 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
     end
 
     local price = horseInfo.horseprice
-    if (Player.PlayerData.money.cash < price) then
+    
+    -- SECURITY: Atomic transaction - remove money first
+    if not Player.Functions.RemoveMoney('cash', price) then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
     end
+    
+    -- Money removed successfully, now safe to create horse
     local horseid = GenerateHorseid()
     MySQL.insert('INSERT INTO player_horses(stable, citizenid, horseid, name, horse, gender, active, born) VALUES(@stable, @citizenid, @horseid, @name, @horse, @gender, @active, @born)', {
         ['@stable'] = stable,
@@ -156,7 +213,6 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
         ['@active'] = false,
         ['@born'] = os.time()
     })
-    Player.Functions.RemoveMoney('cash', price)
     
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
 end)
@@ -167,6 +223,15 @@ end)
 RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+    
+    -- SECURITY: Verify ownership
+    local owned = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
+    if not owned or owned == 0 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
+        return
+    end
+    
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { true, id, Player.PlayerData.citizenid })
@@ -178,6 +243,15 @@ end)
 RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+    
+    -- SECURITY: Verify ownership
+    local owned = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
+    if not owned or owned == 0 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
+        return
+    end
+    
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, false})
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, id, Player.PlayerData.citizenid })
@@ -201,6 +275,23 @@ end)
 RegisterServerEvent('rsg-horses:renameHorse', function(name)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
+    
+    if not Player then return end
+    
+    -- SECURITY: Validate input
+    if not name or type(name) ~= "string" then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_horse_name'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    -- Remove special characters
+    name = string.gsub(name, "[^%w%s%-_]", "")
+    
+    if #name < 1 or #name > 50 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_horse_name_length'), type = 'error', duration = 5000 })
+        return
+    end
+    
     local newName = MySQL.query.await('UPDATE player_horses SET name = ? WHERE citizenid = ? AND active = ?' , {name, Player.PlayerData.citizenid, 1})
 
     if newName == nil then
@@ -250,18 +341,35 @@ end)
 RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
-    local modelHorse = nil
+    if not Player then return end
+    
     local horseid = data.horseid
+    
+    -- SECURITY: Verify ownership before selling
     local player_horses = MySQL.query.await('SELECT * FROM player_horses WHERE id = @id AND `citizenid` = @citizenid', {
         ['@id'] = horseid,
         ['@citizenid'] = Player.PlayerData.citizenid
     })
+    
+    if not player_horses or #player_horses == 0 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    local modelHorse = nil
     for i = 1, #player_horses do
         if tonumber(player_horses[i].id) == tonumber(horseid) then
             modelHorse = player_horses[i].horse
+            
+            -- Delete horse inventory
+            local horsestash = player_horses[i].name .. ' ' .. player_horses[i].horseid
+            MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
+            
+            -- Delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { data.horseid, Player.PlayerData.citizenid })
         end
     end
+    
     for k, v in pairs(HorseSettings) do
         if v.horsemodel == modelHorse then
             local sellprice = v.horseprice * 0.5
@@ -331,11 +439,21 @@ RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, hor
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
 
+    -- SECURITY: Validate components
+    local valid, error = ValidateComponents(newComponents)
+    if not valid then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_components') .. error, type = 'error', duration = 5000 })
+        return
+    end
+
     local citizenid = Player.PlayerData.citizenid
+    
+    -- SECURITY: Verify ownership
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND horseid=@horseid', { ['@citizenid'] = citizenid, ['@horseid'] = horseid })
     local horseData = result[1]
+    
     if not horseData then
-        TriggerClientEvent('ox_lib:notify', src, {title = 'Unknown horse', type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
         return
     end
     
@@ -352,15 +470,120 @@ RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, hor
 end)
 
 -----------------------------------
--- trade horse
+-- trade horse (request)
 -----------------------------------
-RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId, source)
+RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId)
     local src = source
-    local Player2 = RSGCore.Functions.GetPlayer(playerId)
-    local Playercid2 = Player2.PlayerData.citizenid
-    MySQL.update('UPDATE player_horses SET citizenid = ? WHERE horseid = ? AND active = ?', {Playercid2, horseId, 1})
-    MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Playercid2, 1})
-    TriggerClientEvent('ox_lib:notify', playerId, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local Target = RSGCore.Functions.GetPlayer(playerId)
+    
+    if not Player or not Target then return end
+    
+    -- SECURITY: Verify ownership
+    local horse = MySQL.query.await('SELECT * FROM player_horses WHERE horseid = ? AND citizenid = ? AND active = ?', 
+        {horseId, Player.PlayerData.citizenid, 1})
+    
+    if not horse or not horse[1] then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_or_active'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    -- SECURITY: Distance check
+    local playerPed = GetPlayerPed(src)
+    local targetPed = GetPlayerPed(playerId)
+    if not playerPed or not targetPed then return end
+    
+    local playerCoords = GetEntityCoords(playerPed)
+    local targetCoords = GetEntityCoords(targetPed)
+    if #(playerCoords - targetCoords) > 5.0 then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_player_too_far'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    -- Send trade request to target
+    tradeRequests[playerId] = {
+        from = src,
+        horseId = horseId,
+        horseName = horse[1].name,
+        horseModel = horse[1].horse,
+        expires = os.time() + 30
+    }
+    
+    TriggerClientEvent('ox_lib:notify', playerId, {
+        title = locale('sv_trade_request_title'), 
+        description = string.format(locale('sv_trade_request_desc'), GetPlayerName(src), horse[1].name),
+        type = 'info', 
+        duration = 30000 
+    })
+    
+    TriggerClientEvent('ox_lib:notify', src, {
+        title = string.format(locale('sv_trade_request_sent'), GetPlayerName(playerId)), 
+        type = 'success', 
+        duration = 5000 
+    })
+end)
+
+-----------------------------------
+-- trade horse (accept)
+-----------------------------------
+RegisterNetEvent('rsg-horses:server:AcceptTrade', function(fromId)
+    local src = source
+    local trade = tradeRequests[src]
+    
+    if not trade then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_trade_request'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    if trade.from ~= fromId then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_trade_request'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    if os.time() > trade.expires then
+        tradeRequests[src] = nil
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_trade_expired'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    local Target = RSGCore.Functions.GetPlayer(src)
+    local Sender = RSGCore.Functions.GetPlayer(fromId)
+    
+    if not Target or not Sender then
+        tradeRequests[src] = nil
+        return
+    end
+    
+    -- Verify horse still exists and is owned by sender
+    local horse = MySQL.query.await('SELECT * FROM player_horses WHERE horseid = ? AND citizenid = ?', 
+        {trade.horseId, Sender.PlayerData.citizenid})
+    
+    if not horse or not horse[1] then
+        tradeRequests[src] = nil
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_horse_unavailable'), type = 'error', duration = 5000 })
+        TriggerClientEvent('ox_lib:notify', fromId, {title = locale('sv_error_trade_failed'), type = 'error', duration = 5000 })
+        return
+    end
+    
+    -- Proceed with trade
+    MySQL.update('UPDATE player_horses SET citizenid = ?, active = ? WHERE horseid = ?', {Target.PlayerData.citizenid, 0, trade.horseId})
+    
+    -- Deactivate target's current active horse if they have one
+    MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Target.PlayerData.citizenid, 1})
+    
+    TriggerClientEvent('ox_lib:notify', src, {
+        title = string.format(locale('sv_trade_received'), trade.horseName), 
+        type = 'success', 
+        duration = 7000 
+    })
+    
+    TriggerClientEvent('ox_lib:notify', fromId, {
+        title = string.format(locale('sv_trade_success'), GetPlayerName(src)), 
+        type = 'success', 
+        duration = 7000 
+    })
+    
+    tradeRequests[src] = nil
 end)
 
 -----------------------------------
@@ -426,7 +649,7 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horsestash, in
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    local data = { label = 'Horse Inventory', maxweight = invWeight, slots = invSlots }
+    local data = { label = locale('sv_horse_inventory'), maxweight = invWeight, slots = invSlots }
     exports['rsg-inventory']:OpenInventory(src, horsestash, data)
 end)
 

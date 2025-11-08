@@ -93,5 +93,34 @@
     "sv_telegram_has_passed" : "umarł. Odwiedź trenera koni, aby omówić zastępstwo!",
 
     "sv_print" : "Cykl kontroli koni zakończony",
-    "cf_menu_horse_blip_name" : "Stajnia"
+    "cf_menu_horse_blip_name" : "Stajnia",
+
+    "cl_status_active" : "✓ Aktywny",
+    "cl_status_inactive" : "✗ Nieaktywny",
+    "cl_horse_stats_desc" : "Poziom %d | Płeć: %s | XP: %d | %s | Czystość: %d%%",
+    "cl_sell_horse_desc" : "Sprzedaj za $%d (Poziom %d, %d XP)",
+    "cl_sell_horse_header" : "Sprzedaj Konia",
+    "cl_sell_horse_confirm" : "Czy na pewno chcesz sprzedać %s za $%d? Tego nie można cofnąć.",
+    "cl_warning_title" : "⚠️ Ostrzeżenie",
+    "cl_warning_horse_critical" : "Twój koń jest poważnie ranny! Użyj szybko ożywiacza koni!",
+    "cl_horse_fed_title" : "Koń Nakarmiony",
+    "cl_horse_fed_desc" : "%s otrzymał +%d zdrowia i +%d wytrzymałości",
+
+    "sv_command_accept_trade" : "Zaakceptuj oczekującą prośbę o wymianę konia",
+    "sv_error_no_trade_request" : "Brak oczekujących prośb o wymianę",
+    "sv_error_invalid_horse_name" : "Nieprawidłowa nazwa konia",
+    "sv_error_horse_name_length" : "Nazwa konia musi mieć od 1 do 50 znaków",
+    "sv_error_not_own_horse" : "Nie jesteś właścicielem tego konia",
+    "sv_error_invalid_components" : "Nieprawidłowe komponenty: ",
+    "sv_error_not_own_or_active" : "Nie jesteś właścicielem tego konia lub nie jest aktywny",
+    "sv_error_player_too_far" : "Docelowy gracz jest zbyt daleko",
+    "sv_trade_request_title" : "Prośba o Wymianę Konia",
+    "sv_trade_request_desc" : "%s chce wymienić z Tobą swojego konia: %s. Wpisz /accepttrade, aby zaakceptować.",
+    "sv_trade_request_sent" : "Prośba o wymianę wysłana do %s",
+    "sv_error_invalid_trade_request" : "Nieprawidłowa prośba o wymianę",
+    "sv_error_trade_expired" : "Prośba o wymianę wygasła",
+    "sv_error_horse_unavailable" : "Koń już niedostępny",
+    "sv_error_trade_failed" : "Wymiana nie powiodła się - koń nie znaleziony",
+    "sv_trade_received" : "Otrzymałeś konia: %s",
+    "sv_trade_success" : "Koń pomyślnie wymieniony z %s"
 }

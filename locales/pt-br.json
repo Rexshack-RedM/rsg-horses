@@ -93,5 +93,34 @@
     "sv_telegram_has_passed" : "faleceu. Por favor, visite seu treinador de cavalos para discutir uma substituição!",
 
     "sv_print" : "ciclo de verificação de cavalos concluído",
-    "cf_menu_horse_blip_name" : "Estábulo"
+    "cf_menu_horse_blip_name" : "Estábulo",
+
+    "cl_status_active" : "✓ Ativo",
+    "cl_status_inactive" : "✗ Inativo",
+    "cl_horse_stats_desc" : "Nível %d | Gênero: %s | XP: %d | %s | Limpeza: %d%%",
+    "cl_sell_horse_desc" : "Vender por $%d (Nível %d, %d XP)",
+    "cl_sell_horse_header" : "Vender Cavalo",
+    "cl_sell_horse_confirm" : "Tem certeza de que deseja vender %s por $%d? Isso não pode ser desfeito.",
+    "cl_warning_title" : "⚠️ Aviso",
+    "cl_warning_horse_critical" : "Seu cavalo está gravemente ferido! Use um revitalizador de cavalo rapidamente!",
+    "cl_horse_fed_title" : "Cavalo Alimentado",
+    "cl_horse_fed_desc" : "%s ganhou +%d de saúde e +%d de resistência",
+
+    "sv_command_accept_trade" : "Aceitar uma solicitação de troca de cavalo pendente",
+    "sv_error_no_trade_request" : "Nenhuma solicitação de troca pendente",
+    "sv_error_invalid_horse_name" : "Nome de cavalo inválido",
+    "sv_error_horse_name_length" : "O nome do cavalo deve ter entre 1 e 50 caracteres",
+    "sv_error_not_own_horse" : "Você não é dono deste cavalo",
+    "sv_error_invalid_components" : "Componentes inválidos: ",
+    "sv_error_not_own_or_active" : "Você não é dono deste cavalo ou ele não está ativo",
+    "sv_error_player_too_far" : "Jogador alvo está muito longe",
+    "sv_trade_request_title" : "Solicitação de Troca de Cavalo",
+    "sv_trade_request_desc" : "%s quer trocar o cavalo dele com você: %s. Digite /accepttrade para aceitar.",
+    "sv_trade_request_sent" : "Solicitação de troca enviada para %s",
+    "sv_error_invalid_trade_request" : "Solicitação de troca inválida",
+    "sv_error_trade_expired" : "Solicitação de troca expirada",
+    "sv_error_horse_unavailable" : "Cavalo não mais disponível",
+    "sv_error_trade_failed" : "Troca falhou - cavalo não encontrado",
+    "sv_trade_received" : "Você recebeu um cavalo: %s",
+    "sv_trade_success" : "Cavalo trocado com sucesso com %s"
 }

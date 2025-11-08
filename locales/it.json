@@ -93,5 +93,34 @@
     "sv_telegram_has_passed" : "è deceduto, si prega di visitare l'addestratore di cavalli per discutere di una sostituzione!",
 
     "sv_print" : "ciclo di controllo dei cavalli completato",
-    "cf_menu_horse_blip_name" : "Stalla Cavalli"
+    "cf_menu_horse_blip_name" : "Stalla Cavalli",
+
+    "cl_status_active" : "✓ Attivo",
+    "cl_status_inactive" : "✗ Inattivo",
+    "cl_horse_stats_desc" : "Livello %d | Genere: %s | XP: %d | %s | Pulizia: %d%%",
+    "cl_sell_horse_desc" : "Vendi per $%d (Livello %d, %d XP)",
+    "cl_sell_horse_header" : "Vendi Cavallo",
+    "cl_sell_horse_confirm" : "Sei sicuro di voler vendere %s per $%d? Questa azione non può essere annullata.",
+    "cl_warning_title" : "⚠️ Avviso",
+    "cl_warning_horse_critical" : "Il tuo cavallo è gravemente ferito! Usa rapidamente un rianimatore per cavalli!",
+    "cl_horse_fed_title" : "Cavallo Nutrito",
+    "cl_horse_fed_desc" : "%s ha guadagnato +%d di salute e +%d di resistenza",
+
+    "sv_command_accept_trade" : "Accetta una richiesta di scambio di cavallo in sospeso",
+    "sv_error_no_trade_request" : "Nessuna richiesta di scambio in sospeso",
+    "sv_error_invalid_horse_name" : "Nome del cavallo non valido",
+    "sv_error_horse_name_length" : "Il nome del cavallo deve essere di 1-50 caratteri",
+    "sv_error_not_own_horse" : "Non possiedi questo cavallo",
+    "sv_error_invalid_components" : "Componenti non validi: ",
+    "sv_error_not_own_or_active" : "Non possiedi questo cavallo o non è attivo",
+    "sv_error_player_too_far" : "Il giocatore target è troppo lontano",
+    "sv_trade_request_title" : "Richiesta di Scambio Cavallo",
+    "sv_trade_request_desc" : "%s vuole scambiare il suo cavallo con te: %s. Digita /accepttrade per accettare.",
+    "sv_trade_request_sent" : "Richiesta di scambio inviata a %s",
+    "sv_error_invalid_trade_request" : "Richiesta di scambio non valida",
+    "sv_error_trade_expired" : "Richiesta di scambio scaduta",
+    "sv_error_horse_unavailable" : "Cavallo non più disponibile",
+    "sv_error_trade_failed" : "Scambio fallito - cavallo non trovato",
+    "sv_trade_received" : "Hai ricevuto un cavallo: %s",
+    "sv_trade_success" : "Cavallo scambiato con successo con %s"
 }

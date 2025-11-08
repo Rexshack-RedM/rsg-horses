@@ -15,6 +15,45 @@ local horsegender = nil
 local horseBonding = 0
 local bondingLevel = 0
 local horseLevel = 0
+
+-------------------
+-- helper functions
+-------------------
+local function CalculateHorseLevel(xp)
+    if xp <= 99 then return 1
+    elseif xp >= 100 and xp <= 199 then return 2
+    elseif xp >= 200 and xp <= 299 then return 3
+    elseif xp >= 300 and xp <= 399 then return 4
+    elseif xp >= 400 and xp <= 499 then return 5
+    elseif xp >= 500 and xp <= 999 then return 6
+    elseif xp >= 1000 and xp <= 1999 then return 7
+    elseif xp >= 2000 and xp <= 2999 then return 8
+    elseif xp >= 3000 and xp <= 3999 then return 9
+    else return 10 end
+end
+
+local function GetLevelProgress(xp)
+    local levels = {
+        {min = 0, max = 99, level = 1},
+        {min = 100, max = 199, level = 2},
+        {min = 200, max = 299, level = 3},
+        {min = 300, max = 399, level = 4},
+        {min = 400, max = 499, level = 5},
+        {min = 500, max = 999, level = 6},
+        {min = 1000, max = 1999, level = 7},
+        {min = 2000, max = 2999, level = 8},
+        {min = 3000, max = 3999, level = 9},
+        {min = 4000, max = 99999, level = 10}
+    }
+    
+    for _, range in ipairs(levels) do
+        if xp >= range.min and xp <= range.max then
+            local progress = ((xp - range.min) / (range.max - range.min + 1)) * 100
+            return range.level, math.floor(progress)
+        end
+    end
+    return 10, 100
+end
 -------------------
 local lanternequiped = false
 local lanternUsed = false
@@ -971,9 +1010,20 @@ RegisterNetEvent('rsg-horses:client:menu', function(data)
     local options = {}
 
     for k, v in pairs(horses) do
+        local level = CalculateHorseLevel(v.horsexp)
+        local activeStatus = v.active == 1 and locale('cl_status_active') or locale('cl_status_inactive')
+        local cleanPercent = 100 - (v.dirt or 0)
+        
         options[#options + 1] = {
             title = v.name,
-            description = locale('cl_menu_my_horse_gender') .. v.gender .. locale('cl_menu_my_horse_xp') .. v.horsexp .. locale('cl_menu_my_horse_active') .. v.active,
+            description = string.format(
+                locale('cl_horse_stats_desc'),
+                level,
+                v.gender,
+                v.horsexp,
+                activeStatus,
+                cleanPercent
+            ),
             icon = 'fa-solid fa-horse',
             arrow = true,
             onSelect = function()
@@ -1004,13 +1054,33 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
 
     local options = {}
     for k, v in pairs(horses) do
+        -- Calculate sell price (50% of original)
+        local HorseSettings = lib.load('shared.horse_settings')
+        local sellPrice = 0
+        for _, horseSetting in pairs(HorseSettings) do
+            if horseSetting.horsemodel == v.horse then
+                sellPrice = horseSetting.horseprice * 0.5
+                break
+            end
+        end
+        
         options[#options + 1] = {
             title = v.name,
-            description = locale('cl_menu_sell_your_horse'),
+            description = string.format(locale('cl_sell_horse_desc'), sellPrice, CalculateHorseLevel(v.horsexp), v.horsexp),
             icon = 'fa-solid fa-horse',
-            serverEvent = 'rsg-horses:server:deletehorse',
-            args = { horseid = v.id },
-            arrow = true
+            arrow = true,
+            onSelect = function()
+                local alert = lib.alertDialog({
+                    header = locale('cl_sell_horse_header'),
+                    content = string.format(locale('cl_sell_horse_confirm'), v.name, sellPrice),
+                    centered = true,
+                    cancel = true
+                })
+                
+                if alert == 'confirm' then
+                    TriggerServerEvent('rsg-horses:server:deletehorse', { horseid = v.id })
+                end
+            end
         }
     end
     lib.registerContext({
@@ -1031,6 +1101,20 @@ CreateThread(function()
     while true do
         Wait(1000)
         if horsePed ~= 0 and DoesEntityExist(horsePed) then
+            -- Warning when horse health is low
+            local horseHealth = GetEntityHealth(horsePed)
+            local maxHealth = GetEntityMaxHealth(horsePed)
+            local healthPercent = (horseHealth / maxHealth) * 100
+            
+            if healthPercent < 20 and healthPercent > 0 and not IsBeingRevived then
+                lib.notify({
+                    title = locale('cl_warning_title'),
+                    description = locale('cl_warning_horse_critical'),
+                    type = 'warning',
+                    duration = 7000
+                })
+            end
+            
             if IsEntityDead(horsePed) and not IsBeingRevived then
                 -- Wait a moment to allow player chance to revive
                 Wait(Config.DeathGracePeriod) -- grace period
@@ -1278,6 +1362,11 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
     local pcoords = GetEntityCoords(cache.ped)
     local hcoords = GetEntityCoords(horsePed)
 
+    if horsePed == 0 or not DoesEntityExist(horsePed) then
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
+        return
+    end
+
     if #(pcoords - hcoords) > 2.0 then
         lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
         return
@@ -1329,6 +1418,22 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, newStamina) -- SetAttributeCoreValue (Stamina)
 
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+                
+                -- Show feedback
+                RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
+                    if data then
+                        lib.notify({
+                            title = locale('cl_horse_fed_title'),
+                            description = string.format(locale('cl_horse_fed_desc'),
+                                data.name,
+                                Config.HorseFeed[itemName]["health"],
+                                Config.HorseFeed[itemName]["stamina"]
+                            ),
+                            type = 'success',
+                            duration = 5000
+                        })
+                    end
+                end)
             else
                 -- have invalid config
                 lib.notify({ title = locale('cl_error_feed')..' ' .. itemName .. ' '..locale('cl_error_feed_invalid'), type = 'error', duration = 7000 })

@@ -93,5 +93,34 @@
     "sv_telegram_has_passed": "ha fallecido, visite a su amable entrenador de caballos para hablar sobre un reemplazo",
 
     "sv_print" : "ciclo de verificación del caballo completado",
-    "cf_menu_horse_blip_name" : "Establo de caballos"
+    "cf_menu_horse_blip_name" : "Establo de caballos",
+
+    "cl_status_active" : "✓ Activo",
+    "cl_status_inactive" : "✗ Inactivo",
+    "cl_horse_stats_desc" : "Nivel %d | Género: %s | XP: %d | %s | Limpieza: %d%%",
+    "cl_sell_horse_desc" : "Vender por $%d (Nivel %d, %d XP)",
+    "cl_sell_horse_header" : "Vender Caballo",
+    "cl_sell_horse_confirm" : "¿Estás seguro de que quieres vender %s por $%d? Esto no se puede deshacer.",
+    "cl_warning_title" : "⚠️ Advertencia",
+    "cl_warning_horse_critical" : "¡Tu caballo está gravemente herido! ¡Usa un revitalizador de caballos rápidamente!",
+    "cl_horse_fed_title" : "Caballo Alimentado",
+    "cl_horse_fed_desc" : "%s ganó +%d de salud y +%d de resistencia",
+
+    "sv_command_accept_trade" : "Aceptar una solicitud de intercambio de caballo pendiente",
+    "sv_error_no_trade_request" : "No hay solicitud de intercambio pendiente",
+    "sv_error_invalid_horse_name" : "Nombre de caballo inválido",
+    "sv_error_horse_name_length" : "El nombre del caballo debe tener entre 1 y 50 caracteres",
+    "sv_error_not_own_horse" : "No eres dueño de este caballo",
+    "sv_error_invalid_components" : "Componentes inválidos: ",
+    "sv_error_not_own_or_active" : "No eres dueño de este caballo o no está activo",
+    "sv_error_player_too_far" : "El jugador objetivo está demasiado lejos",
+    "sv_trade_request_title" : "Solicitud de Intercambio de Caballo",
+    "sv_trade_request_desc" : "%s quiere intercambiar su caballo contigo: %s. Escribe /accepttrade para aceptar.",
+    "sv_trade_request_sent" : "Solicitud de intercambio enviada a %s",
+    "sv_error_invalid_trade_request" : "Solicitud de intercambio inválida",
+    "sv_error_trade_expired" : "Solicitud de intercambio expirada",
+    "sv_error_horse_unavailable" : "Caballo ya no disponible",
+    "sv_error_trade_failed" : "Intercambio fallido - caballo no encontrado",
+    "sv_trade_received" : "Recibiste un caballo: %s",
+    "sv_trade_success" : "Caballo intercambiado exitosamente con %s"
 }

@@ -93,5 +93,34 @@
     "sv_telegram_has_passed": "verstorben ist. Bitte besuche deinen Pferdetrainer, um über einen Ersatz zu sprechen.",
 
     "sv_print": "Pferdeüberprüfung abgeschlossen",
-    "cf_menu_horse_blip_name": "Pferdestall"
+    "cf_menu_horse_blip_name": "Pferdestall",
+
+    "cl_status_active" : "✓ Aktiv",
+    "cl_status_inactive" : "✗ Inaktiv",
+    "cl_horse_stats_desc" : "Level %d | Geschlecht: %s | XP: %d | %s | Sauberkeit: %d%%",
+    "cl_sell_horse_desc" : "Verkaufen für $%d (Level %d, %d XP)",
+    "cl_sell_horse_header" : "Pferd verkaufen",
+    "cl_sell_horse_confirm" : "Bist du sicher, dass du %s für $%d verkaufen möchtest? Dies kann nicht rückgängig gemacht werden.",
+    "cl_warning_title" : "⚠️ Warnung",
+    "cl_warning_horse_critical" : "Dein Pferd ist kritisch verletzt! Benutze schnell einen Pferdeheiler!",
+    "cl_horse_fed_title" : "Pferd gefüttert",
+    "cl_horse_fed_desc" : "%s hat +%d Gesundheit und +%d Ausdauer erhalten",
+
+    "sv_command_accept_trade" : "Eine ausstehende Pferdetauschanfrage annehmen",
+    "sv_error_no_trade_request" : "Keine ausstehende Tauschanfrage",
+    "sv_error_invalid_horse_name" : "Ungültiger Pferdename",
+    "sv_error_horse_name_length" : "Pferdename muss 1-50 Zeichen lang sein",
+    "sv_error_not_own_horse" : "Du besitzt dieses Pferd nicht",
+    "sv_error_invalid_components" : "Ungültige Komponenten: ",
+    "sv_error_not_own_or_active" : "Du besitzt dieses Pferd nicht oder es ist nicht aktiv",
+    "sv_error_player_too_far" : "Zielspieler ist zu weit entfernt",
+    "sv_trade_request_title" : "Pferdetausch-Anfrage",
+    "sv_trade_request_desc" : "%s möchte sein Pferd mit dir tauschen: %s. Tippe /accepttrade um anzunehmen.",
+    "sv_trade_request_sent" : "Tauschanfrage gesendet an %s",
+    "sv_error_invalid_trade_request" : "Ungültige Tauschanfrage",
+    "sv_error_trade_expired" : "Tauschanfrage abgelaufen",
+    "sv_error_horse_unavailable" : "Pferd nicht mehr verfügbar",
+    "sv_error_trade_failed" : "Tausch fehlgeschlagen - Pferd nicht gefunden",
+    "sv_trade_received" : "Du hast ein Pferd erhalten: %s",
+    "sv_trade_success" : "Pferd erfolgreich getauscht mit %s"
 }
