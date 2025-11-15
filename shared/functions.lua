@@ -9,3 +9,11 @@ function CalculatePrice(comp, initial)
 
     return price
 end
+
+function CalculateHorseMovePrice(fromCoords, toCoords)
+    local baseFee = Config.MoveHorseBasePrice 
+    local distanceMultiplier = Config.MoveFeePerMeter
+    local distance = #(fromCoords - toCoords)
+    local cost = math.floor(baseFee + (distance * distanceMultiplier))
+    return cost
+end

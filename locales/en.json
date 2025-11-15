@@ -120,7 +120,17 @@
     "sv_error_invalid_trade_request" : "Invalid trade request",
     "sv_error_trade_expired" : "Trade request expired",
     "sv_error_horse_unavailable" : "Horse no longer available",
-    "sv_error_trade_failed" : "Trade failed - horse not found",
-    "sv_trade_received" : "You received a horse: %s",
-    "sv_trade_success" : "Horse traded successfully to %s"
+     "sv_error_trade_failed" : "Trade failed - horse not found",
+     "sv_trade_received" : "You received a horse: %s",
+     "sv_trade_success" : "Horse traded successfully to %s",
+     "cl_menu_horse_move" : "Move Horse",
+     "cl_menu_horse_move_sub" : "relocate your horse to another stable",
+     "cl_horse_move_select" : "Select Horse to Move",
+     "cl_horse_move_select_stable" : "Destination Stable",
+     "sv_error_invalid_stable" : "This stable does not exist!",
+     "sv_error_horse_already_there" : "Your horse is already at this stable!",
+     "sv_success_horse_moved" : "Horse Relocated",
+      "sv_success_horse_moved_desc" : "%s moved to %s stable (Fee: $%d)",
+      "sv_error_insufficient_funds" : "Insufficient funds",
+      "cl_move_horse_cost" : "Cost: $%d"
 }

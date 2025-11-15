@@ -122,5 +122,16 @@
     "sv_error_horse_unavailable" : "Pferd nicht mehr verfügbar",
     "sv_error_trade_failed" : "Tausch fehlgeschlagen - Pferd nicht gefunden",
     "sv_trade_received" : "Du hast ein Pferd erhalten: %s",
-    "sv_trade_success" : "Pferd erfolgreich getauscht mit %s"
+     "sv_trade_success" : "Pferd erfolgreich getauscht mit %s",
+     
+     "cl_menu_horse_move": "Pferd verlegen",
+     "cl_menu_horse_move_sub": "verlege dein Pferd in einen anderen Stall",
+     "cl_horse_move_select": "Wähle Pferd zum Verlegen",
+     "cl_horse_move_select_stable": "Wähle Zielstall",
+     "sv_error_invalid_stable": "Dieser Stall existiert nicht!",
+     "sv_error_horse_already_there": "Dein Pferd ist bereits in diesem Stall!",
+     "sv_success_horse_moved": "Pferd verlegt",
+      "sv_success_horse_moved_desc": "%s in %s Stall verlegt (Gebühr: $%d)",
+      "sv_error_insufficient_funds": "Unzureichende Geldmittel",
+      "cl_move_horse_cost": "Kosten: $%d"
 }

@@ -1,6 +1,9 @@
 Config = {}
 lib.locale()
 
+-- debug
+Config.Debug = false
+
 Config = {
     horsesShopItems ={
         { name = 'horse_brush',     amount = 10, price = 5 },
@@ -15,9 +18,6 @@ Config = {
     },
     PersistStock = false, --should stock save in database and load it after restart, to 'remember' stock value before restart
 }
-
--- debug
-Config.Debug = false
 
 -- horse inventory hotkey, please refer to '[framework]/rsg-core/shared/keybinds.lua' for complete list of hotkeys
 Config.HorseInvKey = 0x760A9C6F -- G
@@ -80,6 +80,8 @@ Config.EnableServerNotify  = false
 Config.KeyBind             = 'J'
 Config.AllowTwoPlayersRide = true -- if true two players can ride but may have some impact on other features
 Config.DeathGracePeriod    = 60000 -- grace period to let player attempt to revive the horse
+Config.MoveHorseBasePrice  = 10
+Config.MoveFeePerMeter     = 0.01
 
 ---------------------------------
 -- horse inventory weight by level

@@ -324,6 +324,14 @@ RegisterNetEvent('rsg-horses:client:stablemenu', function(stableid)
         title = locale('cl_menu_stable_menu'),
         options = {
             {
+                title = locale('cl_menu_horse_move'),
+                description = locale('cl_menu_horse_move_sub'),
+                icon = 'fa-solid fa-horse',
+                event = 'rsg-horses:client:movehorse',
+                args = { stableid = stableid },
+                arrow = true
+            },
+            {
                 title = locale('cl_menu_horse_view_horses'),
                 description = locale('cl_menu_horse_view_horses_sub'),
                 icon = 'fa-solid fa-eye',
@@ -1095,6 +1103,86 @@ RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
 end)
 
 ------------------------------------
+-- move horse menu
+------------------------------------
+RegisterNetEvent('rsg-horses:client:movehorse', function(data)
+    local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
+
+    if #horses <= 0 then
+        lib.notify({ title = locale('cl_error_no_horses'), type = 'error', duration = 7000 })
+        return
+    end
+
+    local options = {}
+    for k, v in pairs(horses) do
+        options[#options + 1] = {
+            title = v.name,
+            description = string.format(locale('cl_horse_stats_desc'), CalculateHorseLevel(v.horsexp), v.gender, v.horsexp, v.active == 1 and locale('cl_status_active') or locale('cl_status_inactive'), 100 - (v.dirt or 0)),
+            icon = 'fa-solid fa-horse',
+            arrow = true,
+            onSelect = function()
+                SelectDestinationStable(v.id, data.stableid)
+            end
+        }
+    end
+
+    lib.registerContext({
+        id = 'move_horse_menu',
+        title = locale('cl_horse_move_select'),
+        position = 'top-right',
+        menu = 'stable_menu',
+        onBack = function() end,
+        options = options
+    })
+    lib.showContext('move_horse_menu')
+end)
+
+------------------------------------
+-- move horse destination
+------------------------------------
+function SelectDestinationStable(horseId, currentStableId)
+    local options = {}
+    local currentStable = nil
+    
+    -- Find current stable coordinates
+    for _, stableConfig in pairs(Config.StableSettings) do
+        if stableConfig.stableid == currentStableId then
+            currentStable = stableConfig
+            break
+        end
+    end
+    
+    for _, stableConfig in pairs(Config.StableSettings) do
+        if stableConfig.stableid ~= currentStableId then
+            local baseFee = Config.MoveHorseBasePrice
+            local feePerMeter = Config.MoveFeePerMeter
+            local distance = #(currentStable.coords - stableConfig.coords)
+            local cost = math.ceil(baseFee + (distance * feePerMeter))
+            options[#options + 1] = {
+                title = stableConfig.stableid:upper(),
+                description = string.format(locale('cl_move_horse_cost'), cost),
+                icon = 'fa-solid fa-money-bill',
+                arrow = false,
+                onSelect = function()
+                    TriggerServerEvent('rsg-horses:server:MoveHorse', horseId, stableConfig.stableid)
+                    lib.showContext('stable_menu')
+                end
+            }
+        end
+    end
+
+    lib.registerContext({
+        id = 'move_destination_menu',
+        title = locale('cl_horse_move_select_stable'),
+        position = 'top-right',
+        menu = 'move_horse_menu',
+        onBack = function() end,
+        options = options
+    })
+    lib.showContext('move_destination_menu')
+end
+
+------------------------------------
 -- horse death detection
 ------------------------------------
 CreateThread(function()
@@ -1356,7 +1444,9 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
     end
 end)
 
+------------------------------------
 -- player feed horse
+------------------------------------
 RegisterNetEvent('rsg-horses:client:playerfeedhorse')
 AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
     local pcoords = GetEntityCoords(cache.ped)
@@ -1446,7 +1536,9 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
     end
 end)
 
+------------------------------------
 -- player brush horse
+------------------------------------
 RegisterNetEvent('rsg-horses:client:playerbrushhorse')
 AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
     local pcoords = GetEntityCoords(cache.ped)
@@ -1486,7 +1578,7 @@ local loadAnimDict = function(dict)
 end
 
 ------------------------------------
--- Player revive horse
+-- player revive horse
 ------------------------------------
 RegisterNetEvent("rsg-horses:client:revivehorse")
 AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
@@ -1564,7 +1656,9 @@ Citizen.CreateThread(function()
     end
 end)
 
+------------------------------------
 -- save horse attributes 
+------------------------------------
 Citizen.CreateThread(function()
     while true do
         local sleep = 5000

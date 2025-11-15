@@ -122,5 +122,15 @@
     "sv_error_horse_unavailable" : "Cheval non disponible",
     "sv_error_trade_failed" : "Échange échoué - cheval non trouvé",
     "sv_trade_received" : "Vous avez reçu un cheval: %s",
-    "sv_trade_success" : "Cheval échangé avec succès avec %s"
+     "sv_trade_success" : "Cheval échangé avec succès avec %s",
+     
+     "cl_menu_horse_move": "Déplacer Cheval",
+     "cl_menu_horse_move_sub": "déplacez votre cheval vers une autre écurie",
+     "cl_horse_move_select": "Sélectionnez Cheval à Déplacer",
+     "cl_horse_move_select_stable": "Sélectionnez Écurie de Destination",
+     "sv_error_invalid_stable": "Cette écurie n'existe pas !",
+     "sv_error_horse_already_there": "Votre cheval est déjà dans cette écurie !",
+     "sv_success_horse_moved": "Cheval Déplacé",
+     "sv_success_horse_moved_desc": "%s déplacé vers écurie %s (Frais: $%d)",
+     "sv_error_insufficient_funds": "Fonds insuffisants"
 }
