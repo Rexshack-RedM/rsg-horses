@@ -28,7 +28,7 @@ local m_InfoCardData = {
 local function ListenForPromptEvent(iEventGroup, hWhichEvent, iEventDataSize, tOutTable)
     local iNumEvents = GetNumberOfEvents(iEventGroup)
     if iNumEvents > 0 then
-        for i = 0, iNumEvents do
+        for i = 0, iNumEvents - 1 do
             local hEventName = GetEventAtIndex(iEventGroup, i)
 
             if hEventName == hWhichEvent then

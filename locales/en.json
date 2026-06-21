@@ -8,6 +8,7 @@
     "cl_action_play" : "Play",
     "cl_action_lay" : "Lay",
     "cl_action_saddlebag" : "Open Saddlebag",
+    "cl_action_lantern" : "Lantern",
     "cl_action_horsebrush" : "Brush",
     "cl_custom_rotate_horse" : "Rotate Horses",
     "cl_custom_price" : "Total Price",
@@ -65,9 +66,11 @@
     "cl_horse_active" : "active",
     "cl_horse_find" : "Find Your Horse",
     "cl_error_horse_no" : "No horses",
+    "cl_error_no_saddlebags" : "Your horse needs saddlebags to access the inventory",
     "cl_action_drink" : "Drink",
     "cl_action_graze" : "Graze",
     "cl_action_horses" : "Horse Action",
+	
 
     "sv_command_find" : "find where your horses are stored",
     "sv_error_no_active_horse" : "No horse set as active!",
@@ -132,5 +135,6 @@
      "sv_success_horse_moved" : "Horse Relocated",
       "sv_success_horse_moved_desc" : "%s moved to %s stable (Fee: $%d)",
       "sv_error_insufficient_funds" : "Insufficient funds",
-      "cl_move_horse_cost" : "Cost: $%d"
+      "cl_move_horse_cost" : "Cost: $%d",
+      "sv_error_not_at_stable" : "You need to be near a stable to do that!"
 }

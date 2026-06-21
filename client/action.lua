@@ -133,15 +133,15 @@ function PerformHorseAction(thorse, anim, obj, forward)
     local horseHealth = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 0)
     local horseStamina = Citizen.InvokeNative(0x36731AC041289BB1, thorse, 1)
 
-    Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 0, horseHealth + Config.BoostAction.Health)
-    Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 1, horseStamina + Config.BoostAction.Stamina)
+    Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 0, horseHealth + math.random(Config.BoostAction.MinHealth, Config.BoostAction.MaxHealth))
+    Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 1, horseStamina + math.random(Config.BoostAction.MinStamina, Config.BoostAction.MaxStamina))
 
     objectInteract = false
 end
 
 function GetNearestInteractableObject(forward)
     for _, v in pairs(Config.ObjectActionList) do
-        local obj = GetClosestObjectOfType(forward.x, forward.y, forward.z, 0.9, v[1], 0, 1, 1)
+        local obj = GetClosestObjectOfType(forward.x, forward.y, forward.z, 2.5, v[1], 0, 1, 1)
         if obj ~= 0 then
             return obj, v[2]
         end
