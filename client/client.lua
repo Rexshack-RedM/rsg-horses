@@ -1313,6 +1313,15 @@ end)
 -- horse inventory
 ------------------------------------
 RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
+    local pcoords = GetEntityCoords(cache.ped)
+    local hcoords = GetEntityCoords(horsePed)
+    local distance = #(pcoords - hcoords)
+
+    if distance > 2.0 then
+        lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
+        return
+    end
+
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
         if horsePed == 0 then
             lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
