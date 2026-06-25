@@ -147,6 +147,15 @@ local function SetupHorseTarget()
                 end,
                 distance = 2.5,
             },
+            {
+                name     = 'horse_inventory',
+                icon     = 'fa-solid fa-box-open',
+                label    = locale('cl_action_saddlebag'),
+                distance = 2.5,
+                onSelect = function()
+                    TriggerEvent('rsg-horses:client:inventoryHorse')
+                end,
+            },
         })
     end)
 end
@@ -678,7 +687,7 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 49, 1, true) -- HORSE_BRUSH
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 50, 1, true) -- HORSE_FEED
                 Citizen.InvokeNative(0xA3DB37EDF9A74635, player, horsePed, 28, 1, true) -- HORSE_ITEMS
-
+				
                 HorsePrompts = PromptGetGroupIdForTargetEntity(horsePed)
 
                 SetupHorsePrompts()
@@ -1291,9 +1300,6 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1)
         if horsePed ~= 0 then
-            if Citizen.InvokeNative(0x91AEF906BCA88877, 0, 0xFF8109D8) then
-                TriggerEvent('rsg-horses:client:inventoryHorse')
-            end
             if Citizen.InvokeNative(0xC92AC953F0A982AE, HorseLayPrompts) then
                 if horsexp >= Config.TrickXp.Lay then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_resting@stand_enter', 'base')
@@ -1304,7 +1310,6 @@ Citizen.CreateThread(function()
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_wallow_shake@idle', 'idle_a')
                 end
             end
-
         end
     end
 end)
@@ -1645,4 +1650,27 @@ RegisterNetEvent('rsg-horses:client:gethorselocation', function()
         end
     end)
 
+end)
+
+------------------------------------
+-- Distance-check thread to block 0xFF8109D8 near your horse
+------------------------------------
+Citizen.CreateThread(function()
+    local disableDistance = 2.0
+    while true do
+        Wait(500) 
+        if horsePed ~= 0 and DoesEntityExist(horsePed) then
+            local playerCoords = GetEntityCoords(cache.ped)
+            local horseCoords = GetEntityCoords(horsePed)
+            
+            -- If player gets within the 2-meter threshold
+            if #(playerCoords - horseCoords) <= disableDistance then
+                -- Drop into high-frequency loop to seamlessly block the control action frame-by-frame
+                while horsePed ~= 0 and DoesEntityExist(horsePed) and #(GetEntityCoords(cache.ped) - GetEntityCoords(horsePed)) <= disableDistance do
+                    Wait(0)
+                    DisableControlAction(0, 0xFF8109D8, true)
+                end
+            end
+        end
+    end
 end)
