@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Stable</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="vignette"></div>
+    <div id="shop-container" class="hidden">
+        <div class="shop-frame">
+            <div class="frame-corner tl"></div>
+            <div class="frame-corner tr"></div>
+            <div class="frame-corner bl"></div>
+            <div class="frame-corner br"></div>
+        </div>
+
+        <div class="shop-header">
+            <div class="header-decoration left">
+                <img src="icons/animal_horse.png" alt="">
+            </div>
+            <div class="header-content">
+                <h1 class="shop-name" id="shop-name">HORSE STABLE</h1>
+                <div class="header-ornament">
+                    <span class="line"></span>
+                    <span class="diamond">✦</span>
+                    <span class="line"></span>
+                </div>
+                <p class="shop-subtitle" id="shop-subtitle">Stable Services & Supplies</p>
+            </div>
+            <div class="header-decoration right">
+                <img src="icons/horseshoes.png" alt="">
+            </div>
+        </div>
+
+        <div class="money-bar">
+            <div class="money-item cash">
+                <img src="icons/dollar.png" alt="">
+                <span class="money-label" data-i18n="nui_cash_label">Cash</span>
+                <span class="money-value" id="player-cash">$0.00</span>
+            </div>
+            <div class="money-divider">|</div>
+            <div class="money-item gold">
+                <img src="icons/leaderboard_gold.png" alt="">
+                <span class="money-label" data-i18n="nui_gold_label">Gold</span>
+                <span class="money-value" id="player-gold">0</span>
+            </div>
+        </div>
+
+        <div class="filter-bar" id="filter-bar">
+            <div class="breadcrumb" id="breadcrumb">
+                <span class="breadcrumb-item active" data-screen="main">Stable Menu</span>
+            </div>
+            <div class="sort-options" id="sort-options" style="display:none;">
+                <button class="sort-btn active" data-sort="name"><img src="icons/selection_arrow_left.png" alt=""><img src="icons/selection_arrow_right.png" alt=""> <span data-i18n="nui_sort_name">Name</span></button>
+                <button class="sort-btn" data-sort="price-low"><img src="icons/selection_arrow_left.png" alt=""> <span data-i18n="nui_sort_price_low">Price ↑</span></button>
+                <button class="sort-btn" data-sort="price-high"><img src="icons/selection_arrow_right.png" alt=""> <span data-i18n="nui_sort_price_high">Price ↓</span></button>
+            </div>
+        </div>
+
+        <div class="shop-content">
+            <!-- SCREEN: Main Stable Menu -->
+            <div class="screen" id="screen-main">
+                <div class="items-grid main-menu-grid" id="menu-grid"></div>
+            </div>
+
+            <!-- SCREEN: Horse List -->
+            <div class="screen hidden" id="screen-horse-list">
+                <div class="items-grid" id="horse-grid"></div>
+                <div class="no-items hidden" id="no-horses">
+                    <img src="icons/animal_horse.png" alt="">
+                    <p data-i18n="nui_no_horses_found">No horses found</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Sell Horse -->
+            <div class="screen hidden" id="screen-sell-horse">
+                <div class="items-grid" id="sell-grid"></div>
+                <div class="no-items hidden" id="no-sell-horses">
+                    <img src="icons/animal_horse.png" alt="">
+                    <p data-i18n="nui_no_horses_sell">No horses to sell</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Move Horse - Select Horse -->
+            <div class="screen hidden" id="screen-move-select">
+                <div class="items-grid" id="move-select-grid"></div>
+                <div class="no-items hidden" id="no-move-horses">
+                    <img src="icons/animal_horse.png" alt="">
+                    <p data-i18n="nui_no_horses_move">No horses to move</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Move Horse - Select Destination -->
+            <div class="screen hidden" id="screen-move-destination">
+                <div class="items-grid" id="move-dest-grid"></div>
+                <div class="no-items hidden" id="no-move-dests">
+                    <img src="icons/transferStable.png" alt="">
+                    <p data-i18n="nui_no_destinations">No destinations available</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Horse Shop (items) -->
+            <div class="screen hidden" id="screen-shop">
+                <div class="items-section">
+                    <div class="items-grid" id="shop-grid"></div>
+                    <div class="no-items hidden" id="no-shop-items">
+                        <img src="icons/propsets.png" alt="">
+                        <p data-i18n="nui_no_shop_items">No items available</p>
+                    </div>
+                </div>
+                <div class="cart-section">
+                    <div class="cart-header">
+                        <img src="icons/satchels.png" alt="">
+                        <h3 data-i18n="nui_your_cart">YOUR CART</h3>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="cart-items" id="cart-items"></div>
+                    <div class="cart-empty" id="cart-empty">
+                        <img src="icons/satchels.png" alt="">
+                        <p data-i18n="nui_cart_empty">Your cart is empty</p>
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span data-i18n="nui_subtotal">Subtotal</span>
+                            <span id="cart-subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span data-i18n="nui_total">TOTAL</span>
+                            <span id="cart-total">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="cart-actions">
+                        <button class="btn-clear" id="btn-clear"><img src="icons/cross.png" alt=""> <span data-i18n="nui_clear">CLEAR</span></button>
+                        <button class="btn-purchase" id="btn-purchase"><img src="icons/dollar.png" alt=""> <span data-i18n="nui_purchase">PURCHASE</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN: Buy Horse -->
+            <div class="screen hidden" id="screen-buy-horse">
+                <div class="items-section">
+                    <div class="items-grid" id="buy-grid"></div>
+                    <div class="no-items hidden" id="no-buy-horses">
+                        <img src="icons/animal_horse.png" alt="">
+                        <p data-i18n="nui_no_horses_available">No horses available</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN: Breed - Select Mare -->
+            <div class="screen hidden" id="screen-breed-mare">
+                <div class="items-grid" id="breed-mare-grid"></div>
+                <div class="no-items hidden" id="no-breed-mares">
+                    <img src="icons/female.png" alt="">
+                    <p data-i18n="nui_no_mares">No mares available for breeding</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Breed - Select Stallion -->
+            <div class="screen hidden" id="screen-breed-stallion">
+                <div class="items-grid" id="breed-stallion-grid"></div>
+                <div class="no-items hidden" id="no-breed-stallions">
+                    <img src="icons/male.png" alt="">
+                    <p data-i18n="nui_no_stallions">No stallions available for breeding</p>
+                </div>
+            </div>
+
+            <!-- SCREEN: Horse Customization -->
+            <div class="screen hidden" id="screen-customize">
+                <div class="customize-layout">
+                    <!-- Component Categories (Left) -->
+                    <div class="customize-components">
+                        <div class="customize-section-header">
+                            <img src="icons/horse_outfits.png" alt="">
+                            <h3 data-i18n="nui_components">COMPONENTS</h3>
+                        </div>
+                        <div class="components-grid" id="components-grid"></div>
+                    </div>
+
+                    <!-- Coat Customization (Right) -->
+                    <div class="customize-coat">
+                        <div class="customize-section-header">
+                            <img src="icons/horse_tails.png" alt="">
+                            <h3 data-i18n="nui_coat_markings">COAT & MARKINGS</h3>
+                        </div>
+                        <div class="coat-controls">
+                            <div class="coat-control-group">
+                                <label class="coat-label" data-i18n="nui_main_coat_label">Main Coat Colour (tint0)</label>
+                                <div class="coat-stepper" data-tint="tint0" data-min="0" data-max="254">
+                                    <button class="coat-arrow" id="coat-tint0-dec" title="Previous" data-i18n-title="nui_previous"><img src="icons/selection_arrow_left.png" alt="&lt;"></button>
+                                    <span class="coat-value" id="coat-tint0-value">0</span>
+                                    <button class="coat-arrow" id="coat-tint0-inc" title="Next" data-i18n-title="nui_next"><img src="icons/selection_arrow_right.png" alt="&gt;"></button>
+                                </div>
+                                <div class="color-swatch-grid" id="coat-tint0-grid"></div>
+                            </div>
+                            <div class="coat-control-group" id="coat-tint1-group">
+                                <label class="coat-label" data-i18n="nui_white_markings_label">White Markings (tint1) — 255 = none</label>
+                                <div class="coat-hint" id="coat-markings-hint" data-i18n="nui_markings_hint_has">Change this if the horse has markings (face/leg white). Set 255 for no markings.</div>
+                                <div class="coat-stepper" data-tint="tint1" data-min="0" data-max="255">
+                                    <button class="coat-arrow" id="coat-tint1-dec" title="Previous" data-i18n-title="nui_previous"><img src="icons/selection_arrow_left.png" alt="&lt;"></button>
+                                    <span class="coat-value" id="coat-tint1-value">255</span>
+                                    <button class="coat-arrow" id="coat-tint1-inc" title="Next" data-i18n-title="nui_next"><img src="icons/selection_arrow_right.png" alt="&gt;"></button>
+                                </div>
+                                <div class="color-swatch-grid" id="coat-tint1-grid"></div>
+                            </div>
+                            <div class="coat-control-group">
+                                <label class="coat-label" data-i18n="nui_nose_muzzle_label">Nose &amp; Muzzle (tint2)</label>
+                                <div class="coat-stepper" data-tint="tint2" data-min="0" data-max="255">
+                                    <button class="coat-arrow" id="coat-tint2-dec" title="Previous" data-i18n-title="nui_previous"><img src="icons/selection_arrow_left.png" alt="&lt;"></button>
+                                    <span class="coat-value" id="coat-tint2-value">255</span>
+                                    <button class="coat-arrow" id="coat-tint2-inc" title="Next" data-i18n-title="nui_next"><img src="icons/selection_arrow_right.png" alt="&gt;"></button>
+                                </div>
+                                <div class="color-swatch-grid" id="coat-tint2-grid"></div>
+                            </div>
+                            <div class="coat-control-group">
+                                <label class="coat-label" data-i18n="nui_mane_colour_label">Mane Colour</label>
+                                <div class="coat-stepper" data-tint="mane" data-min="0" data-max="254">
+                                    <button class="coat-arrow" id="coat-mane-dec" title="Previous" data-i18n-title="nui_previous"><img src="icons/selection_arrow_left.png" alt="&lt;"></button>
+                                    <span class="coat-value" id="coat-mane-value">0</span>
+                                    <button class="coat-arrow" id="coat-mane-inc" title="Next" data-i18n-title="nui_next"><img src="icons/selection_arrow_right.png" alt="&gt;"></button>
+                                </div>
+                                <div class="color-swatch-grid" id="coat-mane-grid"></div>
+                            </div>
+                            <div class="coat-control-group">
+                                <label class="coat-label" data-i18n="nui_tail_colour_label">Tail Colour</label>
+                                <div class="coat-stepper" data-tint="tail" data-min="0" data-max="254">
+                                    <button class="coat-arrow" id="coat-tail-dec" title="Previous" data-i18n-title="nui_previous"><img src="icons/selection_arrow_left.png" alt="&lt;"></button>
+                                    <span class="coat-value" id="coat-tail-value">0</span>
+                                    <button class="coat-arrow" id="coat-tail-inc" title="Next" data-i18n-title="nui_next"><img src="icons/selection_arrow_right.png" alt="&gt;"></button>
+                                </div>
+                                <div class="color-swatch-grid" id="coat-tail-grid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price & Actions Bar -->
+                <div class="customize-footer">
+                    <div class="customize-price">
+                        <span class="price-label" data-i18n="nui_total">TOTAL</span>
+                        <span class="price-value" id="customize-price">$0.00</span>
+                    </div>
+                    <div class="customize-rotate">
+                        <button class="rotate-btn" id="customize-rotate-left" title="Rotate Left" data-i18n-title="nui_rotate_left">
+                            <img src="icons/selection_arrow_left.png" alt="">
+                        </button>
+                        <button class="rotate-btn" id="customize-rotate-right" title="Rotate Right" data-i18n-title="nui_rotate_right">
+                            <img src="icons/selection_arrow_right.png" alt="">
+                        </button>
+                    </div>
+                    <div class="customize-actions">
+                        <button class="btn-cancel" id="customize-cancel"><img src="icons/cross.png" alt=""> <span data-i18n="nui_cancel">CANCEL</span></button>
+                        <button class="btn-purchase" id="customize-save"><img src="icons/tick.png" alt=""> <span data-i18n="nui_save">SAVE</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shop-footer">
+            <div class="footer-info">
+                <img src="icons/information.png" alt="">
+                <span id="footer-text" data-i18n="nui_footer_click_option">Click an option to proceed</span>
+            </div>
+            <div class="footer-actions" id="footer-actions">
+                <button class="back-btn" id="back-btn" style="display:none;">
+                    <img src="icons/cross.png" alt=""> <span data-i18n="nui_back">BACK</span>
+                </button>
+                <button class="rotate-btn" id="rotate-left" title="Rotate Left" data-i18n-title="nui_rotate_left">
+                    <img src="icons/wheel2.png" alt="">
+                </button>
+                <button class="rotate-btn" id="rotate-right" title="Rotate Right" data-i18n-title="nui_rotate_right">
+                    <img src="icons/wheel2.png" alt="">
+                </button>
+            </div>
+            <button class="close-btn" id="close-btn">
+                <span data-i18n="nui_close">CLOSE</span>
+                <img src="icons/close.png" alt="">
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container confirm-container">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <h2 id="confirm-title" data-i18n="nui_confirm_default_title">Confirm</h2>
+                </div>
+                <button class="modal-close" id="confirm-close"><img src="icons/cross.png" alt=""></button>
+            </div>
+            <div class="ink-divider"></div>
+            <div class="modal-body">
+                <p id="confirm-message" class="confirm-message" data-i18n="nui_confirm_default_message">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="confirm-cancel"><img src="icons/cross.png" alt=""> <span data-i18n="nui_cancel">CANCEL</span></button>
+                <button class="btn-add-cart confirm-yes" id="confirm-yes"><img src="icons/tick.png" alt=""> <span data-i18n="nui_confirm_btn">CONFIRM</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Modal -->
+    <div id="input-modal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <h2 id="input-title" data-i18n="nui_input_default_title">Input</h2>
+                </div>
+                <button class="modal-close" id="input-close"><img src="icons/cross.png" alt=""></button>
+            </div>
+            <div class="ink-divider"></div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label id="input-label" class="input-label" data-i18n="nui_enter_value_label">Enter value:</label>
+                    <input type="text" id="input-field" class="input-field" placeholder="Type here..." data-i18n-placeholder="nui_input_placeholder_default">
+                </div>
+                <div class="input-group" id="input-select-group" style="display:none;">
+                    <label id="input-select-label" class="input-label" data-i18n="nui_select_option_label">Select option:</label>
+                    <select id="input-select" class="input-select"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="input-cancel"><img src="icons/cross.png" alt=""> <span data-i18n="nui_back">BACK</span></button>
+                <button class="btn-add-cart" id="input-submit"><img src="icons/tick.png" alt=""> <span data-i18n="nui_submit">SUBMIT</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div id="success-overlay" class="success-overlay hidden">
+        <div class="success-content">
+            <div class="success-icon"><img src="icons/tick.png" alt=""></div>
+            <h2 data-i18n="nui_success_title">SUCCESS!</h2>
+            <div class="ink-divider"></div>
+            <p id="success-message" data-i18n="nui_action_completed">Action completed</p>
+            <div class="success-decoration">✦</div>
+        </div>
+    </div>
+
+    <!-- Wild Horse panel + appraisal progress (merged from rsg-wildhorse).
+         All ids/classes are wh-prefixed / scoped under #wh-root so they can
+         never collide with the stable UI above. -->
+    <div id="wh-root" class="hidden">
+        <div class="wh-panel">
+            <div class="wh-header">
+                <button id="wh-backBtn" class="wh-icon wh-icon-left" aria-label="Back" data-i18n-aria="nui_back"><i class="fa-solid fa-chevron-left"></i></button>
+                <div>
+                    <h1 id="wh-title" data-i18n="nui_wild_horse_title">WILD HORSE</h1>
+                    <p data-i18n="nui_frontier_stable">FRONTIER STABLE</p>
+                </div>
+                <button id="wh-closeBtn" class="wh-icon wh-icon-right" aria-label="Close" data-i18n-aria="nui_close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="wh-divider"><span>?</span></div>
+
+            <div class="wh-menu-list">
+                <button id="wh-sellBtn" class="wh-menu-row">
+                    <span class="wh-row-icon"><i class="fa-solid fa-horse-head"></i></span>
+                    <span class="wh-row-copy">
+                        <strong data-i18n="nui_sell_horse_row_title">SELL HORSE</strong>
+                        <em data-i18n="nui_sell_horse_row_desc">Appraise and sell this horse for its frontier value.</em>
+                    </span>
+                    <span class="wh-row-badge" data-i18n="nui_sell_badge">SELL</span>
+                </button>
+
+                <button id="wh-saveBtn" class="wh-menu-row">
+                    <span class="wh-row-icon"><i class="fa-solid fa-horse"></i></span>
+                    <span class="wh-row-copy">
+                        <strong data-i18n="nui_save_horse_row_title">SAVE HORSE</strong>
+                        <em data-i18n="nui_save_horse_row_desc">Register this horse and keep it in your stable.</em>
+                    </span>
+                    <span class="wh-row-badge" data-i18n="nui_stable_badge">STABLE</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom appraisal UI. No vignette/overlay is used. -->
+    <div id="wh-progressRoot" class="hidden" aria-hidden="true">
+        <div class="wh-progress-card">
+            <div class="wh-progress-header">
+                <div class="wh-progress-medallion"><i class="fa-solid fa-horse-head"></i></div>
+                <div class="wh-progress-heading">
+                    <div id="wh-progressTitle" data-i18n="nui_appraising_horse">APPRAISING HORSE</div>
+                    <div id="wh-progressStage" data-i18n="nui_stage_inspecting">INSPECTING THE HORSE</div>
+                </div>
+                <div id="wh-progressPercent">0%</div>
+            </div>
+
+            <div class="wh-progress-track">
+                <div id="wh-progressFill" class="wh-stat-good"></div>
+                <div class="wh-progress-glint"></div>
+            </div>
+
+            <div class="wh-progress-meta">
+                <span><i class="fa-regular fa-clock"></i> <b id="wh-progressTime">0.0s</b></span>
+                <span data-i18n="nui_frontier_stable">FRONTIER STABLE</span>
+            </div>
+
+            <div class="wh-progress-stages">
+                <div class="wh-stage active" data-stage="0">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-horse-head"></i></span>
+                    <span data-i18n="nui_stage_inspecting">INSPECTING THE HORSE</span>
+                </div>
+                <div class="wh-stage" data-stage="1">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <span data-i18n="nui_stage_checking">CHECKING BREED AND MARKINGS</span>
+                </div>
+                <div class="wh-stage" data-stage="2">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <span data-i18n="nui_stage_assessing">ASSESSING CONDITION</span>
+                </div>
+                <div class="wh-stage" data-stage="3">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-id-card"></i></span>
+                    <span data-i18n="nui_stage_confirming">CONFIRMING OWNERSHIP</span>
+                </div>
+                <div class="wh-stage" data-stage="4">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-horse"></i></span>
+                    <span data-i18n="nui_stage_preparing">PREPARING THE SALE</span>
+                </div>
+                <div class="wh-stage" data-stage="5">
+                    <span class="wh-stage-icon"><i class="fa-solid fa-check"></i></span>
+                    <span data-i18n="nui_stage_finalising">FINALISING APPRAISAL</span>
+                </div>
+            </div>
+
+            <div class="wh-progress-footer">
+                <span data-i18n="nui_esc_to_cancel">ESC TO CANCEL</span>
+                <span id="wh-progressHint" data-i18n="nui_please_wait">PLEASE WAIT</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

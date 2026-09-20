@@ -1,6 +1,5 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 local HorseSettings = lib.load('shared.horse_settings')
-local HorseComp = lib.load('shared.horse_comp')
 lib.locale()
 
 ----------------------------------
@@ -14,6 +13,8 @@ local function VerifyHorseOwnership(citizenid, horseid)
 end
 
 local function ValidateComponents(components)
+    local HorseComp = lib.load('shared.horse_comp')
+    
     if type(components) ~= "table" then
         return false, "Invalid component type"
     end
@@ -28,6 +29,41 @@ local function ValidateComponents(components)
         end
     end
     
+    return true
+end
+
+-- coat color / markings validation (merged from horse_markings: tint0 0-254, tint1/tint2 0-255, mane/tail 0-254)
+local function ValidateCoat(coat)
+    if coat == nil then
+        return true
+    end
+    if type(coat) ~= 'table' then
+        return false, locale('sv_error_invalid_coat_type')
+    end
+    local t0 = tonumber(coat.tint0) or 0
+    local t1 = tonumber(coat.tint1)
+    local t2 = tonumber(coat.tint2)
+    if t1 == nil then t1 = 255 end
+    if t2 == nil then t2 = 255 end
+    local mane = tonumber(coat.mane)
+    local tail = tonumber(coat.tail)
+    if mane == nil then mane = t0 end
+    if tail == nil then tail = t0 end
+    if t0 < 0 or t0 > 254 then
+        return false, 'Invalid coat tint0 (0-254)'
+    end
+    if t1 < 0 or t1 > 255 then
+        return false, 'Invalid coat tint1 (0-255)'
+    end
+    if t2 < 0 or t2 > 255 then
+        return false, 'Invalid coat tint2 (0-255)'
+    end
+    if mane < 0 or mane > 254 then
+        return false, 'Invalid mane colour (0-254)'
+    end
+    if tail < 0 or tail > 254 then
+        return false, 'Invalid tail colour (0-254)'
+    end
     return true
 end
 
@@ -72,6 +108,7 @@ end)
 RSGCore.Functions.CreateUseableItem('horse_brush', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item.name)
+    SendDiscordLog('horses', 'Horse Brushed', 'Player used ' .. item.name .. ' to brush their active horse.', WebhookColors.info, nil, source)
 end)
 
 -- player horselantern
@@ -85,23 +122,31 @@ end)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
+        SendDiscordLog('horses', 'Horse Fed', 'Player fed their active horse with ' .. item.name .. '.', WebhookColors.info, nil, source)
     end
 end)
 
 -- feed horse carrot
-RSGCore.Functions.CreateUseableItem('horse_carrot', function(source, item)
+RSGCore.Functions.CreateUseableItem('horsecarrot', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
+        SendDiscordLog('horses', 'Horse Fed', 'Player fed their active horse with ' .. item.name .. '.', WebhookColors.info, nil, source)
     end
 end)
 
  -- feed apple
- RSGCore.Functions.CreateUseableItem('horse_apple', function(source, item)
+ RSGCore.Functions.CreateUseableItem('horseapple', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
+        SendDiscordLog('horses', 'Horse Fed', 'Player fed their active horse with ' .. item.name .. '.', WebhookColors.info, nil, source)
     end
+end)
+-- player horseholster
+RSGCore.Functions.CreateUseableItem("horse_holster", function(source, item)
+    local Player = RSGCore.Functions.GetPlayer(source)
+    TriggerClientEvent("rsg-horses:client:equipHorseHolster", source, item.name)
 end)
 
 -- feed horse sugarcube
@@ -109,24 +154,20 @@ RSGCore.Functions.CreateUseableItem('sugarcube', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
+        SendDiscordLog('horses', 'Horse Fed', 'Player fed their active horse with ' .. item.name .. '.', WebhookColors.info, nil, source)
     end
 end)
 
 -- feed horse haysnack
-RSGCore.Functions.CreateUseableItem('haysnack', function(source, item)
+RSGCore.Functions.CreateUseableItem('hay', function(source, item)
     local Player = RSGCore.Functions.GetPlayer(source)
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
+        SendDiscordLog('horses', 'Horse Fed', 'Player fed their active horse with ' .. item.name .. '.', WebhookColors.info, nil, source)
     end
 end)
 
--- feed horse horsemeal
-RSGCore.Functions.CreateUseableItem('horsemeal', function(source, item)
-    local Player = RSGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent('rsg-horses:client:playerfeedhorse', source, item.name)
-    end
-end)
+
 
 ----------------------------------
 -- horse reviver
@@ -145,10 +186,13 @@ RSGCore.Functions.CreateUseableItem('horse_reviver', function(source, item)
         return
     end
 
-    -- remove item first (server-authoritative), then trigger revive
+    
     if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'remove', 1)
         TriggerClientEvent('rsg-horses:client:revivehorse', src, item, result[1])
+        SendDiscordLog('horses', 'Horse Revived', 'Player revived their active horse (' .. tostring(result[1].name) .. ') using ' .. item.name .. '.', WebhookColors.info, {
+            { name = 'Horse', value = tostring(result[1].name), inline = true },
+        }, src)
     end
 end)
 
@@ -160,7 +204,7 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
 
-    -- SECURITY: Validate horse name
+   
     if not horsename or type(horsename) ~= "string" then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_horse_name'), type = 'error', duration = 5000 })
         return
@@ -186,15 +230,16 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
 
     local price = horseInfo.horseprice
     
-    -- SECURITY: Atomic transaction - remove money first
+    
     if not Player.Functions.RemoveMoney('cash', price) then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
         return
     end
     
-    -- Money removed successfully, now safe to create horse
+   
     local horseid = GenerateHorseid()
-    MySQL.insert('INSERT INTO player_horses(stable, citizenid, horseid, name, horse, gender, active, born) VALUES(@stable, @citizenid, @horseid, @name, @horse, @gender, @active, @born)', {
+    local adultAge = (Config.Growth.growthMinutesToAdult or 120) * 60
+    MySQL.insert('INSERT INTO player_horses(stable, citizenid, horseid, name, horse, gender, active, born, age_seconds) VALUES(@stable, @citizenid, @horseid, @name, @horse, @gender, @active, @born, @age_seconds)', {
         ['@stable'] = stable,
         ['@citizenid'] = Player.PlayerData.citizenid,
         ['@horseid'] = horseid,
@@ -202,12 +247,198 @@ RegisterServerEvent('rsg-horses:server:BuyHorse', function(model, stable, horsen
         ['@horse'] = model,
         ['@gender'] = gender,
         ['@active'] = false,
-        ['@born'] = os.time()
+        ['@born'] = os.time(),
+        ['@age_seconds'] = adultAge
     })
     
     TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_owned'), type = 'success', duration = 5000 })
+
+    SendDiscordLog('economy', 'Horse Purchased', horsename .. ' (' .. model .. ') bought for the ' .. tostring(stable) .. ' stable.', WebhookColors.success, {
+        { name = 'Horse Name', value = horsename, inline = true },
+        { name = 'Model', value = model, inline = true },
+        { name = 'Price', value = '$' .. tostring(price), inline = true },
+        { name = 'Stable', value = tostring(stable), inline = true },
+    }, src)
 end)
 
+RegisterServerEvent('rsg-horses:server:storeHorseWeapon')
+AddEventHandler('rsg-horses:server:storeHorseWeapon', function(weaponHash, weaponName, weaponData)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    local citizenid = Player.PlayerData.citizenid
+
+    -- SECURITY: weaponName/weaponData are client-supplied. Never trust them
+    -- for storage until the item has actually been verified to exist in the
+    -- claimed slot and successfully removed from the player's inventory,
+    -- otherwise a client could conjure an arbitrary weapon (with arbitrary
+    -- serial/info) out of thin air via retrieveHorseWeapon.
+    if type(weaponName) ~= 'string' or type(weaponData) ~= 'table' or type(weaponData.slot) ~= 'number' then
+        SendDiscordLog('security', 'Invalid storeHorseWeapon Payload', 'Player sent a malformed weapon store payload.', WebhookColors.warning, {
+            { name = 'weaponName type', value = type(weaponName), inline = true },
+            { name = 'weaponData type', value = type(weaponData), inline = true },
+        }, src)
+        return
+    end
+
+    local slotItem = Player.Functions.GetItemBySlot(weaponData.slot)
+    if not slotItem or slotItem.name ~= weaponName then
+        SendDiscordLog('security', 'Weapon Slot Mismatch Rejected', 'Claimed weapon did not match the item actually in the given slot.', WebhookColors.warning, {
+            { name = 'Claimed Weapon', value = tostring(weaponName), inline = true },
+            { name = 'Slot', value = tostring(weaponData.slot), inline = true },
+            { name = 'Actual Slot Item', value = slotItem and slotItem.name or 'empty', inline = true },
+        }, src)
+        return
+    end
+
+    if not Player.Functions.RemoveItem(weaponName, 1, weaponData.slot) then
+        return
+    end
+
+    TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[weaponName], 'remove', 1)
+
+    local weaponDataJson = json.encode({
+        name = weaponData.name,
+        info = weaponData.info,
+        serial = weaponData.serial
+    })
+
+    MySQL.update('UPDATE player_horses SET stored_weapon = ?, stored_weapon_name = ?, stored_weapon_data = ? WHERE citizenid = ? AND active = 1', {
+        weaponHash,
+        weaponName,
+        weaponDataJson,
+        citizenid
+    })
+
+    SendDiscordLog('economy', 'Weapon Stored on Horse', weaponName .. ' stored on active horse.', WebhookColors.success, {
+        { name = 'Weapon', value = weaponName, inline = true },
+        { name = 'Slot', value = tostring(weaponData.slot), inline = true },
+    }, src)
+end)
+
+
+RegisterServerEvent('rsg-horses:server:retrieveHorseWeapon')
+AddEventHandler('rsg-horses:server:retrieveHorseWeapon', function()
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    local citizenid = Player.PlayerData.citizenid
+
+    local result = MySQL.query.await('SELECT stored_weapon, stored_weapon_name, stored_weapon_data FROM player_horses WHERE citizenid = ? AND active = 1', { citizenid })
+
+    if result and result[1] and result[1].stored_weapon_name then
+        local weaponName = result[1].stored_weapon_name
+        local weaponDataJson = result[1].stored_weapon_data
+        local weaponData = {}
+
+        if weaponDataJson then
+            weaponData = json.decode(weaponDataJson) or {}
+        end
+
+        
+        local info = weaponData.info or {}
+        if weaponData.serial then
+            info.serial = weaponData.serial
+        end
+
+        
+        Player.Functions.AddItem(weaponName, 1, nil, info)
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[weaponName], 'add', 1)
+
+        
+        MySQL.update('UPDATE player_horses SET stored_weapon = NULL, stored_weapon_name = NULL, stored_weapon_data = NULL WHERE citizenid = ? AND active = 1', { citizenid })
+
+        
+        TriggerClientEvent('rsg-horses:client:equipRetrievedWeapon', src, result[1].stored_weapon)
+
+        SendDiscordLog('economy', 'Weapon Retrieved from Horse', weaponName .. ' retrieved from active horse.', WebhookColors.success, {
+            { name = 'Weapon', value = weaponName, inline = true },
+        }, src)
+    end
+end)
+
+
+RSGCore.Functions.CreateCallback('rsg-horses:server:getHorseWeapon', function(source, cb)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then cb(nil) return end
+
+    local citizenid = Player.PlayerData.citizenid
+    local result = MySQL.query.await('SELECT stored_weapon, stored_weapon_name, stored_weapon_data FROM player_horses WHERE citizenid = ? AND active = 1', { citizenid })
+
+    if result and result[1] and result[1].stored_weapon then
+        local weaponData = {}
+        if result[1].stored_weapon_data then
+            weaponData = json.decode(result[1].stored_weapon_data) or {}
+        end
+
+        cb({
+            weaponHash = result[1].stored_weapon,
+            weaponName = result[1].stored_weapon_name,
+            weaponData = weaponData
+        })
+    else
+        cb(nil)
+    end
+end)
+
+RSGCore.Functions.CreateCallback('rsg-horses:server:getWeaponData', function(source, cb, weaponName)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then cb(nil) return end
+
+    local items = Player.PlayerData.items
+
+    for slot, item in pairs(items) do
+        if item and item.name == weaponName then
+            cb({
+                name = item.name,
+                info = item.info or {},
+                slot = slot,
+                serial = item.info and item.info.serial or nil
+            })
+            return
+        end
+    end
+
+    cb(nil)
+end)
+
+RegisterServerEvent('rsg-horses:server:clearHorseWeapon')
+AddEventHandler('rsg-horses:server:clearHorseWeapon', function()
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    local citizenid = Player.PlayerData.citizenid
+
+    local result = MySQL.query.await('SELECT stored_weapon, stored_weapon_name, stored_weapon_data FROM player_horses WHERE citizenid = ? AND active = 1', { citizenid })
+
+    if result and result[1] and result[1].stored_weapon_name then
+        local weaponName = result[1].stored_weapon_name
+        local weaponDataJson = result[1].stored_weapon_data
+        local weaponData = {}
+
+        if weaponDataJson then
+            weaponData = json.decode(weaponDataJson) or {}
+        end
+
+        local info = weaponData.info or {}
+        if weaponData.serial then
+            info.serial = weaponData.serial
+        end
+
+        Player.Functions.AddItem(weaponName, 1, nil, info)
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[weaponName], 'add', 1)
+
+        
+        TriggerClientEvent('rsg-horses:client:equipRetrievedWeapon', src, result[1].stored_weapon)
+    end
+
+    MySQL.update('UPDATE player_horses SET stored_weapon = NULL, stored_weapon_name = NULL, stored_weapon_data = NULL WHERE citizenid = ? AND active = 1', { citizenid })
+end)
 -----------------------------------
 -- set horse active
 -----------------------------------
@@ -216,6 +447,7 @@ RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
     
+    
     local owned = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
     if not owned or owned == 0 then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
@@ -223,9 +455,7 @@ RegisterServerEvent('rsg-horses:server:SetHoresActive', function(id)
     end
     
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, true})
-    if activehorse then
-        MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
-    end
+    MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { true, id, Player.PlayerData.citizenid })
 end)
 
@@ -237,6 +467,7 @@ RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
     
+    -- SECURITY: Verify ownership
     local owned = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE id = ? AND citizenid = ?', {id, Player.PlayerData.citizenid})
     if not owned or owned == 0 then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
@@ -244,6 +475,7 @@ RegisterServerEvent('rsg-horses:server:SetHoresUnActive', function(id, stableid)
     end
     
     MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', { false, Player.PlayerData.citizenid, true })
+    MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { false, id, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, id, Player.PlayerData.citizenid })
 end)
 
@@ -255,7 +487,6 @@ RegisterServerEvent('rsg-horses:server:fleeStoreHorse', function(stableid)
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
     local activehorse = MySQL.scalar.await('SELECT id FROM player_horses WHERE citizenid = ? AND active = ?', {Player.PlayerData.citizenid, 1})
-    if not activehorse then return end
     MySQL.update('UPDATE player_horses SET active = ? WHERE id = ? AND citizenid = ?', { 0, activehorse, Player.PlayerData.citizenid })
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', { stableid, activehorse, Player.PlayerData.citizenid })
 end)
@@ -313,17 +544,21 @@ RegisterServerEvent('rsg-horses:server:HorseDied', function(horseid, horsename)
     if horse[1] then
         local horsestash = horse[1].name .. ' ' .. horseid
         
-        -- Clear horse inventory stash from database
-        -- Horse stashes are stored as identifiers in the inventories table
+        
         MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
         
-        -- Remove horse from database
+        
         MySQL.update('DELETE FROM player_horses WHERE citizenid = ? AND horseid = ?', {cid, horseid})
         
-        -- Log the death
+        
         TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename .. ' ' .. locale('sv_log_horse_belong') .. ' ' .. cid .. ' ' .. locale('sv_log_horse_dead'))
         
         lib.notify(src, {title = locale('sv_error_horse_died'), type = 'error', duration = 7000})
+
+        SendDiscordLog('horses', 'Horse Died', horsename .. ' has died.', WebhookColors.danger, {
+            { name = 'Horse Name', value = horsename, inline = true },
+            { name = 'Horse ID', value = tostring(horseid), inline = true },
+        }, src)
     end
 end)
 
@@ -337,7 +572,7 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
     
     local horseid = data.horseid
     
-    -- SECURITY: Verify ownership before selling
+   
     local player_horses = MySQL.query.await('SELECT * FROM player_horses WHERE id = @id AND `citizenid` = @citizenid', {
         ['@id'] = horseid,
         ['@citizenid'] = Player.PlayerData.citizenid
@@ -353,11 +588,11 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
         if tonumber(player_horses[i].id) == tonumber(horseid) then
             modelHorse = player_horses[i].horse
             
-            -- Delete horse inventory
+            
             local horsestash = player_horses[i].name .. ' ' .. player_horses[i].horseid
             MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
             
-            -- Delete horse
+            
             MySQL.update('DELETE FROM player_horses WHERE id = ? AND citizenid = ?', { data.horseid, Player.PlayerData.citizenid })
         end
     end
@@ -367,6 +602,11 @@ RegisterServerEvent('rsg-horses:server:deletehorse', function(data)
             local sellprice = v.horseprice * 0.5
             Player.Functions.AddMoney('cash', sellprice)
             TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_horse_sold_for')..sellprice, type = 'success', duration = 5000 })
+
+            SendDiscordLog('economy', 'Horse Sold', 'Horse (model ' .. tostring(modelHorse) .. ') sold back to the stable.', WebhookColors.success, {
+                { name = 'Model', value = tostring(modelHorse), inline = true },
+                { name = 'Sell Price', value = '$' .. tostring(sellprice), inline = true },
+            }, src)
             break
         end
     end
@@ -426,21 +666,27 @@ end)
 -----------------------------------
 -- save saddle
 -----------------------------------
-RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, horseid)
+RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, horseid, newCoat)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
 
-    -- SECURITY: Validate components
+   
     local valid, error = ValidateComponents(newComponents)
     if not valid then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_components') .. error, type = 'error', duration = 5000 })
         return
     end
 
+    local coatValid, coatError = ValidateCoat(newCoat)
+    if not coatValid then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_components') .. coatError, type = 'error', duration = 5000 })
+        return
+    end
+
     local citizenid = Player.PlayerData.citizenid
     
-    -- SECURITY: Verify ownership
+   
     local result = MySQL.query.await('SELECT * FROM player_horses WHERE citizenid=@citizenid AND horseid=@horseid', { ['@citizenid'] = citizenid, ['@horseid'] = horseid })
     local horseData = result[1]
     
@@ -449,12 +695,39 @@ RegisterNetEvent('rsg-horses:server:SaveComponents', function(newComponents, hor
         return
     end
     
+    local newComponents = newComponents or {}
     local currentComponents = json.decode(horseData.components) or {}
     local price = CalculatePrice(newComponents, currentComponents)
 
+    -- coat price (merged from horse_markings flat fee)
+    local currentCoat = nil
+    if horseData.coat ~= nil and horseData.coat ~= '' then
+        local ok, decoded = pcall(json.decode, horseData.coat)
+        if ok and type(decoded) == 'table' then currentCoat = decoded end
+    end
+    price = price + CalculateCoatPrice(newCoat, currentCoat)
+
     if Player.Functions.RemoveMoney('cash', price) then
         MySQL.update('UPDATE player_horses SET components = @components WHERE id = @id', {['@components'] = json.encode(newComponents), ['@id'] = horseData.id})
+        if newCoat ~= nil then
+            local baseTint0 = math.floor(tonumber(newCoat.tint0) or 0)
+            local saveCoat = {
+                tint0 = baseTint0,
+                tint1 = math.floor(tonumber(newCoat.tint1) == nil and 255 or tonumber(newCoat.tint1)),
+                tint2 = math.floor(tonumber(newCoat.tint2) == nil and 255 or tonumber(newCoat.tint2)),
+                mane = math.floor(tonumber(newCoat.mane) == nil and baseTint0 or tonumber(newCoat.mane)),
+                tail = math.floor(tonumber(newCoat.tail) == nil and baseTint0 or tonumber(newCoat.tail)),
+                palette = newCoat.palette or 'metaped_tint_horse',
+                rainbow = newCoat.rainbow or false,
+            }
+            MySQL.update('UPDATE player_horses SET coat = @coat WHERE id = @id', {['@coat'] = json.encode(saveCoat), ['@id'] = horseData.id})
+        end
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_success_component_saved') .. price, type = 'success', duration = 5000 })
+
+        SendDiscordLog('horses', 'Horse Customization Saved', 'Saddle/coat customization updated on horse ' .. tostring(horseData.name) .. '.', WebhookColors.info, {
+            { name = 'Horse', value = tostring(horseData.name), inline = true },
+            { name = 'Price Paid', value = '$' .. tostring(price), inline = true },
+        }, src)
     else
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000 })
     end
@@ -470,7 +743,7 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId)
     
     if not Player or not Target then return end
     
-    -- SECURITY: Verify ownership
+    
     local horse = MySQL.query.await('SELECT * FROM player_horses WHERE horseid = ? AND citizenid = ? AND active = ?', 
         {horseId, Player.PlayerData.citizenid, 1})
     
@@ -479,6 +752,7 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId)
         return
     end
     
+   
     local playerPed = GetPlayerPed(src)
     local targetPed = GetPlayerPed(playerId)
     if not playerPed or not targetPed then return end
@@ -490,7 +764,7 @@ RegisterNetEvent('rsg-horses:server:TradeHorse', function(playerId, horseId)
         return
     end
     
-    -- Send trade request to target
+   
     tradeRequests[playerId] = {
         from = src,
         horseId = horseId,
@@ -544,7 +818,7 @@ RegisterNetEvent('rsg-horses:server:AcceptTrade', function(fromId)
         return
     end
     
-    -- Verify horse still exists and is owned by sender
+    
     local horse = MySQL.query.await('SELECT * FROM player_horses WHERE horseid = ? AND citizenid = ?', 
         {trade.horseId, Sender.PlayerData.citizenid})
     
@@ -555,10 +829,10 @@ RegisterNetEvent('rsg-horses:server:AcceptTrade', function(fromId)
         return
     end
     
-    -- Proceed with trade
+    
     MySQL.update('UPDATE player_horses SET citizenid = ?, active = ? WHERE horseid = ?', {Target.PlayerData.citizenid, 0, trade.horseId})
     
-    -- Deactivate target's current active horse if they have one
+    
     MySQL.update('UPDATE player_horses SET active = ? WHERE citizenid = ? AND active = ?', {0, Target.PlayerData.citizenid, 1})
     
     TriggerClientEvent('ox_lib:notify', src, {
@@ -586,21 +860,7 @@ RegisterServerEvent('rsg-horses:server:MoveHorse', function(horseId, newStableId
 
     local citizenid = Player.PlayerData.citizenid
 
-    -- verify player is near a stable
-    local ped = GetPlayerPed(src)
-    local coords = GetEntityCoords(ped)
-    local nearStable = false
-    for _, stable in pairs(Config.StableSettings) do
-        if #(coords - stable.coords) < 10.0 then
-            nearStable = true
-            break
-        end
-    end
-    if not nearStable then
-        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_not_at_stable'), type = 'error', duration = 5000 })
-        return
-    end
-
+    
     local horse = MySQL.query.await('SELECT * FROM player_horses WHERE id = ? AND citizenid = ?', {horseId, citizenid})
     
     if not horse or not horse[1] then
@@ -608,6 +868,7 @@ RegisterServerEvent('rsg-horses:server:MoveHorse', function(horseId, newStableId
         return
     end
 
+    
     local currentStable = nil
     local newStable = nil
     
@@ -625,21 +886,25 @@ RegisterServerEvent('rsg-horses:server:MoveHorse', function(horseId, newStableId
         return
     end
 
+   
     if horse[1].stable == newStableId then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_horse_already_there'), type = 'error', duration = 5000 })
         return
     end
 
+  
     if not currentStable then
         TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_stable'), type = 'error', duration = 5000 })
         return
     end
 
+    
     local baseFee = Config.MoveHorseBasePrice
     local feePerMeter = Config.MoveFeePerMeter
     local distance = #(currentStable.coords - newStable.coords)
     local moveFee = math.ceil(baseFee + (distance * feePerMeter))
 
+    
     if not Player.Functions.RemoveMoney('cash', moveFee) then
         TriggerClientEvent('ox_lib:notify', src, {
             title = locale('sv_error_insufficient_funds'),
@@ -650,6 +915,7 @@ RegisterServerEvent('rsg-horses:server:MoveHorse', function(horseId, newStableId
         return
     end
 
+    
     MySQL.update('UPDATE player_horses SET stable = ? WHERE id = ? AND citizenid = ?', {newStableId, horseId, citizenid})
 
     TriggerClientEvent('ox_lib:notify', src, {
@@ -658,6 +924,13 @@ RegisterServerEvent('rsg-horses:server:MoveHorse', function(horseId, newStableId
         type = 'success',
         duration = 5000
     })
+
+    SendDiscordLog('horses', 'Horse Moved Between Stables', horse[1].name .. ' moved to stable ' .. tostring(newStableId) .. '.', WebhookColors.info, {
+        { name = 'Horse', value = horse[1].name, inline = true },
+        { name = 'From Stable', value = tostring(horse[1].stable), inline = true },
+        { name = 'To Stable', value = tostring(newStableId), inline = true },
+        { name = 'Fee Paid', value = '$' .. tostring(moveFee), inline = true },
+    }, src)
 end)
 
 -----------------------------------
@@ -683,6 +956,7 @@ end
 RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(source)
+    if not Player then return end
     if Player.Functions.GetItemByName(item) then
         TriggerClientEvent('rsg-horses:client:playerbrushhorse', source, item)
     else
@@ -710,7 +984,6 @@ RegisterServerEvent('rsg-horses:server:SetPlayerBucket', function(random, ped)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    if not ped or type(ped) ~= "number" or ped <= 0 then return end
     if random then
         local BucketID = RSGCore.Shared.RandomInt(1000, 9999)
         SetRoutingBucketPopulationEnabled(BucketID, false)
@@ -794,6 +1067,72 @@ end)
 --------------------------------------
 -- open shop
 --------------------------------------
+--------------------------------------
+-- NUI shop purchase items
+--------------------------------------
+RegisterNetEvent('rsg-horses:server:buyShopItems', function(items, total)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    if not items or #items == 0 then return end
+
+    -- SECURITY: item.quantity is client-supplied. Without validating it is a
+    -- positive integer, a negative quantity makes calcTotal negative; if the
+    -- client also sends a matching negative `total`, RemoveMoney is called
+    -- with a negative amount which effectively hands the player free money
+    -- (and AddItem with a negative quantity is undefined behaviour too).
+    for _, item in ipairs(items) do
+        if type(item.quantity) ~= 'number' or item.quantity <= 0 or item.quantity ~= math.floor(item.quantity) then
+            TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_invalid_quantity'), type = 'error', duration = 5000})
+            SendDiscordLog('security', 'Rejected Shop Purchase - Invalid Quantity', 'Player attempted to buy a shop item with an invalid quantity.', WebhookColors.warning, {
+                { name = 'Item', value = tostring(item.name), inline = true },
+                { name = 'Quantity Sent', value = tostring(item.quantity), inline = true },
+            }, src)
+            return
+        end
+    end
+
+    -- Verify total
+    local calcTotal = 0
+    for _, item in ipairs(items) do
+        for _, shopItem in ipairs(Config.horsesShopItems) do
+            if shopItem.name == item.name then
+                calcTotal = calcTotal + (shopItem.price * item.quantity)
+                break
+            end
+        end
+    end
+
+    if calcTotal <= 0 or calcTotal ~= total then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_price_mismatch'), type = 'error', duration = 5000})
+        SendDiscordLog('security', 'Rejected Shop Purchase - Price Mismatch', 'Client-sent total did not match the server-calculated price.', WebhookColors.warning, {
+            { name = 'Server Calculated Total', value = '$' .. tostring(calcTotal), inline = true },
+            { name = 'Client Sent Total', value = '$' .. tostring(total), inline = true },
+        }, src)
+        return
+    end
+
+    if not Player.Functions.RemoveMoney('cash', total) then
+        TriggerClientEvent('ox_lib:notify', src, {title = locale('sv_error_no_cash'), type = 'error', duration = 5000})
+        return
+    end
+
+    for _, item in ipairs(items) do
+        Player.Functions.AddItem(item.name, item.quantity)
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[item.name], 'add', item.quantity)
+    end
+    TriggerClientEvent('rsg-horses:client:shopPurchaseSuccess', src)
+
+    local itemSummary = {}
+    for _, item in ipairs(items) do
+        itemSummary[#itemSummary + 1] = tostring(item.quantity) .. 'x ' .. tostring(item.name)
+    end
+    SendDiscordLog('economy', 'Horse Shop Purchase', table.concat(itemSummary, ', '), WebhookColors.success, {
+        { name = 'Total Paid', value = '$' .. tostring(total), inline = true },
+    }, src)
+end)
+
 RegisterNetEvent('rsg-horses:server:openShop', function()
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
@@ -822,7 +1161,7 @@ UpkeepInterval = function()
 
     local result = MySQL.query.await('SELECT * FROM player_horses')
 
-    if not result then return end
+    if not result then goto continue end
 
     for i = 1, #result do
         local id = result[i].id
@@ -836,19 +1175,22 @@ UpkeepInterval = function()
         --print(id, horsetype, horsename, ownercid, daysPassed)
 
         if horsetype == 'a_c_horse_mp_mangy_backup' and daysPassed >= Config.StarterHorseDieAge then
-            
-            -- Get horseid for inventory cleanup
-            local horsedata = MySQL.query.await('SELECT horseid FROM player_horses WHERE id = ?', {id})
-            if horsedata[1] then
-                local horsestash = horsename .. ' ' .. horsedata[1].horseid
-                
-                -- Clear horse inventory stash from database
-                MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
-            end
+
+            -- horseid already available from the initial SELECT * above; no need to re-query
+            local horsestash = horsename .. ' ' .. result[i].horseid
+
+            -- Clear horse inventory stash from database
+            MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
             TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename..' '..locale('sv_log_horse_belong')..' '..ownercid..' '..locale('sv_log_horse_dead'))
+
+            SendDiscordLog('horses', 'Starter Horse Expired (Upkeep)', horsename .. ' aged out and was removed from stables.', WebhookColors.warning, {
+                { name = 'Horse', value = horsename, inline = true },
+                { name = 'Owner CitizenID', value = tostring(ownercid), inline = true },
+                { name = 'Days Passed', value = tostring(daysPassed), inline = true },
+            })
 
             -- telegram message to the horse owner
             MySQL.insert('INSERT INTO telegrams (citizenid, recipient, sender, sendername, subject, sentDate, message) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -865,25 +1207,28 @@ UpkeepInterval = function()
         end
 
         if daysPassed >= Config.HorseDieAge then
-            
-            -- Get horseid for inventory cleanup
-            local horsedata = MySQL.query.await('SELECT horseid FROM player_horses WHERE id = ?', {id})
-            if horsedata[1] then
-                local horsestash = horsename .. ' ' .. horsedata[1].horseid
-                
-                -- Clear horse inventory
-                local success = pcall(function()
-                    exports['rsg-inventory']:ClearInventory(horsestash)
-                end)
-                
-                if not success then
-                    MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
-                end
+
+            -- horseid already available from the initial SELECT * above; no need to re-query
+            local horsestash = horsename .. ' ' .. result[i].horseid
+
+            -- Clear horse inventory
+            local success = pcall(function()
+                exports['rsg-inventory']:ClearInventory(horsestash)
+            end)
+
+            if not success then
+                MySQL.update('DELETE FROM inventories WHERE identifier = ?', {horsestash})
             end
 
             -- delete horse
             MySQL.update('DELETE FROM player_horses WHERE id = ?', {id})
             TriggerEvent('rsg-log:server:CreateLog', 'horsetrainer', locale('sv_log_horse_trainer'), 'red', horsename..' '..locale('sv_log_horse_belong')..' '..ownercid..' '..locale('sv_log_horse_dead'))
+
+            SendDiscordLog('horses', 'Horse Expired (Upkeep)', horsename .. ' aged out and was removed from stables.', WebhookColors.warning, {
+                { name = 'Horse', value = horsename, inline = true },
+                { name = 'Owner CitizenID', value = tostring(ownercid), inline = true },
+                { name = 'Days Passed', value = tostring(daysPassed), inline = true },
+            })
 
             -- telegram message to the horse owner
             MySQL.insert('INSERT INTO telegrams (citizenid, recipient, sender, sendername, subject, sentDate, message) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -899,14 +1244,228 @@ UpkeepInterval = function()
             goto continue
         end
 
-        ::continue::
     end
 
+    ::continue::
+    
     if Config.EnableServerNotify then
         print(locale('sv_print'))
     end
 
-    SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
+SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)
 end
+
+-----------------------------------
+-- BREEDING SYSTEM
+-----------------------------------
+
+-- Ensure breeding columns exist on resource start
+CreateThread(function()
+    Wait(2000)
+    local columns = MySQL.query.await('SHOW COLUMNS FROM player_horses')
+    local existing = {}
+    for _, col in ipairs(columns) do
+        existing[col.Field] = true
+    end
+    if not existing['age_seconds'] then
+        MySQL.query.await('ALTER TABLE player_horses ADD COLUMN `age_seconds` INT(11) NOT NULL DEFAULT 0')
+    end
+    if not existing['pregnant_until'] then
+        MySQL.query.await('ALTER TABLE player_horses ADD COLUMN `pregnant_until` INT(11) DEFAULT NULL')
+    end
+    if not existing['last_bred'] then
+        MySQL.query.await('ALTER TABLE player_horses ADD COLUMN `last_bred` INT(11) DEFAULT NULL')
+    end
+    print('[rsg-horses] Breeding system columns ensured')
+end)
+
+local function GetRandomHorseModel()
+    local models = Config.HorseModels
+    if not models or #models == 0 then return 'a_c_horse_morgan_bay' end
+    return models[math.random(#models)]
+end
+
+local function GetRandomFoalName()
+    local prefixes = { 'Little', 'Tiny', 'Baby', 'Sweet', 'Lucky', 'Happy', 'Sunny', 'Storm', 'Shadow', 'Star', 'Dusty', 'Buddy' }
+    local suffixes = { 'Star', 'Storm', 'Wind', 'Heart', 'Spirit', 'Dream', 'Bolt', 'Flash', 'Cloud', 'Moon', 'Fire', 'Rose' }
+    return prefixes[math.random(#prefixes)] .. ' ' .. suffixes[math.random(#suffixes)]
+end
+
+-- Get all horses for a player (for stallion selection)
+lib.callback.register('rsg-horses:server:GetPlayerHorses', function(source)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return {} end
+    local cid = Player.PlayerData.citizenid
+    local result = MySQL.query.await('SELECT id, name, horse, gender, age_seconds, pregnant_until FROM player_horses WHERE citizenid = ?', { cid })
+    return result or {}
+end)
+
+-- Breed horse event
+RegisterServerEvent('rsg-horses:server:breedHorse', function(mareId, stallionId)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+    if not Config.Breeding or not Config.Breeding.enabled then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_breeding_disabled'), type = 'error', duration = 5000 })
+        return
+    end
+
+    if Config.Breeding.requiredJob and Player.PlayerData.job.name ~= Config.Breeding.requiredJob then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('err_breeder_required'), type = 'error', duration = 5000 })
+        return
+    end
+
+    local cid = Player.PlayerData.citizenid
+
+    -- Fetch mare
+    local mare = MySQL.query.await('SELECT * FROM player_horses WHERE id = ? AND citizenid = ?', { mareId, cid })
+    if not mare or not mare[1] then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_not_own_horse'), type = 'error', duration = 5000 })
+        return
+    end
+    mare = mare[1]
+
+    -- Validate mare gender
+    if Config.Breeding.requireOppositeSex and mare.gender ~= 'female' then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_breed_select_mare'), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Check mare maturity
+    local maturitySecs = (Config.Breeding.maturityMinutes or 60) * 60
+    local mareAge = mare.age_seconds or 0
+    if mareAge < maturitySecs then
+        local minsLeft = math.ceil((maturitySecs - mareAge) / 60)
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_mare_not_mature'):format(minsLeft), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Check mare not already pregnant
+    if mare.pregnant_until and mare.pregnant_until > os.time() then
+        local remaining = math.ceil((mare.pregnant_until - os.time()) / 60)
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_already_pregnant'):format(remaining), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Check cooldown
+    local cooldownSecs = (Config.Breeding.breedCooldownMinutes or 60) * 60
+    if mare.last_bred and (os.time() - mare.last_bred) < cooldownSecs then
+        local remaining = math.ceil((cooldownSecs - (os.time() - mare.last_bred)) / 60)
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_breeding_cooldown'):format(remaining), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Fetch stallion
+    local stallion = MySQL.query.await('SELECT * FROM player_horses WHERE id = ? AND citizenid = ?', { stallionId, cid })
+    if not stallion or not stallion[1] then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_not_own_stallion'), type = 'error', duration = 5000 })
+        return
+    end
+    stallion = stallion[1]
+
+    -- Validate stallion gender
+    if Config.Breeding.requireOppositeSex and stallion.gender ~= 'male' then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_breed_must_be_male'), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Check stallion maturity
+    local stallionAge = stallion.age_seconds or 0
+    if stallionAge < maturitySecs then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_stallion_not_mature'), type = 'error', duration = 5000 })
+        return
+    end
+
+    -- Remove hay cost
+    local hayCost = Config.Breeding.hayCost or 0
+    if hayCost > 0 then
+        local hasItem = Player.Functions.GetItemByName('hay')
+        if not hasItem or hasItem.amount < hayCost then
+            TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_need_hay'):format(hayCost), type = 'error', duration = 5000 })
+            return
+        end
+        Player.Functions.RemoveItem('hay', hayCost)
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items['hay'], 'remove', hayCost)
+    end
+
+    -- Set pregnancy
+    local gestationSecs = (Config.Breeding.gestationMinutes or 30) * 60
+    local now = os.time()
+    local pregnantUntil = now + gestationSecs
+
+    MySQL.update.await('UPDATE player_horses SET pregnant_until = ?, last_bred = ? WHERE id = ?', { pregnantUntil, now, mareId })
+
+    local gestMins = Config.Breeding.gestationMinutes or 30
+    TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_success_breeding_started'):format(gestMins), type = 'success', duration = 7000 })
+end)
+
+-- Birth processing loop
+CreateThread(function()
+    while true do
+        Wait(30000)
+        local now = os.time()
+
+        local readyMothers = MySQL.query.await('SELECT * FROM player_horses WHERE pregnant_until IS NOT NULL AND pregnant_until <= ?', { now })
+
+        if readyMothers and #readyMothers > 0 then
+            for _, mother in ipairs(readyMothers) do
+                local cid = mother.citizenid
+                local foalModel = GetRandomHorseModel()
+                local foalGender = math.random(0, 1) == 0 and 'male' or 'female'
+                local foalName = GetRandomFoalName()
+                local horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
+                local foalStable = mother.stable or 'valentine'
+
+                -- Ensure unique horseid
+                local attempts = 0
+                while attempts < 10 do
+                    local exists = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE horseid = ?', { horseid })
+                    if exists == 0 then break end
+                    horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
+                    attempts = attempts + 1
+                end
+
+                MySQL.insert.await('INSERT INTO player_horses(stable, citizenid, horseid, name, horse, gender, active, born, age_seconds) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+                    foalStable, cid, horseid, foalName, foalModel, foalGender, false, now, 0
+                })
+
+                -- Clear mother pregnancy
+                MySQL.update.await('UPDATE player_horses SET pregnant_until = NULL WHERE id = ?', { mother.id })
+
+                -- Find the owner online and notify
+                for _, playerId in ipairs(GetPlayers()) do
+                    local pid = tonumber(playerId)
+                    if pid then
+                        local p = RSGCore.Functions.GetPlayer(pid)
+                        if p and p.PlayerData.citizenid == cid then
+                            TriggerClientEvent('ox_lib:notify', pid, {
+                                title = locale('sv_success_foal_born_title'),
+                                description = locale('sv_success_foal_born_desc'):format(foalGender, foalModel, foalName, foalStable),
+                                type = 'success',
+                                duration = 10000
+                            })
+                            break
+                        end
+                    end
+                end
+
+                print(('[rsg-horses] Foal born: %s (%s) for player %s at %s'):format(foalName, foalModel, cid, foalStable))
+            end
+        end
+    end
+end)
+
+-- Age tick loop (increments age_seconds for all horses)
+CreateThread(function()
+    while true do
+        Wait(30000)
+        MySQL.update('UPDATE player_horses SET age_seconds = age_seconds + 30 WHERE age_seconds IS NOT NULL')
+    end
+end)
+
+-----------------------------------
+-- end of breeding system
+-----------------------------------
 
 SetTimeout(Config.CheckCycle * (60 * 1000), UpkeepInterval)

@@ -431,6 +431,315 @@ local HorseSettings = {
         horsename = 'Criollo Dun',
         stableid = 'tumbleweed'
     },
+    -- valentine (new)
+    {
+        horsecoords = vector4(-380.00, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_dutchwarmblood_sealbrown',
+        horseprice = 250,
+        horsename = 'Seal Brown Dutch Warmblood',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-381.20, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_morgan_palomino',
+        horseprice = 55,
+        horsename = 'Morgan Palomino',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-382.40, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_ardennes_strawberryroan',
+        horseprice = 450,
+        horsename = 'Ardennes Strawberry Roan',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-383.60, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_ardennes_bayroan',
+        horseprice = 400,
+        horsename = 'Ardennes Bay Roan',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-384.80, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_breton_mealydapplebay',
+        horseprice = 250,
+        horsename = 'Breton Mealy Dapple Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-386.00, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_missourifoxtrotter_amberchampagne',
+        horseprice = 1125,
+        horsename = 'Missouri Fox Trotter Amber Champagne',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-387.20, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_missourifoxtrotter_sablechampagne',
+        horseprice = 1125,
+        horsename = 'Missouri Fox Trotter Sable Champagne',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-388.40, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_shire_darkbay',
+        horseprice = 120,
+        horsename = 'Shire Dark Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-389.60, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_shire_ravenblack',
+        horseprice = 150,
+        horsename = 'Shire Raven Black',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-390.80, 795.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_hungarianhalfbred_darkdapplegrey',
+        horseprice = 350,
+        horsename = 'Hungarian Half-bred Dark Dapple Grey',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-380.00, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_tennesseewalker_dapplebay',
+        horseprice = 60,
+        horsename = 'Tennessee Walker Dapple Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-381.20, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_kladruber_grey',
+        horseprice = 150,
+        horsename = 'Kladruber Grey',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-382.40, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_kladruber_silver',
+        horseprice = 250,
+        horsename = 'Kladruber Silver',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-383.60, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_hungarianhalfbred_flaxenchestnut',
+        horseprice = 300,
+        horsename = 'Hungarian Half-bred Flaxen Chestnut',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-384.80, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_hungarianhalfbred_piebaldtobiano',
+        horseprice = 350,
+        horsename = 'Hungarian Half-bred Piebald Tobiano',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-386.00, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_tennesseewalker_blackrabicano',
+        horseprice = 75,
+        horsename = 'Tennessee Walker Black Rabicano',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-387.20, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_tennesseewalker_mahoganybay',
+        horseprice = 60,
+        horsename = 'Tennessee Walker Mahogany Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-388.40, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_americanstandardbred_black',
+        horseprice = 400,
+        horsename = 'American Standardbred Black',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-389.60, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_americanstandardbred_buckskin',
+        horseprice = 350,
+        horsename = 'American Standardbred Buckskin',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-390.80, 793.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_criollo_baybrindle',
+        horseprice = 300,
+        horsename = 'Criollo Bay Brindle',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-380.00, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_criollo_bayframeovero',
+        horseprice = 350,
+        horsename = 'Criollo Bay Frame Overo',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-381.20, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_criollo_marblesabino',
+        horseprice = 400,
+        horsename = 'Criollo Marble Sabino',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-382.40, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_nokota_reversedappleroan',
+        horseprice = 200,
+        horsename = 'Nokota Reversed Dapple Roan',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-383.60, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_appaloosa_blacksnowflake',
+        horseprice = 250,
+        horsename = 'Appaloosa Black Snowflake',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-384.80, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_appaloosa_fewspotted_pc',
+        horseprice = 400,
+        horsename = 'Appaloosa Few Spotted',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-386.00, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_appaloosa_leopard',
+        horseprice = 350,
+        horsename = 'Appaloosa Leopard',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-387.20, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_appaloosa_leopardblanket',
+        horseprice = 200,
+        horsename = 'Appaloosa Leopard Blanket',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-388.40, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_breton_sealbrown',
+        horseprice = 350,
+        horsename = 'Breton Seal Brown',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-389.60, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_criollo_blueroanovero',
+        horseprice = 350,
+        horsename = 'Criollo Blue Roan Overo',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-390.80, 792.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_black',
+        horseprice = 1500,
+        horsename = 'Arabian Black',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-380.00, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_grey',
+        horseprice = 1200,
+        horsename = 'Arabian Grey',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-381.20, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_redchestnut',
+        horseprice = 1000,
+        horsename = 'Arabian Red Chestnut',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-382.40, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_rosegreybay',
+        horseprice = 1300,
+        horsename = 'Arabian Rose Grey Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-383.60, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_warpedbrindle_pc',
+        horseprice = 2000,
+        horsename = 'Arabian Warped Brindle',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-384.80, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_thoroughbred_bloodbay',
+        horseprice = 200,
+        horsename = 'Thoroughbred Blood Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-386.00, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_thoroughbred_brindle',
+        horseprice = 350,
+        horsename = 'Thoroughbred Brindle',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-387.20, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_thoroughbred_reversedappleblack',
+        horseprice = 450,
+        horsename = 'Thoroughbred Reverse Dapple Black',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-388.40, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_mustang_tigerstripedbay',
+        horseprice = 750,
+        horsename = 'Mustang Tiger Striped Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-389.60, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_andalusian_darkbay',
+        horseprice = 400,
+        horsename = 'Andalusian Dark Bay',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-390.80, 790.50, 116.50, 5.00),
+        horsemodel = 'a_c_horse_americanpaint_greyovero',
+        horseprice = 150,
+        horsename = 'American Paint Grey Overo',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-380.00, 789.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_americanpaint_overo',
+        horseprice = 140,
+        horsename = 'American Paint Overo',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-381.20, 789.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_arabian_redchestnut_pc',
+        horseprice = 1000,
+        horsename = 'Arabian Red Chestnut',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-382.40, 789.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_suffolkpunch_redchestnut',
+        horseprice = 140,
+        horsename = 'Suffolk Punch Red Chestnut',
+        stableid = 'valentine'
+    },
+    {
+        horsecoords = vector4(-383.60, 789.00, 116.50, 5.00),
+        horsemodel = 'a_c_horse_andalusian_perlino',
+        horseprice = 450,
+        horsename = 'Andalusian Perlino',
+        stableid = 'valentine'
+    },
 }
 
 return HorseSettings
