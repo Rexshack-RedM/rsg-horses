@@ -37,16 +37,9 @@ body {
 
 .hidden { display: none !important; }
 
-/* Full-screen vignette overlay */
+/* Full-screen vignette overlay (disabled) */
 #vignette {
-    position: fixed;
-    inset: 0;
-    display: none;
-    background:
-        radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.55) 100%),
-        rgba(0, 0, 0, 0.25);
-    pointer-events: none;
-    z-index: 0;
+    display: none !important;
 }
 
 /* ============ SHOP PANEL (left dock kept) ============ */

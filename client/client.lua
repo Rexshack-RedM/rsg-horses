@@ -1009,6 +1009,17 @@ local function createCamera(horses, horsesdata, skipMenu)
         if not skipMenu then
             CameraPromptHorse(horses)
             MainMenu(horses, horsesdata)
+        else
+            -- NUI customize flow: CameraPromptHorse (which also draws the fill
+            -- light) is skipped here, so run a light-only thread instead --
+            -- same values as the buy-preview showroom light.
+            CreateThread(function()
+                while Customize and DoesEntityExist(horses) do
+                    Wait(0)
+                    local crds = GetEntityCoords(horses)
+                    DrawLightWithRange(crds.x - 5.0, crds.y - 5.0, crds.z + 1.0, 255, 255, 255, 15.0, 50.0)
+                end
+            end)
         end
         Citizen.InvokeNative(0x4D51E59243281D80, PlayerId(), false, 0, true)
         DisplayHud(false)

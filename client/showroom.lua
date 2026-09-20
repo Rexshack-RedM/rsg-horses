@@ -1,6 +1,12 @@
 local showroomHorse, showroomCam
 local renderThreadActive = false
 
+-- Orbit state: the camera now circles the horse (rather than the horse
+-- spinning on the spot in front of a static camera). orbitRadius/orbitHeight
+-- are derived once from the configured horseCameraPreview offset, and
+-- orbitAngle is what RotateShowroomHorse advances.
+local orbitAngle, orbitRadius, orbitHeight = 0.0, 3.0, 0.0
+
 -- Uses the optional "weathersync" resource's own client exports to force
 -- noon/sunny while the buy-horse preview is open, since that resource
 -- periodically re-syncs time/weather and would otherwise stomp raw natives.
@@ -47,8 +53,21 @@ local function SetUpShowroomCamera(cameraPosition, targetEntity)
     local leftPoint = GetOffsetFromEntityInWorldCoords(targetEntity, CAMERA_POSITION_LATERAL_OFFSET, 0.0, 0.0)
     local lateralOffset = leftPoint - targetCoords
 
+    local camX = cameraPosition.x + lateralOffset.x
+    local camY = cameraPosition.y + lateralOffset.y
+    local camZ = cameraPosition.z
+
+    -- Derive the orbit circle (radius/height/starting angle) from the
+    -- configured camera position, so the very first frame looks identical
+    -- to before -- only rotating afterwards moves the camera, not the horse.
+    local dx, dy = camX - targetCoords.x, camY - targetCoords.y
+    orbitRadius = math.sqrt(dx * dx + dy * dy)
+    if orbitRadius < 0.1 then orbitRadius = 3.0 end
+    orbitHeight = camZ
+    orbitAngle = math.atan(dy, dx)
+
     showroomCam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-    SetCamCoord(showroomCam, cameraPosition.x + lateralOffset.x, cameraPosition.y + lateralOffset.y, cameraPosition.z)
+    SetCamCoord(showroomCam, camX, camY, camZ)
     -- offsetX < 0 shifts the look-at point to the target's left, which pushes
     -- the target itself further right on screen -- clear of the left-side NUI panel.
     PointCamAtEntity(showroomCam, targetEntity, -1.5, 0, 0, true)
@@ -116,7 +135,13 @@ function SpawnShowroomHorse(model)
     SetModelAsNoLongerNeeded(modelHash)
 
     if showroomCam then
-        -- re-point existing camera to new horse (see offset note in SetUpShowroomCamera)
+        -- Keep the camera at its current orbit position/angle (so switching
+        -- horses mid-browse doesn't snap the view back to the start) and
+        -- just re-point it at the new horse.
+        local targetCoords = GetEntityCoords(showroomHorse)
+        local camX = targetCoords.x + orbitRadius * math.cos(orbitAngle)
+        local camY = targetCoords.y + orbitRadius * math.sin(orbitAngle)
+        SetCamCoord(showroomCam, camX, camY, orbitHeight)
         PointCamAtEntity(showroomCam, showroomHorse, -1.5, 0.0, 0.0, true)
     else
         SetUpShowroomCamera(camCoords, showroomHorse)
@@ -152,12 +177,17 @@ end
 
 function RotateShowroomHorse(direction)
     if not showroomHorse or not DoesEntityExist(showroomHorse) then return end
-    local heading = GetEntityHeading(showroomHorse)
-    local amount = direction == 'left' and -5 or 5
-    SetEntityHeading(showroomHorse, heading + amount)
-    if showroomCam then
-        PointCamAtEntity(showroomCam, showroomHorse, -1.5, 0.0, 0.0, true)
-    end
+    if not showroomCam then return end
+
+    local amountRad = math.rad(direction == 'left' and -5 or 5)
+    orbitAngle = orbitAngle + amountRad
+
+    local targetCoords = GetEntityCoords(showroomHorse)
+    local camX = targetCoords.x + orbitRadius * math.cos(orbitAngle)
+    local camY = targetCoords.y + orbitRadius * math.sin(orbitAngle)
+
+    SetCamCoord(showroomCam, camX, camY, orbitHeight)
+    PointCamAtEntity(showroomCam, showroomHorse, -1.5, 0.0, 0.0, true)
 end
 
 function CloseShowroom()
