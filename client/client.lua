@@ -24,9 +24,9 @@ local function CalculateHorseLevel(xp)
     elseif xp >= 300 and xp <= 399 then return 4
     elseif xp >= 400 and xp <= 499 then return 5
     elseif xp >= 500 and xp <= 999 then return 6
-    elseif xp >= 1000 and xp <= 1999 then return 7
-    elseif xp >= 2000 and xp <= 2999 then return 8
-    elseif xp >= 3000 and xp <= 3999 then return 9
+    elseif xp >= 1000 and xp <= 1399 then return 7
+    elseif xp >= 1400 and xp <= 1699 then return 8
+    elseif xp >= 1700 and xp <= 1899 then return 9
     else return 10 end
 end
 
@@ -38,10 +38,10 @@ local function GetLevelProgress(xp)
         {min = 300,  max = 399,   level = 4},
         {min = 400,  max = 499,   level = 5},
         {min = 500,  max = 999,   level = 6},
-        {min = 1000, max = 1999,  level = 7},
-        {min = 2000, max = 2999,  level = 8},
-        {min = 3000, max = 3999,  level = 9},
-        {min = 4000, max = 99999, level = 10}
+        {min = 1000, max = 1399,  level = 7},
+        {min = 1400, max = 1699,  level = 8},
+        {min = 1700, max = 1899,  level = 9},
+        {min = 1900, max = 99999, level = 10}
     }
     for _, range in ipairs(levels) do
         if xp >= range.min and xp <= range.max then
@@ -760,7 +760,7 @@ end)
 -- prompts setup
 ------------------------------------
 function SetupHorsePrompts()
-    if horsexp >= Config.TrickXp.Lay then
+    if horsexp >= Config.TrickXp.Lay and not HorseLayPrompts then
         local string = locale('cl_action_lay')
         HorseLayPrompts = PromptRegisterBegin()
         PromptSetControlAction(HorseLayPrompts, Config.Prompt.HorseLay)
@@ -1365,10 +1365,10 @@ local function SpawnHorse()
                 if horsexp >= 300  and horsexp <= 399          then hValue = Config.Level4  horseLevel = 4  goto continue end
                 if horsexp >= 400  and horsexp <= 499          then hValue = Config.Level5  horseLevel = 5  goto continue end
                 if horsexp >= 500  and horsexp <= 999          then hValue = Config.Level6  horseLevel = 6  goto continue end
-                if horsexp >= 1000 and horsexp <= 1999         then hValue = Config.Level7  horseLevel = 7  goto continue end
-                if horsexp >= 2000 and horsexp <= 2999         then hValue = Config.Level8  horseLevel = 8  goto continue end
-                if horsexp >= 3000 and horsexp <= 3999         then hValue = Config.Level9  horseLevel = 9  goto continue end
-                if horsexp >= 4000 then hValue = Config.Level10 horseLevel = 10 overPower = true end
+                if horsexp >= 1000 and horsexp <= 1399         then hValue = Config.Level7  horseLevel = 7  goto continue end
+                if horsexp >= 1400 and horsexp <= 1699         then hValue = Config.Level8  horseLevel = 8  goto continue end
+                if horsexp >= 1700 and horsexp <= 1899         then hValue = Config.Level9  horseLevel = 9  goto continue end
+                if horsexp >= 1900 then hValue = Config.Level10 horseLevel = 10 overPower = true end
 
                 ::continue::
 
@@ -1386,7 +1386,8 @@ local function SpawnHorse()
                     Citizen.InvokeNative(0xF6A7C08DF2E28B28, horsePed, 1, setoverpower)
                 end
 
-                local bond  = Config.MaxBondingLevel
+                -- bonding tiers scale to the XP cap (default 2000) so max XP = max bonding
+                local bond  = (Config.HorseXp and Config.HorseXp.MaxXp) or 2000
                 local bond1 = bond * 0.25
                 local bond2 = bond * 0.50
                 local bond3 = bond * 0.75
@@ -1416,6 +1417,8 @@ local function SpawnHorse()
                 storedWeaponHash = nil
 
                 HorsePrompts = PromptGetGroupIdForTargetEntity(horsePed)
+                HorseLayPrompts = nil
+                HorsePLayPrompts = nil
                 SetupHorsePrompts()
                 moveHorseToPlayer()
 
@@ -2163,7 +2166,7 @@ Citizen.CreateThread(function()
                 end
             end
             if Citizen.InvokeNative(0xC92AC953F0A982AE, HorsePLayPrompts) then
-                if horsexp >= Config.TrickXp.Play then
+    if horsexp >= Config.TrickXp.Play and not HorsePLayPrompts then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_wallow_shake@idle', 'idle_a')
                 end
             end
@@ -2391,6 +2394,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 Citizen.InvokeNative(0x50C803A4CD5932C5, true)
                 Citizen.InvokeNative(0xD4EE21B7CC7FD350, true)
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+                TriggerServerEvent('rsg-horses:server:AddHorseXp', itemName)
 
             elseif Config.HorseFeed[itemName]["ismedicine"] == false then
                 Citizen.InvokeNative(0xCD181A959CFDD7F4, cache.ped, horsePed, -224471938, 0, 0)
@@ -2405,6 +2409,7 @@ AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
                 Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 0, horseHealth  + Config.HorseFeed[itemName]["health"])
                 Citizen.InvokeNative(0xC6258F41D86676E0, horsePed, 1, horseStamina + Config.HorseFeed[itemName]["stamina"])
                 PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+                TriggerServerEvent('rsg-horses:server:AddHorseXp', itemName)
 
                 RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
                     if data then
@@ -2432,6 +2437,11 @@ end)
 ------------------------------------
 RegisterNetEvent('rsg-horses:client:playerbrushhorse')
 AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
+    if horsePed == 0 or not DoesEntityExist(horsePed) then
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
+        return
+    end
+
     local pcoords  = GetEntityCoords(cache.ped)
     local hcoords  = GetEntityCoords(horsePed)
 
@@ -2448,6 +2458,22 @@ AddEventHandler('rsg-horses:client:playerbrushhorse', function(itemName)
     ClearPedBloodDamage(horsePed)
     Citizen.InvokeNative(0xD8544F6260F5F01E, horsePed, 10)
     PlaySoundFrontend("Core_Fill_Up", "Consumption_Sounds", true, 0)
+    TriggerServerEvent('rsg-horses:server:AddHorseXp', 'brush')
+end)
+
+------------------------------------
+-- horse xp gained (keeps local xp/level in sync without respawn)
+------------------------------------
+RegisterNetEvent('rsg-horses:client:horseXpUpdated')
+AddEventHandler('rsg-horses:client:horseXpUpdated', function(newXp, amount)
+    horsexp = tonumber(newXp) or horsexp
+    horseLevel = CalculateHorseLevel(horsexp)
+    -- unlock trick prompts without needing a respawn, but avoid duplicates
+    if horsexp >= Config.TrickXp.Lay and not HorseLayPrompts then
+        SetupHorsePrompts()
+    elseif horsexp >= Config.TrickXp.Play and not HorsePLayPrompts then
+        SetupHorsePrompts()
+    end
 end)
 
 local RequestControl = function(entity)

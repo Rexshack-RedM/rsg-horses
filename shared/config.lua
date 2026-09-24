@@ -168,6 +168,24 @@ Config.HorseFeed = {
 }
 
 ---------------------------------
+-- horse xp rewards for feeding / brushing
+-- per-item feed values + brush value are awarded by the server
+-- CooldownSeconds is per-horse (0 = disabled), MaxXp caps horsexp
+---------------------------------
+Config.HorseXp = {
+    CooldownSeconds = 60,
+    MaxXp = 2000,
+    Brush = 10,
+    Feed = {
+        ['horsecarrot'] = 5,
+        ['hay'] = 5,
+        ['horseapple'] = 10,
+        ['sugarcube'] = 10,
+        ['horse_stimulant'] = 15,
+    },
+}
+
+---------------------------------
 --horse action
 ---------------------------------
 Config.ObjectAction = true
