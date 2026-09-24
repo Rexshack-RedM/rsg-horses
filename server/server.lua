@@ -965,6 +965,84 @@ RegisterServerEvent('rsg-horses:server:brushhorse', function(item)
 end)
 
 -----------------------------------
+-- horse xp for feeding / brushing (server-authoritative)
+-- client sends only the action ('brush' or feed item name),
+-- amount is looked up from Config.HorseXp so it can't be spoofed
+-----------------------------------
+local horseXpCooldowns = {}
+
+RegisterServerEvent('rsg-horses:server:AddHorseXp', function(action)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    if type(action) ~= 'string' then return end
+
+    local xpConfig = Config.HorseXp
+    if not xpConfig then return end
+
+    local amount = nil
+    local isBrush = (action == 'brush')
+    if isBrush then
+        amount = tonumber(xpConfig.Brush) or 0
+    elseif type(xpConfig.Feed) == 'table' then
+        amount = tonumber(xpConfig.Feed[action]) or 0
+    end
+
+    if not amount or amount <= 0 then
+        SendDiscordLog('security', 'Rejected Horse XP - Unknown Action', 'Player sent an unknown feed/brush action for XP.', WebhookColors.warning, {
+            { name = 'Action Sent', value = tostring(action), inline = true },
+        }, src)
+        return
+    end
+
+    local horse = MySQL.query.await('SELECT id, horseid, name, horsexp FROM player_horses WHERE citizenid = ? AND active = ?', { Player.PlayerData.citizenid, 1 })
+    if not horse or not horse[1] then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_error_no_active_horse'), type = 'error', duration = 5000 })
+        return
+    end
+
+    local horseRow = horse[1]
+    local maxXp = tonumber(xpConfig.MaxXp) or 2000
+    local currentXp = tonumber(horseRow.horsexp) or 0
+
+    if currentXp >= maxXp then
+        TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_horse_xp_maxed'), type = 'info', duration = 5000 })
+        return
+    end
+
+    local cooldown = tonumber(xpConfig.CooldownSeconds) or 0
+    if cooldown > 0 then
+        local last = horseXpCooldowns[horseRow.horseid] or 0
+        local remaining = cooldown - (os.time() - last)
+        if remaining > 0 then
+            TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_horse_xp_cooldown'):format(remaining), type = 'error', duration = 5000 })
+            SendDiscordLog('security', 'Horse XP Cooldown Hit', 'Player tried to gain horse XP during cooldown.', WebhookColors.warning, {
+                { name = 'Horse', value = tostring(horseRow.name), inline = true },
+                { name = 'Remaining', value = tostring(remaining) .. 's', inline = true },
+            }, src)
+            return
+        end
+    end
+
+    local newXp = math.min(currentXp + amount, maxXp)
+    MySQL.update('UPDATE player_horses SET horsexp = ? WHERE id = ? AND citizenid = ?', { newXp, horseRow.id, Player.PlayerData.citizenid })
+
+    if cooldown > 0 then
+        horseXpCooldowns[horseRow.horseid] = os.time()
+    end
+
+    TriggerClientEvent('rsg-horses:client:horseXpUpdated', src, newXp, amount)
+    TriggerClientEvent('ox_lib:notify', src, { title = locale('sv_horse_xp_gain'):format(amount, horseRow.name), type = 'success', duration = 5000 })
+
+    SendDiscordLog('horses', 'Horse Gained XP', tostring(horseRow.name) .. ' gained +' .. tostring(amount) .. ' XP (' .. (isBrush and 'brush' or tostring(action)) .. ').', WebhookColors.success, {
+        { name = 'Horse', value = tostring(horseRow.name), inline = true },
+        { name = 'Action', value = isBrush and 'brush' or tostring(action), inline = true },
+        { name = 'XP', value = tostring(currentXp) .. ' -> ' .. tostring(newXp), inline = true },
+    }, src)
+end)
+
+-----------------------------------
 -- horse attributes to database
 -----------------------------------
 RegisterServerEvent('rsg-horses:server:sethorseAttributes', function(dirt)
@@ -1033,13 +1111,13 @@ RegisterNetEvent('rsg-horses:server:openhorseinventory', function(horseid)
     elseif horsexp <= 999 then
         invWeight = Config.Level6InvWeight
         invSlots = Config.Level6InvSlots
-    elseif horsexp <= 1999 then
+    elseif horsexp <= 1399 then
         invWeight = Config.Level7InvWeight
         invSlots = Config.Level7InvSlots
-    elseif horsexp <= 2999 then
+    elseif horsexp <= 1699 then
         invWeight = Config.Level8InvWeight
         invSlots = Config.Level8InvSlots
-    elseif horsexp <= 3999 then
+    elseif horsexp <= 1899 then
         invWeight = Config.Level9InvWeight
         invSlots = Config.Level9InvSlots
     else
