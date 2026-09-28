@@ -115,7 +115,7 @@
     "sv_error_invalid_horse_name": "Invalid horse name",
     "sv_error_horse_name_length": "Horse name must be 1-50 characters",
     "sv_error_not_own_horse": "You do not own this horse",
-    "sv_error_invalid_components": "Invalid components: ",
+    "sv_error_invalid_components": "Invalid customization data",
     "sv_error_not_own_or_active": "You do not own this horse or it is not active",
     "sv_error_player_too_far": "Target player is too far away",
     "sv_trade_request_title": "Horse Trade Request",
@@ -368,5 +368,17 @@
     "nui_select_option_label": "Select option:",
     "nui_submit": "SUBMIT",
     "nui_success_title": "SUCCESS!",
-    "nui_confirm_btn": "CONFIRM"
+    "nui_confirm_btn": "CONFIRM",
+    "sv_error_weapon_already_stored": "Your horse is already carrying a weapon",
+    "sv_error_inventory_full": "Your inventory is full",
+    "sv_error_weapon_stored_sell": "Take the weapon out of the holster before selling this horse",
+    "sv_success_name_changed": "Horse renamed to '%s'",
+    "sv_success_horse_sold": "Horse sold for $%s",
+    "sv_success_customization_saved": "Customization saved - you paid $%s",
+    "sv_error_move_cost": "Moving this horse costs $%s",
+    "cl_holster_error_weapon_stored": "Take the weapon out of the holster first",
+    "cl_horse_location_line": "%s - stabled at %s (active: %s)",
+    "cl_yes": "Yes",
+    "cl_no": "No",
+    "wh_success_sold": "You sold the horse for $%s"
 }

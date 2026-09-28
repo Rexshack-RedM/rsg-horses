@@ -1,36 +1,47 @@
 Config = {}
 lib.locale()
 
--- debug
-Config.Debug = false
-
-Config = {
-    horsesShopItems ={
-        { name = 'horse_brush',     amount = 10, price = 5 },
-        { name = 'horse_lantern',   amount = 10, price = 10 },
-        { name = 'horsecarrot',    amount = 50, price = 1 },
-        { name = 'horseapple',     amount = 50, price = 1 },
-		{ name = 'hay',     amount = 50, price = 1 },
-        { name = 'horse_stimulant', amount = 25, price = 2 },
-        { name = 'horse_reviver',   amount = 25, price = 10 },
-		{ name = 'horse_holster',   amount = 25, price = 20 }
-    },
-    PersistStock = false, --should stock save in database and load it after restart, to 'remember' stock value before restart
+Config.horsesShopItems = {
+    { name = 'horse_brush',     amount = 10, price = 5 },
+    { name = 'horse_lantern',   amount = 10, price = 10 },
+    { name = 'horsecarrot',     amount = 50, price = 1 },
+    { name = 'horseapple',      amount = 50, price = 1 },
+    { name = 'hay',             amount = 50, price = 1 },
+    { name = 'horse_stimulant', amount = 25, price = 2 },
+    { name = 'horse_reviver',   amount = 25, price = 10 },
+    { name = 'horse_holster',   amount = 25, price = 20 },
 }
+Config.PersistStock = false -- save shop stock in the database across restarts
 
-Config.HorseHolster = {
-    hash         = 0xF772CED6, -- holster shop item hash (already used in the original SpawnHorse)
-    categoryHash = 0x80451C25, -- saddlebags category hash to clear it if needed
+---------------------------------
+-- horse holster: long-arm weapons that can be stored on the horse
+-- key = weapon hash, value = inventory item name
+---------------------------------
+Config.HolsterWeapons = {
+    [`WEAPON_RIFLE_SPRINGFIELD`]    = 'weapon_rifle_springfield',
+    [`WEAPON_RIFLE_ROLLINGBLOCK`]   = 'weapon_rifle_rollingblock',
+    [`WEAPON_RIFLE_BOLTACTION`]     = 'weapon_rifle_boltaction',
+    [`WEAPON_RIFLE_VARMINT`]        = 'weapon_rifle_varmint',
+    [`WEAPON_RIFLE_ELEPHANT`]       = 'weapon_rifle_elephant',
+    [`WEAPON_RIFLE_CARCANO`]        = 'weapon_rifle_carcano',
+    [`WEAPON_RIFLE_LANCASTER`]      = 'weapon_rifle_lancaster',
+    [`WEAPON_RIFLE_HENRY`]          = 'weapon_rifle_henry',
+    [`WEAPON_SHOTGUN_DOUBLEBARREL`] = 'weapon_shotgun_doublebarrel',
+    [`WEAPON_SHOTGUN_SEMIAUTO`]     = 'weapon_shotgun_semiauto',
+    [`WEAPON_SHOTGUN_PUMP`]         = 'weapon_shotgun_pump',
+    [`WEAPON_SHOTGUN_REPEATING`]    = 'weapon_shotgun_repeating',
+    [`WEAPON_SHOTGUN_SAWNOFF`]      = 'weapon_shotgun_sawnoff',
+    [`WEAPON_BOW`]                  = 'weapon_bow',
+    [`WEAPON_BOW_IMPROVED`]         = 'weapon_bow_improved',
+    [`WEAPON_REPEATER_CARBINE`]     = 'weapon_repeater_carbine',
+    [`WEAPON_REPEATER_WINCHESTER`]  = 'weapon_repeater_winchester',
+    [`WEAPON_REPEATER_EVANS`]       = 'weapon_repeater_evans',
 }
 Config.Prompt = {
     HorseDrink = 0xD8CF0C95,
     HorseGraze = 0xD8CF0C95,
     HorseLay = 0xD8CF0C95,
     HorsePlay = 0x620A6C5E,
-    HorseSaddleBag = 0xC7B5340A,
-    HorseBrush = 0x63A38F2C,
-    HorseLantern = 0x63A38F2C,
-    Rotate = { 0x7065027D, 0xB4E465B4 },
 }
 
 Config.TrickXp = {
@@ -76,37 +87,12 @@ Config.Coat = {
     Default = { tint0 = 0, tint1 = 255, tint2 = 255, mane = 0, tail = 0 },
 }
 
--- preset tint0 ids found in test folder (horse_markings/shared/config.lua)
-Config.CoatPresets = {
-    { name = 'White',        tint0 = 0,   price = 100 },
-    { name = 'Black',        tint0 = 9,   price = 100 },
-    { name = 'Brown',        tint0 = 40,  price = 100 },
-    { name = 'Bay',          tint0 = 100, price = 100 },
-    { name = 'Purple',       tint0 = 105, price = 100 },
-    { name = 'Pink',         tint0 = 107, price = 100 },
-    { name = 'Lilac',        tint0 = 108, price = 100 },
-    { name = 'Dark Green',   tint0 = 109, price = 100 },
-    { name = 'Blue',         tint0 = 110, price = 100 },
-    { name = 'Green',        tint0 = 112, price = 100 },
-    { name = 'Lime',         tint0 = 115, price = 100 },
-    { name = 'Yellow',       tint0 = 119, price = 100 },
-    { name = 'Orange',       tint0 = 120, price = 100 },
-    { name = 'Bronze',       tint0 = 121, price = 100 },
-    { name = 'Blood Red',    tint0 = 125, price = 100 },
-    { name = 'Chestnut Red', tint0 = 127, price = 100 },
-    { name = 'Silver',       tint0 = 128, price = 100 },
-    { name = 'Grey',         tint0 = 130, price = 100 },
-}
-
 ---------------------------------
 -- general settings
 ---------------------------------
 Config.EnableTarget        = true -- toggle between target and prompt
-Config.TargetHelp          = false -- target help to use [L-ALT]
 Config.Automount           = false -- horse automount
 Config.SpawnOnRoadOnly     = false -- always spawn on road
-Config.HorseInvWeight      = 16000 -- horse inventory weight
-Config.HorseInvSlots       = 30 -- horse inventory slots
 Config.CheckCycle          = 30 -- horse check system (mins) -- default 60
 Config.StarterHorseDieAge  = 7 -- starter horse age in days till it dies (days)
 Config.HorseDieAge         = 665 -- horse age in days till it dies (days)
@@ -117,6 +103,8 @@ Config.AllowTwoPlayersRide = true -- if true two players can ride but may have s
 Config.DeathGracePeriod    = 60000 -- grace period to let player attempt to revive the horse
 Config.MoveHorseBasePrice  = 10
 Config.MoveFeePerMeter     = 0.01
+Config.SellPriceMultiplier = 0.5 -- stable buy-back price = horseprice * this
+Config.InteractDistance    = 2.5 -- max distance to feed / brush / revive / holster your horse
 
 ---------------------------------
 -- horse inventory weight by level
@@ -164,6 +152,7 @@ Config.HorseFeed = {
     ['horsecarrot']    = { health = 10,  stamina = 10,  ismedicine = false },
 	['hay']    = { health = 10,  stamina = 10,  ismedicine = false },
     ['horseapple']     = { health = 15,  stamina = 15,  ismedicine = false },
+    ['sugarcube']      = { health = 15,  stamina = 15,  ismedicine = false },
     ['horse_stimulant'] = { health = 100, stamina = 100, ismedicine = true, medicineHash = 'consumable_horse_stimulant' },
 }
 
@@ -206,11 +195,6 @@ Config.Anim = {
     Drink2 = { dict = 'amb_creature_mammal@prop_horse_drink_trough@idle0', anim = 'idle_a', duration = 20 },
     Graze  = { dict = 'amb_creature_mammal@world_horse_grazing@idle',      anim = 'idle_a', duration = 20 }
 }
-
----------------------------------
--- horse bonding settings
----------------------------------
-Config.MaxBondingLevel = 5000
 
 ---------------------------------
 -- config blips

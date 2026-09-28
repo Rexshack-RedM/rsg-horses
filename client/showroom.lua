@@ -168,13 +168,6 @@ function SpawnShowroomHorse(model)
     end
 end
 
-function GetShowroomHorse()
-    if showroomHorse and DoesEntityExist(showroomHorse) then
-        return showroomHorse
-    end
-    return nil
-end
-
 function RotateShowroomHorse(direction)
     if not showroomHorse or not DoesEntityExist(showroomHorse) then return end
     if not showroomCam then return end

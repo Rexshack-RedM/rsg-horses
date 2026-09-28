@@ -1,4 +1,8 @@
 let Locale = {};
+// escape text before it is placed in innerHTML (horse names etc.)
+function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 function t(key, fallback) {
     return (Locale && Locale[key]) || fallback || key;
 }
@@ -29,9 +33,7 @@ const HorseUI = {
     moveHorseId: null,
     selectedMareId: null,
     screenHistory: [],
-    cart: [],
     playerMoney: { cash: 0, gold: 0 },
-    sortBy: 'name',
     confirmCallback: null,
     inputCallback: null,
 
@@ -48,26 +50,6 @@ const HorseUI = {
         document.getElementById('shop-container').addEventListener('wheel', (e) => {
             e.stopPropagation();
         }, { passive: false });
-
-        const searchInput = document.getElementById('search-input');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.searchQuery = e.target.value.toLowerCase();
-                this.renderCurrentScreen();
-            });
-        }
-
-        document.querySelectorAll('.sort-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.sortBy = btn.dataset.sort;
-                this.renderCurrentScreen();
-            });
-        });
-
-        document.getElementById('btn-clear').addEventListener('click', () => this.clearCart());
-        document.getElementById('btn-purchase').addEventListener('click', () => this.purchase());
 
         document.getElementById('rotate-left').addEventListener('click', () => this.sendNUI('rotateHorse', { direction: 'left' }));
         document.getElementById('rotate-right').addEventListener('click', () => this.sendNUI('rotateHorse', { direction: 'right' }));
@@ -93,7 +75,6 @@ const HorseUI = {
             backdrop.addEventListener('click', () => {
                 this.closeConfirm();
                 this.closeInput();
-                this.closeModal();
             });
         }
 
@@ -131,14 +112,11 @@ const HorseUI = {
                 case 'openMoveDestinations':
                     this.openMoveDestinations(data.horseId, data.destinations);
                     break;
-                case 'openShop':
-                    this.openShop(data.items, data.money);
-                    break;
-                case 'openBuyTarget':
-                    this.openBuyTarget(data);
-                    break;
                 case 'openBuyHorse':
                     this.openBuyHorse(data.horses, data.money, data.stableId);
+                    break;
+                case 'setActiveHorse':
+                    this.setActiveHorse(data.id);
                     break;
                 case 'openHorseOptions':
                     this.openHorseOptions(data.horse);
@@ -151,12 +129,6 @@ const HorseUI = {
                     break;
                 case 'openCustomization':
                     this.openCustomization(data);
-                    break;
-                case 'showNotification':
-                    this.showNotification(data.type, data.title, data.message);
-                    break;
-                case 'showSuccess':
-                    this.showSuccess(data.message, true);
                     break;
                 case 'updateMoney':
                     this.updateMoney(data.cash, data.gold);
@@ -240,8 +212,6 @@ const HorseUI = {
 
         this.showScreen('main');
         document.getElementById('shop-container').classList.remove('hidden');
-        const vig = document.getElementById('vignette');
-        if (vig) vig.style.display = 'block';
     },
 
     openHorseList(horses) {
@@ -263,13 +233,30 @@ const HorseUI = {
         grid.classList.remove('hidden');
         noItems.classList.add('hidden');
 
+        this.horseListData = horses;
+        this.renderHorseCards();
+
+        this.showScreen('horse-list');
+    },
+
+    isActiveHorse(horse) {
+        return horse.active === 1 || horse.active === true;
+    },
+
+    // renders the "View Horses" grid - the active horse is listed first and highlighted
+    renderHorseCards() {
+        const grid = document.getElementById('horse-grid');
+        grid.innerHTML = '';
+        const horses = [...(this.horseListData || [])].sort((a, b) => this.isActiveHorse(b) - this.isActiveHorse(a));
+
         horses.forEach(horse => {
+            const isActive = this.isActiveHorse(horse);
             const card = document.createElement('div');
-            card.className = 'item-card';
-            const isActive = horse.active === 1 || horse.active === true;
+            card.className = 'item-card' + (isActive ? ' active-horse' : '');
             card.innerHTML = `
-                <div class="item-icon"><img src="icons/animal_horse.png" alt=""></div>
-                <div class="item-name">${horse.name || t('nui_unknown', 'Unknown')}</div>
+                ${isActive ? `<span class="active-ribbon">${esc(t('nui_active', 'Active'))}</span>` : ''}
+                <div class="item-icon"><img src="${isActive ? 'icons/menu_icon_on_horse.png' : 'icons/animal_horse.png'}" alt=""></div>
+                <div class="item-name">${esc(horse.name || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-subtitle">${t('nui_level_gender_format', 'Level %s | %s').replace('%s', horse.level || 1).replace('%s', horse.gender || t('nui_unknown', 'Unknown'))}</div>
                 <div class="horse-stats">
                     <span class="horse-stat-badge">XP: ${horse.horsexp || 0}</span>
@@ -282,8 +269,18 @@ const HorseUI = {
             });
             grid.appendChild(card);
         });
+    },
 
-        this.showScreen('horse-list');
+    // server confirmed a new active horse: update the list and return to it
+    setActiveHorse(id) {
+        if (!this.horseListData) return;
+        this.horseListData.forEach(h => { h.active = (h.id === id) ? 1 : 0; });
+        if (this.currentScreen !== 'horse-list') return;
+        const last = this.screenHistory[this.screenHistory.length - 1];
+        if (last && last.screen === 'horse-list') this.screenHistory.pop(); // leave the options view
+        this.setBreadcrumb([t('nui_breadcrumb_stable_menu', 'Stable Menu'), t('nui_breadcrumb_view_horses', 'View Horses')]);
+        document.getElementById('footer-text').textContent = t('nui_footer_click_horse_options', 'Click a horse to see options');
+        this.renderHorseCards();
     },
 
     openHorseOptions(horse) {
@@ -338,7 +335,7 @@ const HorseUI = {
             card.className = 'item-card';
             card.innerHTML = `
                 <div class="item-icon"><img src="icons/animal_horse.png" alt=""></div>
-                <div class="item-name">${horse.name || t('nui_unknown', 'Unknown')}</div>
+                <div class="item-name">${esc(horse.name || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-subtitle">${t('nui_level_gender_format', 'Level %s | %s').replace('%s', horse.level || 1).replace('%s', horse.gender || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-price">$${(horse.sellPrice || 0).toFixed(2)}</div>
                 <div class="item-stat">XP: ${horse.horsexp || 0}</div>
@@ -349,7 +346,7 @@ const HorseUI = {
                     t('nui_confirm_sell_message', 'Are you sure you want to sell %s for $%s? This cannot be undone.').replace('%s', horse.name).replace('%s', (horse.sellPrice || 0).toFixed(2)),
                     () => {
                         this.sendNUI('confirmSell', { horseId: horse.id });
-                        this.showSuccess(t('nui_sold_success', '%s has been sold!').replace('%s', horse.name), true);
+                        this.close(); // result is reported by the server
                     }
                 );
             });
@@ -380,11 +377,11 @@ const HorseUI = {
 
         horses.forEach(horse => {
             const card = document.createElement('div');
-            card.className = 'item-card';
-            const isActive = horse.active === 1 || horse.active === true;
+            const isActive = this.isActiveHorse(horse);
+            card.className = 'item-card' + (isActive ? ' active-horse' : '');
             card.innerHTML = `
                 <div class="item-icon"><img src="icons/animal_horse.png" alt=""></div>
-                <div class="item-name">${horse.name || t('nui_unknown', 'Unknown')}</div>
+                <div class="item-name">${esc(horse.name || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-subtitle">${t('nui_level_format', 'Level %s').replace('%s', horse.level || 1)}</div>
                 <div class="horse-stats">
                     <span class="horse-stat-badge ${isActive ? 'active' : 'inactive'}">${isActive ? t('nui_active', 'Active') : t('nui_stabled', 'Stabled')}</span>
@@ -430,7 +427,7 @@ const HorseUI = {
             `;
             card.addEventListener('click', () => {
                 this.sendNUI('confirmMove', { horseId: this.moveHorseId, destStable: dest.stableId });
-                this.showSuccess(t('nui_move_success', 'Horse moved successfully!'), true);
+                this.close(); // result is reported by the server
             });
             grid.appendChild(card);
         });
@@ -464,7 +461,7 @@ const HorseUI = {
             const ageLabel = horse.age_seconds ? this.getHorseAgeLabel(horse.age_seconds) : t('nui_unknown', 'Unknown');
             card.innerHTML = `
                 <div class="item-icon"><img src="icons/female.png" alt=""></div>
-                <div class="item-name">${horse.name || t('nui_unknown', 'Unknown')}</div>
+                <div class="item-name">${esc(horse.name || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-subtitle">${horse.horse || t('nui_unknown_breed', 'Unknown breed')}</div>
                 <div class="horse-stats">
                     <span class="horse-stat-badge">${t('nui_age_format', 'Age: %s').replace('%s', ageLabel)}</span>
@@ -510,7 +507,7 @@ const HorseUI = {
             const ageLabel = horse.age_seconds ? this.getHorseAgeLabel(horse.age_seconds) : t('nui_unknown', 'Unknown');
             card.innerHTML = `
                 <div class="item-icon"><img src="icons/male.png" alt=""></div>
-                <div class="item-name">${horse.name || t('nui_unknown', 'Unknown')}</div>
+                <div class="item-name">${esc(horse.name || t('nui_unknown', 'Unknown'))}</div>
                 <div class="item-subtitle">${horse.horse || t('nui_unknown_breed', 'Unknown breed')}</div>
                 <div class="horse-stats">
                     <span class="horse-stat-badge">${t('nui_age_format', 'Age: %s').replace('%s', ageLabel)}</span>
@@ -522,7 +519,7 @@ const HorseUI = {
                     t('nui_confirm_breeding_message', 'Breed %s (stallion) with your mare? This will cost hay and start gestation.').replace('%s', horse.name),
                     () => {
                         this.sendNUI('confirmBreed', { mareId: this.selectedMareId, stallionId: horse.id });
-                        this.showSuccess(t('nui_breeding_started', 'Breeding started! Check back later for your foal.'), true);
+                        this.close(); // result is reported by the server
                     }
                 );
             });
@@ -540,279 +537,17 @@ const HorseUI = {
         return Math.floor(mins) + 'm';
     },
 
-    openShop(items, money) {
-        this.playerMoney = { cash: money?.cash || 0, gold: money?.gold || 0 };
-        this.cart = [];
-        this.currentScreen = 'shop';
-        this.pushHistory(this.currentScreen, ['Stable Menu'], 'Click an option to proceed');
-
-        this.setBreadcrumb([t('nui_breadcrumb_stable_menu', 'Stable Menu'), t('nui_menu_shop_label', 'Horse Shop')]);
-        document.getElementById('footer-text').textContent = t('nui_footer_click_items', 'Click items to add to cart');
-        document.getElementById('filter-bar').style.display = '';
-        document.getElementById('sort-options').style.display = '';
-
-        this.updateMoneyDisplay();
-        this.renderShopItems(items || []);
-        this.updateCartDisplay();
-
-        this.showScreen('shop');
-    },
-
-    renderShopItems(items) {
-        const grid = document.getElementById('shop-grid');
-        const noItems = document.getElementById('no-shop-items');
-        grid.innerHTML = '';
-
-        let filtered = (items || []).filter(item => {
-            if (!item) return false;
-            const q = this.searchQuery || '';
-            if (!q) return true;
-            return (item.label || item.name || '').toLowerCase().includes(q);
-        });
-
-        filtered.sort((a, b) => {
-            switch (this.sortBy) {
-                case 'price-low': return (a.price || 0) - (b.price || 0);
-                case 'price-high': return (b.price || 0) - (a.price || 0);
-                default: return (a.label || a.name || '').localeCompare(b.label || b.name || '');
-            }
-        });
-
-        if (filtered.length === 0) {
-            grid.classList.add('hidden');
-            noItems.classList.remove('hidden');
-            return;
-        }
-
-        grid.classList.remove('hidden');
-        noItems.classList.add('hidden');
-
-        filtered.forEach(item => {
-            const card = document.createElement('div');
-            card.className = `item-card ${(item.amount || 0) <= 0 ? 'disabled' : ''}`;
-            const icon = this.getItemIcon(item);
-            const label = item.label || item.name || t('nui_item_fallback', 'Item');
-
-            card.innerHTML = `
-                <div class="item-icon"><img src="${icon}" alt=""></div>
-                <div class="item-name">${label}</div>
-                <div class="item-price">$${(item.price || 0).toFixed(2)}</div>
-                <div class="item-stat">${t('nui_stock_format', 'Stock: %s').replace('%s', item.amount || 0)}</div>
-            `;
-
-            if ((item.amount || 0) > 0) {
-                card.addEventListener('click', () => {
-                    this.selectedItem = item;
-                    this.showItemModal(item);
-                });
-            }
-
-            grid.appendChild(card);
-        });
-    },
-
-    getItemIcon(item) {
-        if (!item || !item.name) return 'icons/propsets.png';
-        const n = item.name.toLowerCase();
-        if (n.includes('brush')) return 'icons/horseBrush.png';
-        if (n.includes('lantern') || n.includes('lamp')) return 'icons/saddle_lanterns.png';
-        if (n.includes('carrot') || n.includes('apple') || n.includes('feed')) return 'icons/toast_horse_bond.png';
-        if (n.includes('stimulant') || n.includes('reviver') || n.includes('medic')) return 'icons/horse_health.png';
-        if (n.includes('holster')) return 'icons/holsters_left.png';
-        return 'icons/propsets.png';
-    },
-
-    showItemModal(item) {
-        this.selectedItem = item;
-        const modal = document.getElementById('item-modal');
-        if (!modal) return;
-
-        const label = item.label || item.name || t('nui_item_fallback', 'Item');
-        const icon = this.getItemIcon(item);
-
-        document.getElementById('modal-item-name').textContent = label;
-        document.getElementById('modal-item-type').textContent = item.type || t('nui_horse_item_fallback', 'Horse Item');
-        document.getElementById('modal-price').textContent = '$' + (item.price || 0).toFixed(2);
-        document.getElementById('modal-stock').textContent = item.amount || 0;
-        document.getElementById('modal-icon').innerHTML = `<img src="${icon}" alt="">`;
-
-        const qtyInput = document.getElementById('qty-input');
-        if (qtyInput) {
-            qtyInput.value = 1;
-            qtyInput.max = item.amount || 1;
-        }
-
-        this.updateModalTotal();
-        modal.classList.remove('hidden');
-
-        document.getElementById('qty-minus').onclick = () => this.adjustQuantity(-1);
-        document.getElementById('qty-plus').onclick = () => this.adjustQuantity(1);
-        document.getElementById('qty-input').onchange = () => this.updateModalTotal();
-        document.querySelectorAll('.quick-btn').forEach(btn => {
-            btn.onclick = () => {
-                if (!this.selectedItem) return;
-                const qty = btn.dataset.qty;
-                const input = document.getElementById('qty-input');
-                if (qty === 'max') {
-                    input.value = this.selectedItem.amount || 1;
-                } else {
-                    input.value = Math.min(parseInt(qty), this.selectedItem.amount || 1);
-                }
-                this.updateModalTotal();
-            };
-        });
-        document.getElementById('modal-close').onclick = () => this.closeModal();
-        document.getElementById('modal-cancel').onclick = () => this.closeModal();
-        document.getElementById('modal-add').onclick = () => this.addToCart();
-    },
-
-    adjustQuantity(delta) {
-        if (!this.selectedItem) return;
-        const input = document.getElementById('qty-input');
-        if (!input) return;
-        let value = parseInt(input.value) + delta;
-        value = Math.max(1, Math.min(value, this.selectedItem.amount || 1));
-        input.value = value;
-        this.updateModalTotal();
-    },
-
-    updateModalTotal() {
-        if (!this.selectedItem) return;
-        const input = document.getElementById('qty-input');
-        const totalEl = document.getElementById('modal-total');
-        if (!input || !totalEl) return;
-        const qty = parseInt(input.value) || 1;
-        totalEl.textContent = '$' + (qty * (this.selectedItem.price || 0)).toFixed(2);
-    },
-
-    closeModal() {
-        const modal = document.getElementById('item-modal');
-        if (modal) modal.classList.add('hidden');
-        this.selectedItem = null;
-    },
-
-    addToCart() {
-        if (!this.selectedItem) return;
-        const input = document.getElementById('qty-input');
-        const qty = input ? (parseInt(input.value) || 1) : 1;
-
-        const existing = this.cart.find(c => c.name === this.selectedItem.name);
-        if (existing) {
-            const newQty = existing.quantity + qty;
-            if (newQty > (this.selectedItem.amount || 0)) {
-                this.showNotification('error', t('nui_stock_limit_title', 'Stock Limit'), t('nui_stock_limit_message', 'Cannot add more than available stock'));
-                return;
-            }
-            existing.quantity = newQty;
-        } else {
-            this.cart.push({
-                name: this.selectedItem.name,
-                label: this.selectedItem.label || this.selectedItem.name,
-                price: this.selectedItem.price || 0,
-                quantity: qty,
-                icon: this.getItemIcon(this.selectedItem)
-            });
-        }
-
-        this.updateCartDisplay();
-        this.closeModal();
-        this.showNotification('success', t('nui_added_to_cart_title', 'Added to Cart'), `${qty}x ${this.selectedItem.label || this.selectedItem.name}`);
-    },
-
-    updateCartDisplay() {
-        const cartItems = document.getElementById('cart-items');
-        const cartEmpty = document.getElementById('cart-empty');
-        const cartCount = document.getElementById('cart-count');
-        const purchaseBtn = document.getElementById('btn-purchase');
-
-        const totalItems = this.cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
-        if (cartCount) cartCount.textContent = totalItems;
-
-        if (this.cart.length === 0) {
-            if (cartItems) cartItems.classList.add('hidden');
-            if (cartEmpty) cartEmpty.classList.remove('hidden');
-            document.getElementById('cart-subtotal').textContent = '$0.00';
-            document.getElementById('cart-total').textContent = '$0.00';
-            if (purchaseBtn) purchaseBtn.disabled = true;
-            return;
-        }
-
-        if (cartItems) cartItems.classList.remove('hidden');
-        if (cartEmpty) cartEmpty.classList.add('hidden');
-        if (purchaseBtn) purchaseBtn.disabled = false;
-
-        if (!cartItems) return;
-        cartItems.innerHTML = '';
-        let subtotal = 0;
-
-        this.cart.forEach((item, index) => {
-            const itemTotal = (item.price || 0) * (item.quantity || 0);
-            subtotal += itemTotal;
-
-            const el = document.createElement('div');
-            el.className = 'cart-item';
-            el.innerHTML = `
-                <div class="cart-item-image"><img src="${item.icon || 'icons/propsets.png'}" alt=""></div>
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${item.label || 'Item'}</div>
-                    <div class="cart-item-qty">x${item.quantity || 0}</div>
-                </div>
-                <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
-                <button class="cart-item-remove" data-index="${index}"><img src="icons/cross.png" alt=""></button>
-            `;
-            el.querySelector('.cart-item-remove').addEventListener('click', () => {
-                this.cart.splice(index, 1);
-                this.updateCartDisplay();
-            });
-            cartItems.appendChild(el);
-        });
-
-        document.getElementById('cart-subtotal').textContent = '$' + subtotal.toFixed(2);
-        const cartTotalEl = document.getElementById('cart-total');
-        cartTotalEl.textContent = '$' + subtotal.toFixed(2);
-        const canAffordCart = subtotal <= (this.playerMoney.cash || 0);
-        cartTotalEl.classList.toggle('over', !canAffordCart);
-        if (purchaseBtn) purchaseBtn.disabled = !canAffordCart;
-    },
-
-    clearCart() {
-        this.cart = [];
-        this.updateCartDisplay();
-    },
-
-    purchase() {
-        if (this.cart.length === 0) return;
-        const total = this.cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
-
-        if (total > (this.playerMoney.cash || 0)) {
-            this.showNotification('error', t('nui_insufficient_funds_title', 'Insufficient Funds'), t('nui_insufficient_funds_message', "You don't have enough cash"));
-            return;
-        }
-
-        const purchaseBtn = document.getElementById('btn-purchase');
-        if (purchaseBtn) {
-            purchaseBtn.classList.add('purchasing');
-            purchaseBtn.disabled = true;
-        }
-
-        this.sendNUI('purchaseItems', {
-            items: this.cart,
-            total: total
-        });
-    },
-
     openBuyHorse(horses, money, stableId) {
         this.playerMoney = { cash: money?.cash || 0, gold: money?.gold || 0 };
         if (stableId) this.currentStableId = stableId;
         this.currentScreen = 'buy-horse';
         this.selectedHorse = null;
         this.buyHorses = horses || [];
-        this.pushHistory(this.currentScreen, ['Stable Menu'], 'Click an option to proceed');
+        this.pushHistory(this.currentScreen, [t('nui_breadcrumb_stable_menu', 'Stable Menu')], t('nui_footer_click_option', 'Click an option to proceed'));
 
         this.setBreadcrumb([t('nui_breadcrumb_stable_menu', 'Stable Menu'), t('nui_menu_buy_label', 'Buy Horse')]);
         document.getElementById('footer-text').textContent = t('nui_footer_click_preview', 'Click a horse to preview');
         document.getElementById('filter-bar').style.display = '';
-        document.getElementById('sort-options').style.display = '';
 
         this.updateMoneyDisplay();
 
@@ -842,7 +577,7 @@ const HorseUI = {
                 : '';
             card.innerHTML = `
                 <div class="item-icon"><img src="icons/animal_horse.png" alt=""></div>
-                <div class="item-name">${horse.horsename || horse.name || t('nui_horse_name_fallback', 'Horse')}</div>
+                <div class="item-name">${esc(horse.horsename || horse.name || t('nui_horse_name_fallback', 'Horse'))}</div>
                 <div class="item-subtitle">${horse.horsemodel || horse.model || ''}</div>
                 <div class="item-price ${canAfford ? '' : 'over'}">$${price.toFixed(2)}</div>
                 ${shortfallHtml}
@@ -882,41 +617,6 @@ const HorseUI = {
         this.showScreen('buy-horse');
     },
 
-    openBuyTarget(data) {
-        document.getElementById('input-title').textContent = t('nui_menu_buy_label', 'Buy Horse');
-        document.getElementById('input-label').textContent = t('nui_enter_horse_name', 'Enter a name for your new horse:');
-        document.getElementById('input-field').value = '';
-        document.getElementById('input-field').placeholder = t('nui_horse_name_placeholder', 'Horse name...');
-        document.getElementById('input-select-group').style.display = 'block';
-        document.getElementById('input-select-label').textContent = t('nui_select_gender', 'Select Gender:');
-
-        const select = document.getElementById('input-select');
-        select.innerHTML = `
-            <option value="male">${t('nui_gelding', 'Gelding')}</option>
-            <option value="female">${t('nui_mare', 'Mare')}</option>
-        `;
-
-        this.inputCallback = () => {
-            const name = document.getElementById('input-field').value.trim();
-            const gender = document.getElementById('input-select').value;
-            if (!name) {
-                this.showNotification('error', t('nui_invalid_name_title', 'Invalid Name'), t('nui_invalid_name_message', 'Please enter a horse name'));
-                return;
-            }
-            this.sendNUI('buyTarget', {
-                model: data.horsemodel,
-                stableId: this.currentStableId,
-                name: name,
-                gender: gender
-            });
-            this.closeInput();
-            this.showSuccess(t('nui_horse_is_yours', '%s the %s is yours!').replace('%s', name).replace('%s', gender === 'male' ? t('nui_gelding', 'Gelding') : t('nui_mare', 'Mare')), true);
-        };
-
-        document.getElementById('input-modal').classList.remove('hidden');
-        setTimeout(() => document.getElementById('input-field').focus(), 100);
-    },
-
     showBuyHorseDialog(horse) {
         const price = horse.horseprice || horse.price || 0;
         if (price > (this.playerMoney.cash || 0)) {
@@ -950,7 +650,7 @@ const HorseUI = {
                 gender: gender
             });
             this.closeInput();
-            this.showSuccess(t('nui_horse_is_yours', '%s the %s is yours!').replace('%s', name).replace('%s', gender === 'male' ? t('nui_gelding', 'Gelding') : t('nui_mare', 'Mare')), true);
+            this.close(); // result is reported by the server
         };
 
         document.getElementById('input-modal').classList.remove('hidden');
@@ -978,41 +678,9 @@ const HorseUI = {
         if (this.inputCallback) this.inputCallback();
     },
 
-    showSuccess(message, autoClose) {
-        document.getElementById('success-message').textContent = message || t('nui_action_completed', 'Action completed');
-        const overlay = document.getElementById('success-overlay');
-        overlay.classList.remove('hidden');
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-            if (autoClose) this.close();
-        }, 2500);
-    },
-
+    // all notifications are shown by ox_lib (lib.notify) on the Lua side
     showNotification(type, title, message) {
-        const container = document.getElementById('notification-container');
-        if (!container) return;
-
-        const icons = {
-            success: 'icons/tick.png',
-            error: 'icons/cross.png',
-            info: 'icons/information.png'
-        };
-
-        const notif = document.createElement('div');
-        notif.className = `notification ${type}`;
-        notif.innerHTML = `
-            <img src="${icons[type] || icons.info}" alt="">
-            <div>
-                <strong>${title || t('nui_notice_default', 'Notice')}</strong>
-                ${message ? `<span class="notif-sub">${message}</span>` : ''}
-            </div>
-        `;
-
-        container.appendChild(notif);
-        setTimeout(() => {
-            notif.style.animation = 'notifyOut 0.25s ease-in forwards';
-            setTimeout(() => notif.remove(), 250);
-        }, 4000);
+        this.sendNUI('notify', { type, title, message });
     },
 
     close() {
@@ -1022,7 +690,6 @@ const HorseUI = {
 
     hide() {
         this.isOpen = false;
-        this.cart = [];
         this.selectedHorse = null;
         this.moveHorseId = null;
         this.selectedMareId = null;
@@ -1036,20 +703,11 @@ const HorseUI = {
         }
 
         document.getElementById('shop-container').classList.add('hidden');
-        const vig = document.getElementById('vignette');
-        if (vig) vig.style.display = 'none';
         document.getElementById('confirm-modal').classList.add('hidden');
         document.getElementById('input-modal').classList.add('hidden');
-        document.getElementById('item-modal')?.classList.add('hidden');
         const backBtn = document.getElementById('back-btn');
         if (backBtn) backBtn.style.display = 'none';
-        this.closeModal();
 
-        const purchaseBtn = document.getElementById('btn-purchase');
-        if (purchaseBtn) {
-            purchaseBtn.classList.remove('purchasing');
-            purchaseBtn.disabled = false;
-        }
     },
 
     updateMoneyDisplay() {
@@ -1063,7 +721,6 @@ const HorseUI = {
         this.playerMoney = { cash: cash || 0, gold: gold || 0 };
         this.updateMoneyDisplay();
         if (this.currentScreen === 'buy-horse') this.updateBuyGridAffordability();
-        if (this.currentScreen === 'shop') this.updateCartDisplay();
     },
 
     updateBuyGridAffordability() {
@@ -1149,12 +806,10 @@ const HorseUI = {
             if (backBtn) backBtn.style.display = '';
         }
 
-        if (screen === 'shop' || screen === 'buy-horse') {
+        if (screen === 'buy-horse') {
             document.getElementById('filter-bar').style.display = '';
-            document.getElementById('sort-options').style.display = screen === 'shop' ? '' : 'none';
         } else {
             document.getElementById('filter-bar').style.display = 'none';
-            document.getElementById('sort-options').style.display = 'none';
         }
     },
 
@@ -1185,12 +840,10 @@ const HorseUI = {
                 if (backBtn) backBtn.style.display = '';
             }
 
-            if (prev.screen === 'shop' || prev.screen === 'buy-horse') {
+            if (prev.screen === 'buy-horse') {
                 document.getElementById('filter-bar').style.display = '';
-                document.getElementById('sort-options').style.display = prev.screen === 'shop' ? '' : 'none';
             } else {
                 document.getElementById('filter-bar').style.display = 'none';
-                document.getElementById('sort-options').style.display = 'none';
             }
         } else {
             this.showScreen('main');
@@ -1220,7 +873,7 @@ const HorseUI = {
             hasMarkings: data.hasMarkings !== false,
             originalMarking: data.originalMarking,
             maneTailSupported: data.maneTailSupported !== false,
-            prices: data.prices || { component: 10, coat: 5 },
+            prices: data.prices || { components: {}, coat: 100 },
             currentPrice: 0
         };
 
@@ -1488,7 +1141,7 @@ const HorseUI = {
         // Component price: count changed components
         for (const [cat, value] of Object.entries(components)) {
             if (value !== (initialComponents[cat] || 0) && value > 0) {
-                price += prices.component || 10;
+                price += (prices.components && prices.components[cat]) || 0;
             }
         }
 
@@ -1500,7 +1153,7 @@ const HorseUI = {
                            norm(coat.mane, norm(coat.tint0, 0)) !== norm(initialCoat.mane, norm(initialCoat.tint0, 0)) ||
                            norm(coat.tail, norm(coat.tint0, 0)) !== norm(initialCoat.tail, norm(initialCoat.tint0, 0));
         if (coatChanged) {
-            price += prices.coat || 5;
+            price += prices.coat || 0;
         }
 
         this.customizeData.currentPrice = price;
@@ -1528,14 +1181,8 @@ const HorseUI = {
             coat: this.customizeData.coat,
             price: this.customizeData.currentPrice
         });
-        this.showSuccess(t('nui_customization_saved', 'Customization saved!'), false);
-        this.goBack();
     },
 
-    renderCurrentScreen() {
-        // Re-render the current screen based on search/sort (used for shop)
-        // This is a no-op for non-shop screens since they don't re-render
-    }
 };
 
 // Wild horse sell/save panel + appraisal progress (merged from rsg-wildhorse).
@@ -1689,12 +1336,3 @@ document.addEventListener('DOMContentLoaded', () => {
     WildHorseUI.init();
 });
 
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes notifyOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(30px); opacity: 0; }
-    }
-    .btn-purchase.purchasing { pointer-events: none; opacity: 0.7; }
-`;
-document.head.appendChild(style);

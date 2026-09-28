@@ -1,120 +1,103 @@
--- Wild horse (tame / sell / save) server, merged from rsg-wildhorse v1.0.3.
--- Event names are kept identical so anything triggering them keeps working.
--- Model names and gender are normalised to lowercase on save for
--- compatibility with the stable database, breeding checks and model lookups.
+-- Wild horse selling / stabling (merged from rsg-wildhorse).
+-- The client only sends the network id of the horse it is riding. Everything
+-- else (model, reward, validity, deletion) is decided and done by the server.
 local RSGCore = exports['rsg-core']:GetCoreObject()
 lib.locale()
 
--- shared/wildhorse_config.lua (listed in fxmanifest shared_scripts) normally
--- provides this. If it is missing the running server is on a stale manifest:
--- fully Stop + Start the server (not Restart) so the new manifest loads.
-if not Config.WildHorse then
-    print('^1[rsg-horses] shared/wildhorse_config.lua did not load - fully Stop + Start the server so the new fxmanifest takes effect^7')
-    Config.WildHorse = {
-        Debug = false, SellTime = 20000, EnableCooldown = false, Cooldown = 900,
-        Keybind = 'J', PaymentType = 'cash', SaleMultiplier = 1, Xp = 0,
-        Blip = { blipName = 'Sell Wild Horse', blipSprite = 'blip_shop_horse_fencing', blipScale = 0.2 },
-        SellWildHorseLocations = {}, Horse = {},
-    }
+local WH = Config.WildHorse
+local SELL_RADIUS  = 10.0 -- player must be this close to a wild horse seller
+local HORSE_RADIUS = 6.0  -- and the horse this close to the player
+-- a sale/stable can never happen faster than the appraisal takes, even with EnableCooldown off
+local MIN_COOLDOWN = math.ceil((tonumber(WH.SellTime) or 5000) / 1000)
+
+local rewardsByModel = {}
+for _, cfg in pairs(WH.Horse or {}) do
+    rewardsByModel[cfg.model] = cfg
 end
 
--- SECURITY: rewardmoney/rewarditem are client-supplied and were fully
--- trusted here, letting a modified client call this event repeatedly with
--- an arbitrary amount/item for unlimited money+item duplication, with no
--- server-side cooldown. Every entry in Config.WildHorse.Horse currently
--- uses the same reward item and a 15-30 money range, so we derive a
--- server-authoritative cap/whitelist from that config and enforce a
--- per-player cooldown independent of the client.
-local wildHorseRewardItems = {}
-local wildHorseMaxReward = 0
-for _, horseCfg in pairs(Config.WildHorse.Horse or {}) do
-    if horseCfg.rewarditem then
-        wildHorseRewardItems[horseCfg.rewarditem] = true
-    end
-    local rm = tonumber(horseCfg.rewardmoney) or 0
-    if rm > wildHorseMaxReward then
-        wildHorseMaxReward = rm
-    end
+local lastAction = {} -- [citizenid] = os.time()
+
+local function Notify(src, key, nType, ...)
+    TriggerClientEvent('ox_lib:notify', src, { title = locale('wh_title'), description = locale(key, ...), type = nType, duration = 5000 })
 end
-if wildHorseMaxReward <= 0 then wildHorseMaxReward = 30 end
 
-local wildHorseSellCooldowns = {} -- citizenid -> os.time() of last successful sale
+local function IsNearSeller(coords)
+    for _, loc in pairs(WH.SellWildHorseLocations or {}) do
+        if #(coords - loc.coords) <= SELL_RADIUS then return true end
+    end
+    return false
+end
 
-RegisterServerEvent('rsg-sellwildhorse:server:reward')
-AddEventHandler('rsg-sellwildhorse:server:reward', function(rewardmoney, rewarditem)
+local function CooldownRemaining(citizenid)
+    local cd = WH.EnableCooldown and math.max(tonumber(WH.Cooldown) or 0, MIN_COOLDOWN) or MIN_COOLDOWN
+    return cd - (os.time() - (lastAction[citizenid] or 0))
+end
+
+--- resolves + validates the horse entity the client claims to be on
+local function ResolveWildHorse(src, netId)
+    if type(netId) ~= 'number' then return nil end
+    local entity = NetworkGetEntityFromNetworkId(netId)
+    if not entity or entity == 0 or not DoesEntityExist(entity) or GetEntityType(entity) ~= 1 then return nil end
+    -- never allow a player-owned stable horse to be sold/stabled
+    if Entity(entity).state.rsgHorseOwner then return nil end
+
+    local playerCoords = GetEntityCoords(GetPlayerPed(src))
+    if not IsNearSeller(playerCoords) then return nil end
+    if #(playerCoords - GetEntityCoords(entity)) > HORSE_RADIUS then return nil end
+    return entity
+end
+
+local function Security(src, title, reason)
+    SendDiscordLog('security', title, reason, WebhookColors.warning, nil, src)
+end
+
+-----------------------------------
+-- sell
+-----------------------------------
+RegisterNetEvent('rsg-sellwildhorse:server:reward', function(netId)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-    local firstname = Player.PlayerData.charinfo.firstname
-    local lastname = Player.PlayerData.charinfo.lastname
     local citizenid = Player.PlayerData.citizenid
 
-    if Config.WildHorse.Debug then
-        print("Money    : "..tostring(rewardmoney))
-        print("Item     : "..tostring(rewarditem))
+    local remaining = CooldownRemaining(citizenid)
+    if remaining > 0 then
+        return Security(src, 'Wild Horse Sell Cooldown Hit', remaining .. 's remaining')
     end
 
-    -- SECURITY: enforce server-side cooldown so this event can't be spammed
-    -- to farm money/items, regardless of what the client's own timer does.
-    if Config.WildHorse.EnableCooldown then
-        local cooldownSecs = tonumber(Config.WildHorse.Cooldown) or 0
-        local lastSold = wildHorseSellCooldowns[citizenid]
-        if lastSold and (os.time() - lastSold) < cooldownSecs then
-            SendDiscordLog('security', 'Wild Horse Sell Cooldown Hit', 'Player attempted to sell a wild horse again before the cooldown expired.', WebhookColors.warning, {
-                { name = 'Seconds Remaining', value = tostring(cooldownSecs - (os.time() - lastSold)), inline = true },
-            }, src)
-            return
-        end
+    local entity = ResolveWildHorse(src, netId)
+    if not entity then
+        Notify(src, 'wh_error_no_horse_sell', 'error')
+        return Security(src, 'Wild Horse Sell Rejected', 'invalid entity / location / distance')
     end
 
-    -- SECURITY: never trust the client's reward values directly. Validate
-    -- the item against the configured reward items and clamp the money to
-    -- the maximum configured for any wild horse.
-    if type(rewarditem) ~= 'string' or not wildHorseRewardItems[rewarditem] then
-        warn(('rsg-horses: rejected suspicious wild horse reward item "%s" from citizenid %s'):format(tostring(rewarditem), tostring(citizenid)))
-        SendDiscordLog('security', 'Rejected Wild Horse Reward Item', 'Player attempted a wild horse sell reward with an unrecognised item.', WebhookColors.danger, {
-            { name = 'Claimed Item', value = tostring(rewarditem), inline = true },
-        }, src)
-        return
+    local cfg = rewardsByModel[GetEntityModel(entity)]
+    if not cfg then
+        return Notify(src, 'wh_error_invalid_model', 'error')
     end
 
-    local safeMoney = tonumber(rewardmoney) or 0
-    local requestedMoney = safeMoney
-    if safeMoney < 0 then safeMoney = 0 end
-    if safeMoney > wildHorseMaxReward then safeMoney = wildHorseMaxReward end
+    lastAction[citizenid] = os.time()
+    DeleteEntity(entity)
 
-    if requestedMoney ~= safeMoney then
-        SendDiscordLog('security', 'Wild Horse Reward Clamped', 'Client-requested reward amount was outside the allowed range and was clamped.', WebhookColors.warning, {
-            { name = 'Requested', value = tostring(requestedMoney), inline = true },
-            { name = 'Clamped To', value = tostring(safeMoney), inline = true },
-        }, src)
+    local reward = math.floor((tonumber(cfg.rewardmoney) or 0) * (tonumber(WH.SaleMultiplier) or 1))
+    if reward > 0 then
+        Player.Functions.AddMoney(WH.PaymentType, reward, 'wild-horse-sold')
+    end
+    if cfg.rewarditem and RSGCore.Shared.Items[cfg.rewarditem] and exports['rsg-inventory']:CanAddItem(src, cfg.rewarditem, 1) then
+        Player.Functions.AddItem(cfg.rewarditem, 1, nil, nil, 'wild-horse-sold')
+        TriggerClientEvent('rsg-inventory:client:ItemBox', src, RSGCore.Shared.Items[cfg.rewarditem], 'add', 1)
     end
 
-    local reward = math.floor(safeMoney * (tonumber(Config.WildHorse.SaleMultiplier) or 1))
-
-    wildHorseSellCooldowns[citizenid] = os.time()
-
-    Player.Functions.AddMoney(Config.WildHorse.PaymentType, reward)
-    Player.Functions.AddItem(rewarditem, 1)
-
-    TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[rewarditem], "add")
-
-    TriggerClientEvent('ox_lib:notify', src, {
-        title = locale('wh_title'),
-        description = locale('wh_success_sold_for')..reward,
-        type = 'success',
-        duration = 3000
-    })
-
-    TriggerEvent('rsg-log:server:CreateLog', 'testwebhook', 'WILD HORSE', 'yellow', firstname..' '..lastname..' Horse sold for '..reward)
-
-    SendDiscordLog('economy', 'Wild Horse Sold', firstname .. ' ' .. lastname .. ' sold a tamed wild horse.', WebhookColors.success, {
-        { name = 'Reward', value = '$' .. tostring(reward), inline = true },
-        { name = 'Item', value = tostring(rewarditem), inline = true },
+    Notify(src, 'wh_success_sold', 'success', reward)
+    SendDiscordLog('economy', 'Wild Horse Sold', cfg.name or 'wild horse', WebhookColors.success, {
+        { name = 'Reward', value = '$' .. reward, inline = true },
     }, src)
 end)
 
--- Mapping of horse model hashes to their names
+-----------------------------------
+-- stable (tamed wild horse -> player_horses)
+-----------------------------------
+-- every model that may be stabled from the wild
 local horseNames = {
     "a_c_horse_nokota_whiteroan",
     "a_c_donkey_01",
@@ -334,150 +317,56 @@ local horseNames = {
 
 local horseModels = {}
 for _, name in ipairs(horseNames) do
-    horseModels[GetHashKey(name)] = name
+    horseModels[joaat(name)] = name:lower()
 end
 
-RegisterServerEvent('rms-wildhorsestable:server:WildHorseStable')
-AddEventHandler('rms-wildhorsestable:server:WildHorseStable', function(modelHash, horsename, gender)
+RegisterNetEvent('rms-wildhorsestable:server:WildHorseStable', function(netId, horsename, gender)
     local src = source
     local Player = RSGCore.Functions.GetPlayer(src)
     if not Player then return end
-
     local citizenid = Player.PlayerData.citizenid
 
-    local modelName = horseModels[modelHash]
-    if not modelName then
-        TriggerClientEvent('ox_lib:notify', src, {
-            title = locale('wh_title'),
-            description = locale('wh_error_invalid_model'),
-            type = 'error',
-            duration = 5000
-        })
-        SendDiscordLog('security', 'Wild Horse Stable Rejected - Invalid Model', 'Player attempted to stable a wild horse with an unrecognised model hash.', WebhookColors.warning, {
-            { name = 'Model Hash', value = tostring(modelHash), inline = true },
-        }, src)
-        return
-    end
-
-    -- Normalise for stable compatibility: lowercase model (hash lookups and
-    -- breed lists use lowercase) and lowercase gender (breeding checks expect
-    -- 'male' / 'female'). The client dialog already sends lowercase gender;
-    -- this is defence in depth.
-    modelName = string.lower(modelName)
-    gender = string.lower(gender or '')
-    if gender ~= 'male' and gender ~= 'female' then
-        gender = 'male'
-    end
-    if type(horsename) ~= 'string' then
-        TriggerClientEvent('ox_lib:notify', src, {
-            title = locale('wh_title'),
-            description = locale('wh_error_invalid_name'),
-            type = 'error',
-            duration = 5000
-        })
-        SendDiscordLog('security', 'Wild Horse Stable Rejected - Invalid Name Type', 'Player attempted to stable a wild horse with a non-string name.', WebhookColors.warning, nil, src)
-        return
-    end
-    horsename = string.gsub(horsename, "[^%w%s%-_]", "")
+    if type(horsename) ~= 'string' then return Notify(src, 'wh_error_invalid_name', 'error') end
+    horsename = horsename:gsub('[^%w%s%-_]', ''):gsub('^%s+', ''):gsub('%s+$', '')
     if #horsename < 1 or #horsename > 30 then
-        TriggerClientEvent('ox_lib:notify', src, {
-            title = locale('wh_title'),
-            description = locale('wh_error_invalid_name'),
-            type = 'error',
-            duration = 5000
-        })
-        SendDiscordLog('security', 'Wild Horse Stable Rejected - Invalid Name Length', 'Player attempted to stable a wild horse with an invalid name length.', WebhookColors.warning, {
-            { name = 'Sanitized Name', value = horsename, inline = true },
-        }, src)
-        return
+        return Notify(src, 'wh_error_invalid_name', 'error')
+    end
+    if gender ~= 'male' and gender ~= 'female' then gender = 'male' end
+
+    local remaining = CooldownRemaining(citizenid)
+    if remaining > 0 then
+        return Security(src, 'Wild Horse Stable Cooldown Hit', remaining .. 's remaining')
     end
 
-    -- Generate unique horse ID
-    local horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
-
-    -- Set born timestamp to 4 days ago so horse is NOT a foal (3+ days old)
-    local fourDaysAgo = os.time() - (4 * 24 * 60 * 60)
-
-    -- Default components (empty JSON object)
-    local components = json.encode({})
-
-    if Config.WildHorse.Debug then
-        print('[rsg-horses] Saving wild horse to stables:')
-        print('  CitizenID  : ' .. tostring(citizenid))
-        print('  HorseID    : ' .. tostring(horseid))
-        print('  Name       : ' .. tostring(horsename))
-        print('  Model      : ' .. tostring(modelName))
-        print('  Gender     : ' .. tostring(gender))
-        print('  Born       : ' .. tostring(fourDaysAgo) .. ' (4 days ago)')
+    local entity = ResolveWildHorse(src, netId)
+    if not entity then
+        Notify(src, 'wh_error_no_horse_save', 'error')
+        return Security(src, 'Wild Horse Stable Rejected', 'invalid entity / location / distance')
     end
 
-    local query = [[
-        INSERT INTO player_horses
-        (stable, citizenid, horseid, name, horse, gender, active, born, components, horsexp, dirt, age_seconds)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ]]
-
-    local params = {
-        'valentine',    -- stable
-        citizenid,      -- citizenid
-        horseid,        -- horseid
-        horsename,      -- name
-        modelName,      -- horse
-        gender,         -- gender
-        0,              -- active
-        fourDaysAgo,    -- born (4 days ago so it's an adult)
-        components,     -- components
-        0,              -- horsexp
-        0,              -- dirt
-        4 * 24 * 60 * 60 -- age_seconds (4 days in seconds = 345600)
-    }
-
-    if Config.WildHorse.Debug then
-        print('[rsg-horses] Query: ' .. query)
-        print('[rsg-horses] Params: ' .. json.encode(params))
+    local modelName = horseModels[GetEntityModel(entity)]
+    if not modelName then
+        return Notify(src, 'wh_error_invalid_model', 'error')
     end
 
-    MySQL.Async.insert(query, params, function(insertId)
-        if insertId and insertId > 0 then
-            TriggerClientEvent('ox_lib:notify', src, {
-                title = locale('wh_title'),
-                description = locale('wh_save_success'):format(horsename),
-                type = 'success',
-                duration = 5000
-            })
+    lastAction[citizenid] = os.time()
+    DeleteEntity(entity)
 
-            TriggerClientEvent('rms-wildhorsestable:client:DeleteWildHorse', src)
+    local adultAge = 4 * 24 * 60 * 60 -- wild horses are adults
+    local insertId = MySQL.insert.await('INSERT INTO player_horses (stable, citizenid, horseid, name, horse, gender, active, born, components, horsexp, dirt, age_seconds) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, 0, 0, ?)', {
+        'valentine', citizenid, GenerateHorseid(), horsename, modelName, gender, os.time() - adultAge, '{}', adultAge
+    })
 
-            SendDiscordLog('horses', 'Wild Horse Tamed & Stabled', horsename .. ' (' .. modelName .. ') tamed and added to the valentine stable.', WebhookColors.info, {
-                { name = 'Horse Name', value = horsename, inline = true },
-                { name = 'Model', value = modelName, inline = true },
-                { name = 'Gender', value = gender, inline = true },
-            }, src)
+    if not insertId then
+        return Notify(src, 'wh_error_save_failed', 'error')
+    end
 
-            if Config.WildHorse.Debug then
-                print('[rsg-horses] Wild horse successfully saved! InsertId: ' .. tostring(insertId))
-            end
-        else
-            TriggerClientEvent('ox_lib:notify', src, {
-                title = locale('wh_title'),
-                description = locale('wh_error_save_failed'),
-                type = 'error',
-                duration = 5000
-            })
-
-            if Config.WildHorse.Debug then
-                print('[rsg-horses] Failed to insert wild horse into database.')
-            end
-        end
-    end)
+    Notify(src, 'wh_save_success', 'success', horsename)
+    SendDiscordLog('horses', 'Wild Horse Tamed & Stabled', horsename .. ' (' .. modelName .. ')', WebhookColors.info, nil, src)
 end)
 
---debug
-if Config.WildHorse.Debug then
-    RSGCore.Commands.Add('sethorsewild', 'Make current Horse a Wild Horse to test/debug Horse Taming activity', {}, false, function(source)
-        local src = source
-        local Player = RSGCore.Functions.GetPlayer(src)
-        if not Player then return end
-        TriggerClientEvent('rsg-sellwildhorse:client:SetHorseAsWild', src)
+if WH.Debug then
+    RSGCore.Commands.Add('sethorsewild', 'Make current horse wild (debug)', {}, false, function(source)
+        TriggerClientEvent('rsg-sellwildhorse:client:SetHorseAsWild', source)
     end, 'admin')
 end

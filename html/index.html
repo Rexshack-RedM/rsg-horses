@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="vignette"></div>
     <div id="shop-container" class="hidden">
         <div class="shop-frame">
             <div class="frame-corner tl"></div>
@@ -56,11 +55,6 @@
             <div class="breadcrumb" id="breadcrumb">
                 <span class="breadcrumb-item active" data-screen="main">Stable Menu</span>
             </div>
-            <div class="sort-options" id="sort-options" style="display:none;">
-                <button class="sort-btn active" data-sort="name"><img src="icons/selection_arrow_left.png" alt=""><img src="icons/selection_arrow_right.png" alt=""> <span data-i18n="nui_sort_name">Name</span></button>
-                <button class="sort-btn" data-sort="price-low"><img src="icons/selection_arrow_left.png" alt=""> <span data-i18n="nui_sort_price_low">Price ↑</span></button>
-                <button class="sort-btn" data-sort="price-high"><img src="icons/selection_arrow_right.png" alt=""> <span data-i18n="nui_sort_price_high">Price ↓</span></button>
-            </div>
         </div>
 
         <div class="shop-content">
@@ -102,43 +96,6 @@
                 <div class="no-items hidden" id="no-move-dests">
                     <img src="icons/transferStable.png" alt="">
                     <p data-i18n="nui_no_destinations">No destinations available</p>
-                </div>
-            </div>
-
-            <!-- SCREEN: Horse Shop (items) -->
-            <div class="screen hidden" id="screen-shop">
-                <div class="items-section">
-                    <div class="items-grid" id="shop-grid"></div>
-                    <div class="no-items hidden" id="no-shop-items">
-                        <img src="icons/propsets.png" alt="">
-                        <p data-i18n="nui_no_shop_items">No items available</p>
-                    </div>
-                </div>
-                <div class="cart-section">
-                    <div class="cart-header">
-                        <img src="icons/satchels.png" alt="">
-                        <h3 data-i18n="nui_your_cart">YOUR CART</h3>
-                        <span class="cart-count" id="cart-count">0</span>
-                    </div>
-                    <div class="cart-items" id="cart-items"></div>
-                    <div class="cart-empty" id="cart-empty">
-                        <img src="icons/satchels.png" alt="">
-                        <p data-i18n="nui_cart_empty">Your cart is empty</p>
-                    </div>
-                    <div class="cart-summary">
-                        <div class="summary-row">
-                            <span data-i18n="nui_subtotal">Subtotal</span>
-                            <span id="cart-subtotal">$0.00</span>
-                        </div>
-                        <div class="summary-row total">
-                            <span data-i18n="nui_total">TOTAL</span>
-                            <span id="cart-total">$0.00</span>
-                        </div>
-                    </div>
-                    <div class="cart-actions">
-                        <button class="btn-clear" id="btn-clear"><img src="icons/cross.png" alt=""> <span data-i18n="nui_clear">CLEAR</span></button>
-                        <button class="btn-purchase" id="btn-purchase"><img src="icons/dollar.png" alt=""> <span data-i18n="nui_purchase">PURCHASE</span></button>
-                    </div>
                 </div>
             </div>
 
@@ -334,17 +291,6 @@
         </div>
     </div>
 
-    <!-- Success Overlay -->
-    <div id="success-overlay" class="success-overlay hidden">
-        <div class="success-content">
-            <div class="success-icon"><img src="icons/tick.png" alt=""></div>
-            <h2 data-i18n="nui_success_title">SUCCESS!</h2>
-            <div class="ink-divider"></div>
-            <p id="success-message" data-i18n="nui_action_completed">Action completed</p>
-            <div class="success-decoration">✦</div>
-        </div>
-    </div>
-
     <!-- Wild Horse panel + appraisal progress (merged from rsg-wildhorse).
          All ids/classes are wh-prefixed / scoped under #wh-root so they can
          never collide with the stable UI above. -->
@@ -440,7 +386,6 @@
     </div>
 
     <!-- Notification Container -->
-    <div id="notification-container"></div>
 
     <script src="script.js"></script>
 </body>

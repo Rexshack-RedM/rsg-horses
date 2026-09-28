@@ -55,27 +55,27 @@ CreateThread(function()
                 lib.requestModel(self.model, 10000)
                 self.ped = NearNPC(self.model, self.coords, self.heading)
 
-                pcall(function ()
-                    if Config.EnableTarget then
+                if Config.EnableTarget then
+                    pcall(function()
                         exports.ox_target:addLocalEntity(self.ped, {
                             {
                                 name = 'npc_stablehand',
                                 icon = 'far fa-eye',
                                 label = locale('cl_menu'),
+                                distance = 2.0,
                                 onSelect = function()
                                     TriggerEvent('rsg-horses:client:stablemenu', self.stableid)
                                 end,
-                                distance = 2.0
                             }
                         })
-                    end
-                end)
+                    end)
+                end
             end
         end
 
         newpoint.onExit = function(self)
-            if self.ped then
-                exports.ox_target:removeEntity(self.ped, 'npc_stablehand')
+            if self.ped and Config.EnableTarget then
+                pcall(function() exports.ox_target:removeLocalEntity(self.ped, 'npc_stablehand') end)
             end
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
@@ -97,8 +97,8 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
-        if v.ped then
-            exports.ox_target:removeEntity(v.ped, 'npc_stablehand')
+        if v.ped and Config.EnableTarget then
+            pcall(function() exports.ox_target:removeLocalEntity(v.ped, 'npc_stablehand') end)
         end
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)

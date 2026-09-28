@@ -3,7 +3,7 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 game 'rdr3'
 
 description 'rsg-horses'
-version '2.3.2'
+version '2.3.3'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -31,7 +31,7 @@ files {
     'html/index.html',
     'html/style.css',
     'html/script.js',
-	'html/icons/*.png',
+    'html/icons/*.png',
 }
 
 ui_page 'html/index.html'
@@ -46,7 +46,9 @@ server_scripts {
 
 dependencies {
     'rsg-core',
+    'rsg-inventory',
     'ox_lib',
+    'oxmysql',
 }
 
 lua54 'yes'

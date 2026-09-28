@@ -365,5 +365,17 @@
     "nui_select_option_label": "Wybierz opcję:",
     "nui_submit": "WYŚLIJ",
     "nui_success_title": "SUKCES!",
-    "nui_confirm_btn": "POTWIERDŹ"
+    "nui_confirm_btn": "POTWIERDŹ",
+    "sv_error_weapon_already_stored": "Your horse is already carrying a weapon",
+    "sv_error_inventory_full": "Your inventory is full",
+    "sv_error_weapon_stored_sell": "Take the weapon out of the holster before selling this horse",
+    "sv_success_name_changed": "Horse renamed to '%s'",
+    "sv_success_horse_sold": "Horse sold for $%s",
+    "sv_success_customization_saved": "Customization saved - you paid $%s",
+    "sv_error_move_cost": "Moving this horse costs $%s",
+    "cl_holster_error_weapon_stored": "Take the weapon out of the holster first",
+    "cl_horse_location_line": "%s - stabled at %s (active: %s)",
+    "cl_yes": "Yes",
+    "cl_no": "No",
+    "wh_success_sold": "You sold the horse for $%s"
 }
