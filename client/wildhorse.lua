@@ -93,6 +93,15 @@ end)
 AddEventHandler('rsg-sellwildhorse:client:sellhorse', function()
     local ped = PlayerPedId()
     local horse = Citizen.InvokeNative(0xE7E11B8DCBED1058, ped)
+    if not horse or horse == 0 then
+        lib.notify({
+            title = locale('wh_title'),
+            description = locale('wh_error_no_horse_sell'),
+            type = 'error',
+            duration = 3000
+        })
+        return
+    end
     local myhorse = exports['rsg-horses']:CheckActiveHorse()
     local model = GetEntityModel(horse)
     local owner = Citizen.InvokeNative(0xF103823FFE72BB49, horse)
@@ -103,21 +112,6 @@ AddEventHandler('rsg-sellwildhorse:client:sellhorse', function()
         print("Horse    : "..tostring(horse))
         print("Model    : "..tostring(model))
         print("Owner    : "..tostring(owner))
-    end
-
-    if not horse or horse == 0 then
-        lib.notify({
-            title = locale('wh_title'),
-            description = locale('wh_error_no_horse_sell'),
-            type = 'error',
-            duration = 3000
-        })
-
-        Wait(3000)
-
-        selling = false
-
-        return
     end
 
     if not owner or owner ~= ped then
@@ -284,6 +278,16 @@ end)
 AddEventHandler('rms-wildhorsestable:client:wildhorsestable', function()
     local ped = PlayerPedId()
     local horse = Citizen.InvokeNative(0xE7E11B8DCBED1058, ped)
+    -- Validate horse exists BEFORE touching it with other natives
+    if not horse or horse == 0 then
+        lib.notify({
+            title = locale('wh_title'),
+            description = locale('wh_error_no_horse_save'),
+            type = 'error',
+            duration = 3000
+        })
+        return
+    end
     local myhorse = exports['rsg-horses']:CheckActiveHorse()
     local model = GetEntityModel(horse)
     local owner = Citizen.InvokeNative(0xF103823FFE72BB49, horse)
@@ -294,17 +298,6 @@ AddEventHandler('rms-wildhorsestable:client:wildhorsestable', function()
         print('  Horse : ' .. tostring(horse))
         print('  Model : ' .. tostring(model))
         print('  Owner : ' .. tostring(owner))
-    end
-
-    -- Validate horse exists
-    if not horse or horse == 0 then
-        lib.notify({
-            title = locale('wh_title'),
-            description = locale('wh_error_no_horse_save'),
-            type = 'error',
-            duration = 3000
-        })
-        return
     end
 
     -- Validate horse is tamed (owner must be the player ped)

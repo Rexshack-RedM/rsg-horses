@@ -392,8 +392,13 @@ AddEventHandler('rms-wildhorsestable:server:WildHorseStable', function(modelHash
         return
     end
 
-    -- Generate unique horse ID
+    -- Generate unique horse ID (checked against the DB like GenerateHorseid)
     local horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
+    for _ = 1, 10 do
+        local exists = MySQL.scalar.await('SELECT COUNT(*) FROM player_horses WHERE horseid = ?', { horseid })
+        if exists == 0 then break end
+        horseid = tostring(RSGCore.Shared.RandomStr(3) .. RSGCore.Shared.RandomInt(3)):upper()
+    end
 
     -- Set born timestamp to 4 days ago so horse is NOT a foal (3+ days old)
     local fourDaysAgo = os.time() - (4 * 24 * 60 * 60)

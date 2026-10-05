@@ -75,6 +75,10 @@ local Components        = lib.load('shared.horse_comp')
 local CurrentPrice      = 0
 local initialHorseComps = {}
 local initialHorseCoat  = nil
+-- true once the player touches any coat control this session. A horse with
+-- no saved coat keeps its natural coat: untouched coats are never previewed,
+-- priced, or persisted, so buying components can't destroy colour/markings.
+local coatTouched = false
 -- NUI Customization state
 local CustomizeHorseId  = nil
 local CustomizeHorsePed = nil
@@ -347,7 +351,11 @@ RegisterNUICallback('customizeComponent', function(data, cb)
                 if ManeTailApply then ManeTailApply(CustomizeHorsePed, horseCoats[horseid]) end
             end
         end
-        
+        -- saddle swaps repaint the bridle slot: put the saved bridle back
+        if category ~= 'Bridles' then
+            ApplySavedBridle(CustomizeHorsePed, horseid)
+        end
+
         -- Calculate and send price update
         local price = CalculatePrice(horseComps[horseid], initialHorseComps)
             + CalculateCoatPrice(horseCoats[horseid], initialHorseCoat)
@@ -358,16 +366,22 @@ end)
 RegisterNUICallback('customizeCoat', function(data, cb)
     cb('ok')
     local horseid = CustomizeHorseId
-    if horseid and horseCoats[horseid] then
+    if horseid then
+        -- safety net (open seeds live tints, so this is rarely hit):
+        -- restart from the session's initial coat, never raw defaults
+        if not horseCoats[horseid] then
+            horseCoats[horseid] = initialHorseCoat and table.copy(initialHorseCoat) or CoatNormalize(nil)
+        end
         if data.tint0 ~= nil then horseCoats[horseid].tint0 = math.floor(tonumber(data.tint0) or 0) end
         if data.tint1 ~= nil then horseCoats[horseid].tint1 = math.floor(tonumber(data.tint1) or 255) end
         if data.tint2 ~= nil then horseCoats[horseid].tint2 = math.floor(tonumber(data.tint2) or 255) end
         if data.mane ~= nil then horseCoats[horseid].mane = math.floor(tonumber(data.mane) or 0) end
         if data.tail ~= nil then horseCoats[horseid].tail = math.floor(tonumber(data.tail) or 0) end
         horseCoats[horseid].rainbow = false
+        coatTouched = true
         CoatApply(CustomizeHorsePed, horseCoats[horseid])
 
-        local price = CalculatePrice(horseComps[horseid], initialHorseComps)
+        local price = CalculatePrice(horseComps[horseid] or {}, initialHorseComps)
             + CalculateCoatPrice(horseCoats[horseid], initialHorseCoat)
         SendNUIMessage({ action = 'updatePrice', price = price })
     end
@@ -377,13 +391,16 @@ RegisterNUICallback('saveCustomization', function(data, cb)
     cb('ok')
     local horseid = data.horseId
     if horseid then
-        TriggerServerEvent('rsg-horses:server:SaveComponents', horseComps[horseid], horseid, horseCoats[horseid])
+        -- untouched coat sends nil: the server keeps the saved coat (or
+        -- natural NULL), so buying components can't destroy markings
+        TriggerServerEvent('rsg-horses:server:SaveComponents', horseComps[horseid], horseid, coatTouched and horseCoats[horseid] or nil)
     end
     -- Close customization camera and NUI
     DisableCamera()
     SendNUIMessage({ action = 'close' })
     SetNuiFocus(false, false)
     CurrentPrice = 0
+    coatTouched = false
     initialHorseComps = {}
     initialHorseCoat = nil
     -- Remove the temporary preview horse used during customization.
@@ -405,8 +422,10 @@ RegisterNUICallback('cancelCustomization', function(data, cb)
     if horseid then
         -- Restore initial components
         horseComps[horseid] = table.copy(data.components or initialHorseComps)
-        horseCoats[horseid] = table.copy(data.coat or initialHorseCoat)
-        
+        if data.coat or initialHorseCoat then
+            horseCoats[horseid] = table.copy(data.coat or initialHorseCoat)
+        end
+
         -- Re-apply to horse
         for category, value in pairs(horseComps[horseid]) do
             local hash = getComponentHash(category, value)
@@ -414,13 +433,16 @@ RegisterNUICallback('cancelCustomization', function(data, cb)
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, CustomizeHorsePed, tonumber(hash), true, true, true)
             end
         end
-        CoatApply(CustomizeHorsePed, horseCoats[horseid])
+        if horseCoats[horseid] then
+            CoatApply(CustomizeHorsePed, horseCoats[horseid])
+        end
         UpdatePedVariation(CustomizeHorsePed)
     end
     DisableCamera()
     SendNUIMessage({ action = 'close' })
     SetNuiFocus(false, false)
     CurrentPrice = 0
+    coatTouched = false
     initialHorseComps = {}
     initialHorseCoat = nil
     -- Remove the temporary preview horse used during customization.
@@ -440,19 +462,24 @@ RegisterNUICallback('closeCustomization', function(data, cb)
     local horseid = CustomizeHorseId
     if horseid then
         horseComps[horseid] = table.copy(initialHorseComps)
-        horseCoats[horseid] = table.copy(initialHorseCoat)
-        
+        if initialHorseCoat then
+            horseCoats[horseid] = table.copy(initialHorseCoat)
+        end
+
         for category, value in pairs(horseComps[horseid]) do
             local hash = getComponentHash(category, value)
             if hash ~= 0 then
                 Citizen.InvokeNative(0xD3A7B003ED343FD9, CustomizeHorsePed, tonumber(hash), true, true, true)
             end
         end
-        CoatApply(CustomizeHorsePed, horseCoats[horseid])
+        if horseCoats[horseid] then
+            CoatApply(CustomizeHorsePed, horseCoats[horseid])
+        end
         UpdatePedVariation(CustomizeHorsePed)
     end
     DisableCamera()
     CurrentPrice = 0
+    coatTouched = false
     initialHorseComps = {}
     initialHorseCoat = nil
     -- Remove the temporary preview horse used during customization.
@@ -1063,12 +1090,28 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
                     horseComps[CustomizeHorseId] = result
                 end
             end
-            horseCoats[CustomizeHorseId] = CoatNormalize(horsesdata.coat)
-            
+            horseCoats[CustomizeHorseId] = nil
+            -- natural coat (never customized): seed the UI from the ped's
+            -- LIVE tints so sliders start at the horse's real colours and
+            -- touching one control doesn't reset the rest to white.
+            -- coatTouched stays false: an untouched coat is never priced
+            -- or persisted, so buying components can't destroy markings.
+            if horsesdata.coat and horsesdata.coat ~= '' then
+                local raw = horsesdata.coat
+                local usable = type(raw) == 'table'
+                if not usable then
+                    local ok, decoded = pcall(json.decode, raw)
+                    usable = ok and type(decoded) == 'table'
+                end
+                if usable then
+                    horseCoats[CustomizeHorseId] = CoatNormalize(raw)
+                end
+            end
+            coatTouched = false
+
             -- Save initial state for cancel/restore
             initialHorseComps = table.copy(horseComps[CustomizeHorseId])
-            initialHorseCoat = table.copy(horseCoats[CustomizeHorseId])
-            
+
             -- Apply current components to the preview horse
             for category, value in pairs(horseComps[CustomizeHorseId]) do
                 local hash = getComponentHash(category, value)
@@ -1086,11 +1129,18 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
                 if not DoesEntityExist(ped) then break end
             end
             CoatSaveOriginalAssets(ped)
-            CoatApply(ped, horseCoats[CustomizeHorseId])
-            UpdatePedVariation(ped)
-            -- Re-apply once after variation settles so mane/tail tints stick
-            -- on freshly streamed drawables.
+            -- natural coat (no DB value): seed from the ped's LIVE tints so
+            -- the UI starts at the horse's real colours. coatTouched stays
+            -- false so it is never priced or persisted unless edited.
+            if not horseCoats[CustomizeHorseId] and DoesEntityExist(ped) then
+                horseCoats[CustomizeHorseId] = CoatGetLiveTints() or CoatNormalize(nil)
+            end
+            initialHorseCoat = horseCoats[CustomizeHorseId] and table.copy(horseCoats[CustomizeHorseId]) or nil
             if horseCoats[CustomizeHorseId] then
+                CoatApply(ped, horseCoats[CustomizeHorseId])
+                UpdatePedVariation(ped)
+                -- Re-apply once after variation settles so mane/tail tints stick
+                -- on freshly streamed drawables.
                 CoatApply(ped, horseCoats[CustomizeHorseId])
             end
 
@@ -1105,6 +1155,8 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
                 Bedrolls = 'icons/horse_bedrolls.png',
                 Tails = 'icons/horse_tails.png',
                 Manes = 'icons/horse_manes.png',
+                Bridles = 'icons/horse_bridles.png',
+                Horseshoes = 'icons/horseshoes.png',
             }
             local categories = {}
             for catName, catItems in pairs(Components) do
@@ -1132,13 +1184,17 @@ RegisterNetEvent('rsg-horses:client:custShop', function(data)
                 horseId = CustomizeHorseId,
                 categories = categories,
                 components = horseComps[CustomizeHorseId],
-                coat = horseCoats[CustomizeHorseId],
+                -- display defaults when natural; the NUI needs slider
+                -- starting values, but nil here means "don't persist"
+                coat = horseCoats[CustomizeHorseId] or CoatNormalize(nil),
                 hasMarkings = originalMarking == nil or originalMarking ~= 255,
                 originalMarking = originalMarking,
                 maneTailSupported = (ManeTailHasSupport and ManeTailHasSupport(ped)) or true,
                 prices = {
-                    component = 10,
-                    coat = (Config.Coat and Config.Coat.Price) or 100
+                    component = 10, -- legacy fallback; NUI prefers `components`
+                    components = Config.PriceComponent or {},
+                    coat = (Config.Coat and Config.Coat.Price) or 100,
+                    presets = Config.CoatPresets or {}
                 },
                 money = { cash = cash, gold = gold }
             })
@@ -1177,7 +1233,7 @@ end)
 ------------------------------------
 local function TradeHorse()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        if horsePed ~= 0 then
+        if horsePed ~= 0 and data and data.horseid then
             local player, distance = RSGCore.Functions.GetClosestPlayer()
             if player ~= -1 and distance < 1.5 then
                 local playerId = GetPlayerServerId(player)
@@ -1222,6 +1278,24 @@ function getComponentHash(category, value)
     return 0
 end
 
+--- Re-applies the saved bridle (if any). Saddle shop items repaint the
+--- bridle slot with the saddle's default paired bridle, so the bridle must
+--- go last after any tack apply + variation rebuild, or it visually changes
+--- whenever saddles change.
+function ApplySavedBridle(ped, horseid)
+    if not ped or ped == 0 or not DoesEntityExist(ped) then return end
+    if not horseid or not horseComps[horseid] then return end
+    local value = tonumber(horseComps[horseid].Bridles) or 0
+    if value <= 0 then return end
+    local hash = getComponentHash('Bridles', value)
+    if hash ~= 0 then
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, tonumber(hash), true, true, true)
+        if Config.Debug then
+            print(('[rsg-horses] bridle re-applied: ped=%s value=%s hash=%s'):format(tostring(ped), tostring(value), tostring(hash)))
+        end
+    end
+end
+
 ------------------------------------
 -- spawn horse
 ------------------------------------
@@ -1233,7 +1307,12 @@ local function SpawnHorse()
             local location        = GetEntityCoords(cache.ped)
             local x, y, z        = table.unpack(location)
             local _, nodePosition = GetClosestVehicleNode(x - 15, y, z, 0, 3.0, 0.0)
-            local distance        = math.floor(#(nodePosition - location))
+            -- no road node nearby: fall back to plain offset spawn
+            local distance = 9999
+            if nodePosition then
+                local ok, len = pcall(function() return #(nodePosition - location) end)
+                if ok and len then distance = math.floor(len) end
+            end
             local onRoad          = false
 
             if distance < 50 then onRoad = true end
@@ -1323,9 +1402,15 @@ local function SpawnHorse()
                 Citizen.InvokeNative(0xCC97B29285B1DC3B, horsePed, 1)
                 Citizen.InvokeNative(0x5DA12E025D47D4E5, horsePed, 16, data.dirt)
 
-                horseComps[data.horseid] = json.decode(data.components)
-                if not horseComps[data.horseid] then
-                    horseComps[data.horseid] = {}
+                -- components may be NULL/empty for horses saved before
+                -- customization existed: default to {} instead of erroring,
+                -- which would kill this spawn thread before coat/stats apply
+                horseComps[data.horseid] = {}
+                if data.components and data.components ~= '' then
+                    local ok, decoded = pcall(json.decode, data.components)
+                    if ok and type(decoded) == 'table' then
+                        horseComps[data.horseid] = decoded
+                    end
                 end
 
                 for category, value in pairs(horseComps[data.horseid]) do
@@ -1340,20 +1425,42 @@ local function SpawnHorse()
 
                 UpdatePedVariation(horsePed)
 
+                -- bridle last: pairs() order is random and saddle items
+                -- repaint the bridle slot, so the saved bridle must win
+                ApplySavedBridle(horsePed, data.horseid)
+
                 -- Apply foal scaling AFTER UpdatePedVariation so it isn't reset
                 if Config.Growth and Config.Growth.enabled and data.age_seconds then
                     ApplyHorseScale(horsePed, data.age_seconds)
                 end
 
                 -- Apply saved coat color / markings (merged from horse_markings)
+                -- same sequence as the customize preview (proven to render):
+                -- apply -> variation rebuild -> apply again, because the
+                -- variation rebuild can wipe freshly set tags on a new ped.
+                -- A delayed re-apply follows: streaming can reset tags after
+                -- spawn, which is why call-out colour differed from preview.
                 if data.coat ~= nil and data.coat ~= '' then
                     local coatData = CoatNormalize(data.coat)
                     horseCoats[data.horseid] = coatData
-                    CoatSaveOriginalAssets(horsePed)
-                    CoatApply(horsePed, coatData)
+                    local spawnedPed = horsePed
+                    local spawnedHorseid = data.horseid
+                    if CoatApplyWait(horsePed, coatData) then
+                        UpdatePedVariation(horsePed)
+                        CoatApply(horsePed, coatData)
+                        CreateThread(function()
+                            Wait(5000)
+                            if horsePed == spawnedPed and DoesEntityExist(spawnedPed)
+                                and horseCoats[spawnedHorseid] then
+                                CoatApply(spawnedPed, horseCoats[spawnedHorseid])
+                            end
+                        end)
+                    elseif Config.Debug then
+                        print(('[rsg-horses] coat failed to apply on spawn for %s'):format(tostring(data.horseid)))
+                    end
                 end
 
-                horsexp     = data.horsexp
+                horsexp     = tonumber(data.horsexp) or 0
                 horsegender = data.gender
 
                 local hValue    = 0
@@ -1507,19 +1614,37 @@ function MainMenu(horses, horsedata)
 
     initialHorseComps = table.copy(horseComps[horseid])
 
-    -- coat color / markings (merged from horse_markings): init from DB row, else defaults
+    -- coat init: DB coat if saved, else seed from the ped's live tints so
+    -- the sliders start at the horse's real colours. coatTouched gates
+    -- persist + charge, so component-only buys keep the natural coat.
     if not horseCoats[horseid] then
-        horseCoats[horseid] = CoatNormalize(horsedata.coat)
+        local raw = horsedata.coat
+        local usable = type(raw) == 'table'
+        if not usable and raw and raw ~= '' then
+            local ok, decoded = pcall(json.decode, raw)
+            usable = ok and type(decoded) == 'table'
+        end
+        if usable then
+            horseCoats[horseid] = CoatNormalize(raw)
+        end
     end
-    initialHorseCoat = table.copy(horseCoats[horseid])
+    coatTouched = false
     CoatSaveOriginalAssets(horses)
-    CoatApply(horses, horseCoats[horseid])
+    if not horseCoats[horseid] and DoesEntityExist(horses) then
+        horseCoats[horseid] = CoatGetLiveTints() or CoatNormalize(nil)
+    end
+    initialHorseCoat = horseCoats[horseid] and table.copy(horseCoats[horseid]) or nil
 
     for category, value in pairs(horseComps[horseid]) do
         local hash = getComponentHash(category, value)
         if hash ~= 0 then
             Citizen.InvokeNative(0xD3A7B003ED343FD9, horses, tonumber(hash), true, true, true)
         end
+    end
+    -- coat painted after components so the variation rebuild below can't
+    -- wipe freshly set tags
+    if horseCoats[horseid] then
+        CoatApply(horses, horseCoats[horseid])
     end
 
     local elements = {
@@ -1542,9 +1667,10 @@ function MainMenu(horses, horsedata)
             elseif data.current.value == 'coat' then
                 CustomCoat(horses, horsedata)
             elseif data.current.value == 'buy' then
-                TriggerServerEvent('rsg-horses:server:SaveComponents', horseComps[horsedata.horseid], horsedata.horseid, horseCoats[horsedata.horseid])
+                TriggerServerEvent('rsg-horses:server:SaveComponents', horseComps[horsedata.horseid], horsedata.horseid, coatTouched and horseCoats[horsedata.horseid] or nil)
                 DisableCamera()
                 CurrentPrice      = 0
+                coatTouched       = false
                 initialHorseComps = {}
                 initialHorseCoat  = nil
                 menu.close()
@@ -1559,6 +1685,7 @@ function MainMenu(horses, horsedata)
             end
             DisableCamera()
             CurrentPrice      = 0
+            coatTouched       = false
             initialHorseComps = {}
             initialHorseCoat  = nil
             menu.close()
@@ -1612,6 +1739,10 @@ function CustomHorse(horses, data)
                         UpdatePedVariation(horses)
                     end
                 end
+                -- saddle swaps repaint the bridle slot: put the saved bridle back
+                if data.current.category ~= 'Bridles' then
+                    ApplySavedBridle(horses, horseid)
+                end
             end
             local newPrice = CalculatePrice(horseComps[horseid], initialHorseComps)
                 + CalculateCoatPrice(horseCoats[horseid], initialHorseCoat)
@@ -1632,9 +1763,10 @@ function CustomCoat(horses, data)
     MenuData.CloseAll()
     local horseid = data.horseid
     if not horseCoats[horseid] then
-        horseCoats[horseid] = CoatNormalize(data.coat)
+        -- natural coat: start from live tints so sliders show real colours
+        horseCoats[horseid] = CoatGetLiveTints() or CoatNormalize(data.coat)
     end
-    if not initialHorseCoat then
+    if not initialHorseCoat and horseCoats[horseid] then
         initialHorseCoat = table.copy(horseCoats[horseid])
     end
     CurrentPrice = CalculatePrice(horseComps[horseid] or {}, initialHorseComps)
@@ -1681,10 +1813,11 @@ function CustomCoat(horses, data)
             if cat == 'tint0' or cat == 'tint1' or cat == 'tint2' then
                 horseCoats[horseid][cat] = change.current.value
                 horseCoats[horseid].rainbow = false
+                coatTouched = true
                 CoatApply(horses, horseCoats[horseid])
             end
             local newPrice = CalculatePrice(horseComps[horseid] or {}, initialHorseComps)
-                + CalculateCoatPrice(horseCoats[horseid], initialHorseCoat)
+                + CalculateCoatPrice(coatTouched and horseCoats[horseid] or nil, initialHorseCoat)
             if CurrentPrice ~= newPrice then
                 CurrentPrice = newPrice
             end
@@ -1731,7 +1864,7 @@ function getControlOfEntity(entity)
     NetworkRequestControlOfEntity(entity)
     SetEntityAsMissionEntity(entity, true, true)
     local timeout = 2000
-    while timeout > 0 and NetworkHasControlOfEntity(entity) == nil do
+    while timeout > 0 and not NetworkHasControlOfEntity(entity) do
         Wait(100)
         timeout = timeout - 100
     end
@@ -1816,7 +1949,14 @@ end)
 
 RegisterNetEvent('rsg-horses:client:storehorse', function(data)
     if (horsePed ~= 0) then
-        TriggerServerEvent('rsg-horses:server:SetHoresUnActive', HorseId, data.stableid)
+        -- resolve the active horse id live: the cached HorseId is nil when
+        -- the horse was called via hotkey, which left the DB row active
+        local stableid = (data and data.stableid) or closestStable
+        RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(active)
+            if active and active.id then
+                TriggerServerEvent('rsg-horses:server:SetHoresUnActive', active.id, stableid)
+            end
+        end)
         lib.notify({ title = locale('cl_success_storing_horse'), type = 'success', duration = 7000 })
         Flee()
         HorseCalled = false
@@ -1826,8 +1966,8 @@ RegisterNetEvent('rsg-horses:client:storehorse', function(data)
 end)
 
 RegisterNetEvent("rsg-horses:client:tradehorse", function(data)
-    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data, newnames)
-        if (horsePed ~= 0) then
+    RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(active)
+        if (horsePed ~= 0) and active and active.horseid then
             TradeHorse()
             Flee()
             HorseCalled = false
@@ -1850,7 +1990,7 @@ end
 RegisterNetEvent('rsg-horses:client:menu', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
-    if #horses <= 0 then
+    if not horses or #horses <= 0 then
         SendNuiNotify('error', locale('cl_error_no_horses'), '')
         return
     end
@@ -1879,7 +2019,7 @@ end)
 RegisterNetEvent('rsg-horses:client:MenuDel', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
-    if #horses <= 0 then
+    if not horses or #horses <= 0 then
         SendNuiNotify('error', locale('cl_error_no_horses'), '')
         return
     end
@@ -1919,7 +2059,7 @@ end)
 RegisterNetEvent('rsg-horses:client:movehorse', function(data)
     local horses = lib.callback.await('rsg-horses:server:GetHorse', false, data.stableid)
 
-    if #horses <= 0 then
+    if not horses or #horses <= 0 then
         SendNuiNotify('error', locale('cl_error_no_horses'), '')
         return
     end
@@ -2058,10 +2198,14 @@ CreateThread(function()
             end
 
             if IsEntityDead(horsePed) and not IsBeingRevived then
+                -- capture the dying ped: a revive respawns into a NEW ped via
+                -- SpawnHorse(), and we must not delete that fresh horse below
+                local deadPed = horsePed
                 Wait(Config.DeathGracePeriod)
 
-                if IsEntityDead(horsePed) then
+                if horsePed == deadPed and IsEntityDead(horsePed) then
                     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
+                        if horsePed ~= deadPed then return end
                         if data then
                             lib.notify({ title = locale('cl_error_horse_died'), type = 'error', duration = 7000 })
                             TriggerServerEvent('rsg-horses:server:HorseDied', data.horseid, data.name)
@@ -2092,20 +2236,24 @@ CreateThread(function()
         Wait(0)
 
         if Citizen.InvokeNative(0x91AEF906BCA88877, 0, RSGCore.Shared.Keybinds['H']) then
-            RSGCore.Functions.GetPlayerData(function(PlayerData)
-                if PlayerData.metadata["injail"] == 0 and not PlayerData.metadata["isdead"] then
+            local PlayerData = RSGCore.Functions.GetPlayerData()
+            if PlayerData and PlayerData.metadata and PlayerData.metadata["injail"] == 0 and not PlayerData.metadata["isdead"] then
+                if not HorseCalled or horsePed == 0 or not DoesEntityExist(horsePed) then
+                    SpawnHorse()
+                    Wait(3000)
+                else
                     local coords      = GetEntityCoords(cache.ped)
                     local horseCoords = GetEntityCoords(horsePed)
                     local distance    = #(coords - horseCoords)
 
-                    if not HorseCalled and (distance > 100.0) then
+                    if distance > 100.0 then
                         SpawnHorse()
                         Wait(3000)
                     else
                         moveHorseToPlayer()
                     end
                 end
-            end)
+            end
         end
 
         local size = GetNumberOfEvents(0)
@@ -2160,13 +2308,13 @@ Citizen.CreateThread(function()
             local pcoords = GetEntityCoords(cache.ped)
             local hcoords = GetEntityCoords(horsePed)
             local dist = #(pcoords - hcoords)
-            if Citizen.InvokeNative(0xC92AC953F0A982AE, HorseLayPrompts) then
+            if HorseLayPrompts and Citizen.InvokeNative(0xC92AC953F0A982AE, HorseLayPrompts) then
                 if horsexp >= Config.TrickXp.Lay then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_resting@stand_enter', 'base')
                 end
             end
-            if Citizen.InvokeNative(0xC92AC953F0A982AE, HorsePLayPrompts) then
-    if horsexp >= Config.TrickXp.Play and not HorsePLayPrompts then
+            if HorsePLayPrompts and Citizen.InvokeNative(0xC92AC953F0A982AE, HorsePLayPrompts) then
+                if horsexp >= Config.TrickXp.Play then
                     HorseActions(horsePed, 'amb_creature_mammal@world_horse_wallow_shake@idle', 'idle_a')
                 end
             end
@@ -2179,7 +2327,7 @@ end)
 ------------------------------------
 RegisterNetEvent('rsg-horses:client:inventoryHorse', function()
     RSGCore.Functions.TriggerCallback('rsg-horses:server:GetActiveHorse', function(data)
-        if horsePed == 0 then
+        if horsePed == 0 or not data or not data.horseid then
             lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
             return
         end
@@ -2196,6 +2344,11 @@ AddEventHandler('rsg-horses:client:equipHorseLantern', function()
 
     if not hasItem then
         lib.notify({ title = locale('cl_error_no_lantern'), type = 'error', duration = 7000 })
+        return
+    end
+
+    if horsePed == 0 or not DoesEntityExist(horsePed) then
+        lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
         return
     end
 
@@ -2357,13 +2510,13 @@ end)
 ------------------------------------
 RegisterNetEvent('rsg-horses:client:playerfeedhorse')
 AddEventHandler('rsg-horses:client:playerfeedhorse', function(itemName)
-    local pcoords = GetEntityCoords(cache.ped)
-    local hcoords = GetEntityCoords(horsePed)
-
     if horsePed == 0 or not DoesEntityExist(horsePed) then
         lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
         return
     end
+
+    local pcoords = GetEntityCoords(cache.ped)
+    local hcoords = GetEntityCoords(horsePed)
 
     if #(pcoords - hcoords) > 2.0 then
         lib.notify({ title = locale('cl_error_need_to_be_closer'), type = 'error', duration = 7000 })
@@ -2494,14 +2647,14 @@ end
 ------------------------------------
 RegisterNetEvent("rsg-horses:client:revivehorse")
 AddEventHandler("rsg-horses:client:revivehorse", function(item, data)
-    local playercoords = GetEntityCoords(cache.ped)
-    local horsecoords  = GetEntityCoords(horsePed)
-    local distance     = #(playercoords - horsecoords)
-
-    if horsePed == 0 then
+    if horsePed == 0 or not DoesEntityExist(horsePed) then
         lib.notify({ title = locale('cl_error_no_horse_out'), type = 'error', duration = 7000 })
         return
     end
+
+    local playercoords = GetEntityCoords(cache.ped)
+    local horsecoords  = GetEntityCoords(horsePed)
+    local distance     = #(playercoords - horsecoords)
 
     if IsEntityDead(horsePed) then
         if distance > 1.5 then
@@ -2543,12 +2696,17 @@ local candoaction = false
 Citizen.CreateThread(function()
     while true do
         local sleep    = 1000
-        local dist     = #(GetEntityCoords(cache.ped) - GetEntityCoords(horsePed))
+        local dist     = 9999
+        if horsePed ~= 0 and DoesEntityExist(horsePed) then
+            dist = #(GetEntityCoords(cache.ped) - GetEntityCoords(horsePed))
+        end
         local ZoneTypeId = 1
         local x, y, z = table.unpack(GetEntityCoords(cache.ped))
         local town     = Citizen.InvokeNative(0x43AD8FC02B429D33, x, y, z, ZoneTypeId)
 
-        if town == false then candoaction = true end
+        -- 0x43AD8FC02B429D33 returns a zone hash (never boolean false);
+        -- 0 / nil means no mapped zone here, i.e. outside towns
+        if town == 0 or town == nil then candoaction = true end
 
         if horsePed ~= 0 and horsebusy and dist < 12 then
             if Citizen.InvokeNative(0x57AB4A3080F85143, horsePed) then
@@ -2576,8 +2734,8 @@ end)
 Citizen.CreateThread(function()
     while true do
         local sleep     = 5000
-        local horsedirt = Citizen.InvokeNative(0x147149F2E909323C, horsePed, 16, Citizen.ResultAsInteger())
-        if horsePed ~= 0 then
+        if horsePed ~= 0 and DoesEntityExist(horsePed) then
+            local horsedirt = Citizen.InvokeNative(0x147149F2E909323C, horsePed, 16, Citizen.ResultAsInteger())
             TriggerServerEvent('rsg-horses:server:sethorseAttributes', horsedirt)
         end
         Wait(sleep)

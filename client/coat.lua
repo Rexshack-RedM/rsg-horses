@@ -17,6 +17,7 @@ local COAT_COMPONENTS = {
 
 local ORIGINAL_COAT_ASSETS = {}
 local ORIGINAL_MANETAIL_ASSETS = {}
+local ORIGINAL_COAT_PED = nil
 local coatRainbowThread = nil
 
 -- Category hashes for mane / tail (mirror Config.ComponentHash so coat.lua works standalone)
@@ -116,7 +117,13 @@ end
 
 function CoatSaveOriginalAssets(horsePed)
     ORIGINAL_COAT_ASSETS = {}
+    ORIGINAL_COAT_PED = horsePed
     local found = false
+    local num = CoatGetNumComponents(horsePed)
+    if Config.Debug then
+        print(('[rsg-horses] CoatSave: ped=%s model=%s numComponents=%s'):format(
+            tostring(horsePed), tostring(GetEntityModel(horsePed)), tostring(num)))
+    end
     for _, catHash in ipairs(COAT_COMPONENTS) do
         local index = CoatGetIndex(horsePed, catHash)
         if index then
@@ -358,12 +365,52 @@ function CoatGetOriginalMarking()
     return nil
 end
 
+--- Reads the ped's CURRENT tints (captured by CoatSaveOriginalAssets) as a
+--- coat table. Used to seed the customize UI for never-customized horses so
+--- the sliders start from the horse's real colours instead of defaults, and
+--- touching one control doesn't reset the others to white. Returns nil if
+--- nothing was captured.
+function CoatGetLiveTints()
+    local tints = nil
+    for _, assets in pairs(ORIGINAL_COAT_ASSETS) do
+        tints = {
+            tint0 = assets.original_tint0 or 0,
+            tint1 = assets.original_tint1,
+            tint2 = assets.original_tint2,
+        }
+        if tints.tint1 == nil then tints.tint1 = 255 end
+        if tints.tint2 == nil then tints.tint2 = 255 end
+        break
+    end
+    if not tints then return nil end
+    tints.palette = (Config.Coat and Config.Coat.Palette) or 'metaped_tint_horse'
+    tints.rainbow = false
+    for key, assets in pairs(ORIGINAL_MANETAIL_ASSETS) do
+        if key == 'mane' and assets.original_tint0 ~= nil then
+            tints.mane = assets.original_tint0
+        elseif key == 'tail' and assets.original_tint0 ~= nil then
+            tints.tail = assets.original_tint0
+        end
+    end
+    if tints.mane == nil then tints.mane = tints.tint0 end
+    if tints.tail == nil then tints.tail = tints.tint0 end
+    return tints
+end
+
 --- Apply a saved coat table {tint0,tint1,tint2,mane,tail,palette,rainbow} to a ped
 function CoatApply(horsePed, coatData)
     if not coatData then return true end
     if not horsePed or horsePed == 0 or not DoesEntityExist(horsePed) then return false end
-    if next(ORIGINAL_COAT_ASSETS) == nil then
-        if not CoatSaveOriginalAssets(horsePed) then return false end
+    -- the ORIGINAL_* caches hold drawable GUIDs for ONE ped: re-capture when
+    -- the ped changed (preview ped vs spawned horse, horse switch), otherwise
+    -- we would tint stale drawables and nothing visibly changes
+    if next(ORIGINAL_COAT_ASSETS) == nil or ORIGINAL_COAT_PED ~= horsePed then
+        if not CoatSaveOriginalAssets(horsePed) then
+            if Config.Debug then
+                print(('[rsg-horses] CoatApply: capture failed for ped %s'):format(tostring(horsePed)))
+            end
+            return false
+        end
     end
     local horseid = nil
     for id, c in pairs(horseCoats) do
@@ -392,12 +439,49 @@ function CoatApply(horsePed, coatData)
     Citizen.InvokeNative(0xCC8CA3E88256E58F, horsePed, false, true, true, true, false)
     -- Mane / tail colours ride along with the coat so they preview + persist together
     ManeTailApply(horsePed, coatData)
+    if Config.Debug then
+        -- read back the first body/head slot to confirm the tint stuck
+        for catHash, assets in pairs(ORIGINAL_COAT_ASSETS) do
+            local index = CoatGetIndex(horsePed, catHash)
+            if index then
+                local _, t0, t1, t2 = CoatGetTint(horsePed, index)
+                print(('[rsg-horses] CoatApply: ped=%s wanted=(%s,%s,%s) readback=(%s,%s,%s)'):format(
+                    tostring(horsePed), tostring(coatData.tint0), tostring(coatData.tint1),
+                    tostring(coatData.tint2), tostring(t0), tostring(t1), tostring(t2)))
+            else
+                print(('[rsg-horses] CoatApply: ped=%s slot lookup failed after apply'):format(tostring(horsePed)))
+            end
+            break
+        end
+    end
     return true
+end
+
+--- Wait for the ped to be render-ready, then save + apply with retries.
+--- Returns true on success. Use this right after CreatePed/SpawnHorse where
+--- the ped may not accept metaped tags on the first frame (previously a
+--- silent no-op, i.e. colours never applied).
+function CoatApplyWait(horsePed, coatData, maxTries)
+    if not coatData then return true end
+    maxTries = maxTries or 60
+    local tries = 0
+    while not Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, horsePed) and tries < maxTries do
+        Wait(50)
+        tries = tries + 1
+        if not DoesEntityExist(horsePed) then return false end
+    end
+    -- force a fresh capture for this ped, then apply (with one re-try)
+    CoatSaveOriginalAssets(horsePed)
+    if CoatApply(horsePed, coatData) then return true end
+    Wait(500)
+    if not DoesEntityExist(horsePed) then return false end
+    CoatSaveOriginalAssets(horsePed)
+    return CoatApply(horsePed, coatData)
 end
 
 function CoatClear(horsePed)
     CoatStopRainbow()
-    if next(ORIGINAL_COAT_ASSETS) == nil then
+    if next(ORIGINAL_COAT_ASSETS) == nil or ORIGINAL_COAT_PED ~= horsePed then
         if not CoatSaveOriginalAssets(horsePed) then return end
     end
     if not Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, horsePed) then

@@ -1220,7 +1220,7 @@ const HorseUI = {
             hasMarkings: data.hasMarkings !== false,
             originalMarking: data.originalMarking,
             maneTailSupported: data.maneTailSupported !== false,
-            prices: data.prices || { component: 10, coat: 5 },
+            prices: data.prices || { component: 10, components: {}, coat: 100, presets: [] },
             currentPrice: 0
         };
 
@@ -1230,6 +1230,23 @@ const HorseUI = {
         this.updateCustomizePrice();
 
         this.showScreen('customize');
+    },
+
+    // Price lookup helpers (display-only mirrors of shared/functions.lua;
+    // the server is authoritative on save).
+    componentPrice(cat) {
+        const prices = (this.customizeData && this.customizeData.prices) || {};
+        if (prices.components && prices.components[cat] !== undefined) return prices.components[cat];
+        return prices.component || 10;
+    },
+
+    presetPrice(tint0) {
+        const prices = (this.customizeData && this.customizeData.prices) || {};
+        const list = prices.presets || [];
+        for (const p of list) {
+            if (p.tint0 === Math.floor(Number(tint0) || 0)) return p.price;
+        }
+        return prices.coat || 100;
     },
 
     renderComponents() {
@@ -1253,6 +1270,7 @@ const HorseUI = {
                 card.className = 'component-category-card';
                 const currentValue = this.customizeData.components[cat.category] || 0;
                 const maxValue = cat.items.length;
+                const catPrice = this.componentPrice(cat.category);
 
                 card.innerHTML = `
                     <div class="component-category-header">
@@ -1260,6 +1278,7 @@ const HorseUI = {
                         <div class="component-category-info">
                             <div class="component-category-name">${cat.category.toUpperCase()}</div>
                             <div class="component-category-value">${t('nui_option_count_format', 'Option %s / %s').replace('%s', currentValue).replace('%s', maxValue)}</div>
+                            <div class="component-category-price">$${catPrice}</div>
                         </div>
                     </div>
                     <div class="coat-stepper" data-category="${cat.category}" data-min="0" data-max="${maxValue}">
@@ -1421,7 +1440,7 @@ const HorseUI = {
                 swatch.dataset.value = preset.tint0;
                 swatch.dataset.tint = tintKey;
                 swatch.style.background = this.getCoatColor(tintKey, preset.tint0);
-                swatch.title = preset.name;
+                swatch.title = `${preset.name} — $${this.presetPrice(preset.tint0)}`;
                 swatch.addEventListener('click', () => {
                     this.setCoatTint(tintKey, preset.tint0);
                 });
@@ -1485,14 +1504,14 @@ const HorseUI = {
         const { components, initialComponents, coat, initialCoat, prices } = this.customizeData;
         let price = 0;
 
-        // Component price: count changed components
+        // Component price: per-category fee for each changed category
         for (const [cat, value] of Object.entries(components)) {
             if (value !== (initialComponents[cat] || 0) && value > 0) {
-                price += prices.component || 10;
+                price += this.componentPrice(cat);
             }
         }
 
-        // Coat price: any tint changed (coat, markings, nose, mane, tail)
+        // Coat price: single fee priced by the selected main colour (tint0)
         const norm = (v, fb) => (v === undefined || v === null) ? fb : v;
         const coatChanged = norm(coat.tint0, 0) !== norm(initialCoat.tint0, 0) ||
                            norm(coat.tint1, 255) !== norm(initialCoat.tint1, 255) ||
@@ -1500,7 +1519,7 @@ const HorseUI = {
                            norm(coat.mane, norm(coat.tint0, 0)) !== norm(initialCoat.mane, norm(initialCoat.tint0, 0)) ||
                            norm(coat.tail, norm(coat.tint0, 0)) !== norm(initialCoat.tail, norm(initialCoat.tint0, 0));
         if (coatChanged) {
-            price += prices.coat || 5;
+            price += this.presetPrice(norm(coat.tint0, 0));
         }
 
         this.customizeData.currentPrice = price;

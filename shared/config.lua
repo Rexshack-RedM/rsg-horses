@@ -2,7 +2,7 @@ Config = {}
 lib.locale()
 
 -- debug
-Config.Debug = false
+Config.Debug = true
 
 Config = {
     horsesShopItems ={
@@ -49,19 +49,25 @@ Config.ComponentHash = {
     Manes = 0xAA0217AB,
     Masks = 0xD3500E5D,
     Mustaches = 0x30DEFDDF,
+    Bridles = 0x94B2E3AF,
+    Horseshoes = 0xFACFC3C0,
 }
 
+-- per-category component price: charged once per changed category on save
+-- (server-authoritative via CalculatePrice in shared/functions.lua)
 Config.PriceComponent = {
-    Blankets = 5,
-    Saddles = 2,
-    Horns = 10,
-    Saddlebags = 3,
-    Stirrups = 4,
-    Bedrolls = 5,
-    Tails = 4,
-    Manes = 3,
-    Masks = 3,
-    Mustaches = 2,
+    Blankets = 15,
+    Saddles = 75,
+    Horns = 40,
+    Saddlebags = 35,
+    Stirrups = 30,
+    Bedrolls = 20,
+    Tails = 12,
+    Manes = 14,
+    Masks = 18,
+    Mustaches = 10,
+    Bridles = 25,
+    Horseshoes = 8,
 }
 
 ---------------------------------
@@ -71,31 +77,34 @@ Config.PriceComponent = {
 -- applied via SetMetaPedTag on horse_bodies + horse_heads with palette metaped_tint_horse
 ---------------------------------
 Config.Coat = {
-    Price = 100, -- flat price charged when coat/mane/tail differs from saved coat
+    Price = 100, -- fallback fee for a custom (non-preset) tint0
     Palette = 'metaped_tint_horse',
     Default = { tint0 = 0, tint1 = 255, tint2 = 255, mane = 0, tail = 0 },
 }
 
--- preset tint0 ids found in test folder (horse_markings/shared/config.lua)
+-- preset main-coat colours: changing to a preset tint0 costs that preset's
+-- price (natural coats cheap, fantasy dyes premium). Any coat/mane/tail/
+-- marking change is a single coat fee based on the selected main colour.
+-- (server-authoritative via CalculateCoatPrice in shared/functions.lua)
 Config.CoatPresets = {
-    { name = 'White',        tint0 = 0,   price = 100 },
-    { name = 'Black',        tint0 = 9,   price = 100 },
-    { name = 'Brown',        tint0 = 40,  price = 100 },
-    { name = 'Bay',          tint0 = 100, price = 100 },
-    { name = 'Purple',       tint0 = 105, price = 100 },
-    { name = 'Pink',         tint0 = 107, price = 100 },
-    { name = 'Lilac',        tint0 = 108, price = 100 },
-    { name = 'Dark Green',   tint0 = 109, price = 100 },
-    { name = 'Blue',         tint0 = 110, price = 100 },
-    { name = 'Green',        tint0 = 112, price = 100 },
-    { name = 'Lime',         tint0 = 115, price = 100 },
-    { name = 'Yellow',       tint0 = 119, price = 100 },
-    { name = 'Orange',       tint0 = 120, price = 100 },
-    { name = 'Bronze',       tint0 = 121, price = 100 },
-    { name = 'Blood Red',    tint0 = 125, price = 100 },
-    { name = 'Chestnut Red', tint0 = 127, price = 100 },
-    { name = 'Silver',       tint0 = 128, price = 100 },
-    { name = 'Grey',         tint0 = 130, price = 100 },
+    { name = 'White',        tint0 = 0,   price = 30 },
+    { name = 'Black',        tint0 = 9,   price = 40 },
+    { name = 'Brown',        tint0 = 40,  price = 35 },
+    { name = 'Bay',          tint0 = 100, price = 45 },
+    { name = 'Chestnut Red', tint0 = 127, price = 50 },
+    { name = 'Silver',       tint0 = 128, price = 60 },
+    { name = 'Grey',         tint0 = 130, price = 55 },
+    { name = 'Bronze',       tint0 = 121, price = 120 },
+    { name = 'Blood Red',    tint0 = 125, price = 140 },
+    { name = 'Orange',       tint0 = 120, price = 150 },
+    { name = 'Yellow',       tint0 = 119, price = 160 },
+    { name = 'Green',        tint0 = 112, price = 170 },
+    { name = 'Blue',         tint0 = 110, price = 180 },
+    { name = 'Dark Green',   tint0 = 109, price = 180 },
+    { name = 'Lime',         tint0 = 115, price = 190 },
+    { name = 'Pink',         tint0 = 107, price = 200 },
+    { name = 'Purple',       tint0 = 105, price = 200 },
+    { name = 'Lilac',        tint0 = 108, price = 220 },
 }
 
 ---------------------------------
@@ -183,6 +192,10 @@ Config.HorseXp = {
         ['sugarcube'] = 10,
         ['horse_stimulant'] = 15,
     },
+    -- leading the horse to water / trough / haypile: no item consumed,
+    -- gated by the same per-horse cooldown
+    Drink = 3,
+    Graze = 5,
 }
 
 ---------------------------------

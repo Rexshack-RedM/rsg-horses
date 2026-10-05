@@ -4512,7 +4512,36 @@ local Components = {
             hash_dec_signed = -148881469,
             category_hash_dec_signed = 819920351,
         },
-    }
+    },
+    -- bridles (category hash 0x94B2E3AF, sourced from bcc-stables comps)
+    Bridles = {
+        { hashid = 1,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x0C48F261 },
+        { hashid = 2,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x0CBA8E54 },
+        { hashid = 3,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x2F62D3A4 },
+        { hashid = 4,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x433DE046 },
+        { hashid = 5,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x5BC3AC4D },
+        { hashid = 6,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x63899BC6 },
+        { hashid = 7,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x754C3F4B },
+        { hashid = 8,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x7956475F },
+        { hashid = 9,  category = "bridles", category_hash = 0x94B2E3AF, hash = 0x7E89F1D9 },
+        { hashid = 10, category = "bridles", category_hash = 0x94B2E3AF, hash = 0x874F0363 },
+        { hashid = 11, category = "bridles", category_hash = 0x94B2E3AF, hash = 0x880FE4D2 },
+        { hashid = 12, category = "bridles", category_hash = 0x94B2E3AF, hash = 0x95ADA020 },
+        { hashid = 13, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xAAA9CA18 },
+        { hashid = 14, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xB8F0E6A6 },
+        { hashid = 15, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xCFFBF4B5 },
+        { hashid = 16, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xD1D7988F },
+        { hashid = 17, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xE006B4ED },
+        { hashid = 18, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xE3139FF7 },
+        { hashid = 19, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xF0D53B7A },
+        { hashid = 20, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xF18C3CE4 },
+        { hashid = 21, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xFB2178EC },
+        { hashid = 22, category = "bridles", category_hash = 0x94B2E3AF, hash = 0xFE8E56EC },
+    },
+    -- horseshoes (category hash 0xFACFC3C0, sourced from bcc-stables comps)
+    Horseshoes = {
+        { hashid = 1, category = "horseshoes", category_hash = 0xFACFC3C0, hash = 0x0865A270 },
+    },
 }
 
 return Components

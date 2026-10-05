@@ -57,7 +57,8 @@ CreateThread(function()
         end
 
         local thorse = GetLedHorseFromPed(cache.ped)
-        if cache.ped == nil or thorse == nil then goto continue end
+        -- native returns 0 (not nil) when the player leads no horse
+        if thorse == nil or thorse == 0 then goto continue end
 
         if not IsPedLeadingHorse(cache.ped) or objectInteract then
             Wait(1000)
@@ -73,43 +74,48 @@ CreateThread(function()
 end)
 
 function HandleWaterInteraction(thorse)
-    if not IsPedStill(thorse) or IsPedSwimming(thorse) then return end
+    -- allow slow drift (rivers keep horses moving); only exclude swimming
+    local vel = GetEntityVelocity(thorse)
+    local speed = #(vector2(vel.x, vel.y))
+    if speed > 1.5 or IsPedSwimming(thorse) then return end
 
     DisableControlAction(0, 0x7914A3DD, true)
     local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(DrinkPrompt, label) 
 
     if Citizen.InvokeNative(0xC92AC953F0A982AE, ActionHorseDrink) then
-        PerformHorseAction(thorse, Config.Anim.Drink)
+        PerformHorseAction(thorse, Config.Anim.Drink, nil, nil, 'drink')
     end
 end
 
 function HandleObjectInteraction(thorse)
-    local forward = GetOffsetFromEntityInWorldCoords(thorse, 0.0, 0.8, -0.5)
-    local obj, type = GetNearestInteractableObject(forward)
+    local obj, type = GetNearestInteractableObject(thorse)
 
     if obj == nil then return end
 
-    local promptGroup, action, anim
+    local promptGroup, action, anim, xpAction
     if type == "drink" then
         promptGroup, action = DrinkPrompt, ActionHorseDrink
         anim = Config.Anim.Drink2
+        xpAction = 'drink'
     elseif type == "feed" then
         promptGroup, action = GrazePrompt, ActionHorseGraze
         anim = Config.Anim.Graze
+        xpAction = 'graze'
     else
         return
     end
 
+    local forward = GetOffsetFromEntityInWorldCoords(thorse, 0.0, 0.8, -0.5)
     local label = CreateVarString(10, 'LITERAL_STRING', locale('cl_action_horses'))
     PromptSetActiveGroupThisFrame(promptGroup, label) 
 
     if Citizen.InvokeNative(0xC92AC953F0A982AE, action) then
-        PerformHorseAction(thorse, anim, obj, forward)
+        PerformHorseAction(thorse, anim, obj, forward, xpAction)
     end
 end
 
-function PerformHorseAction(thorse, anim, obj, forward)
+function PerformHorseAction(thorse, anim, obj, forward, xpAction)
     objectInteract = true
     TaskStopLeadingHorse(cache.ped)
     Wait(500)
@@ -136,14 +142,27 @@ function PerformHorseAction(thorse, anim, obj, forward)
     Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 0, horseHealth + Config.BoostAction.Health)
     Citizen.InvokeNative(0xC6258F41D86676E0, thorse, 1, horseStamina + Config.BoostAction.Stamina)
 
+    -- XP only on completion (server enforces per-horse cooldown + cap)
+    if xpAction then
+        TriggerServerEvent('rsg-horses:server:AddHorseXp', xpAction)
+    end
+
     objectInteract = false
 end
 
-function GetNearestInteractableObject(forward)
+function GetNearestInteractableObject(thorse)
+    -- wide check around the horse plus the forward point: the old
+    -- single 0.9m forward check missed troughs constantly
+    local points = {
+        { coords = GetEntityCoords(thorse), radius = 2.5 },
+        { coords = GetOffsetFromEntityInWorldCoords(thorse, 0.0, 0.8, -0.5), radius = 1.5 },
+    }
     for _, v in pairs(Config.ObjectActionList) do
-        local obj = GetClosestObjectOfType(forward.x, forward.y, forward.z, 0.9, v[1], 0, 1, 1)
-        if obj ~= 0 then
-            return obj, v[2]
+        for _, p in ipairs(points) do
+            local obj = GetClosestObjectOfType(p.coords.x, p.coords.y, p.coords.z, p.radius, v[1], 0, 1, 1)
+            if obj ~= 0 then
+                return obj, v[2]
+            end
         end
     end
     return nil, nil

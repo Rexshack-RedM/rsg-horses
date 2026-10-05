@@ -74,8 +74,10 @@ CreateThread(function()
         end
 
         newpoint.onExit = function(self)
-            if self.ped then
-                exports.ox_target:removeEntity(self.ped, 'npc_stablehand')
+            if Config.EnableTarget and self.ped then
+                pcall(function()
+                    exports.ox_target:removeEntity(self.ped, 'npc_stablehand')
+                end)
             end
             if self.ped and DoesEntityExist(self.ped) then
                 if Config.FadeIn then
@@ -97,8 +99,10 @@ end)
 AddEventHandler("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     for k, v in pairs(spawnedPeds) do
-        if v.ped then
-            exports.ox_target:removeEntity(v.ped, 'npc_stablehand')
+        if Config.EnableTarget and v.ped then
+            pcall(function()
+                exports.ox_target:removeEntity(v.ped, 'npc_stablehand')
+            end)
         end
         if v.ped and DoesEntityExist(v.ped) then
             DeleteEntity(v.ped)
